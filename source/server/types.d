@@ -5,6 +5,7 @@ import std.conv : to;
 import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddress, SocketFlags;
 import core.thread : Thread;
 import std.stdio : writeln;
+import std.json : JSONValue, parseJSON, JSONException;
 
 public class BesterServer
 {
@@ -110,8 +111,29 @@ private class BesterConnection : Thread
 				writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
 			}
 
-
+			/* Process the message */
+			processMessage(messageBuffer);
 		}
+	}
+
+	/* Process the received message */
+	private void processMessage(byte[] messageBuffer)
+	{
+		/* The message as a JSONValue struct */
+		JSONValue jsonMessage;
+		
+		try
+		{
+			/* Convert message to JSON */
+			jsonMessage = parseJSON(cast(string)messageBuffer);
+
+			writeln("JSON received: ", jsonMessage);
+		}
+		catch(JSONException exception)
+		{
+			/* TODO: Implement this */
+		}
+	
 	}
 
 	
