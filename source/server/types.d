@@ -157,21 +157,21 @@ private class BesterConnection : Thread
 					{
 						/* Get the scope */
 						string scopeString = scopeBlock.str;
-						debugPrint("Scope selected: " ~ scopeString);
 
 						/* If the message is for client<->server */
 						if(cmp(scopeString, "client"))
 						{
-							
+							debugPrint("Scope: client<->server");
 						}
 						/* If the message is for server<->server */
 						else if(cmp(scopeString, "server"))
 						{
-							
+							debugPrint("Scope: server<->server");
 						}
 						else
 						{
-							
+							/* TODO: Error handling */
+							debugPrint("Unknown scope provided");
 						}
 					}
 					else
