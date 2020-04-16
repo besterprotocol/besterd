@@ -17,5 +17,5 @@ bester daemon:
 Make sure you have `dub` and `dmd` installed, clone the repository and run the following:
 
 ````
-dub
+dub build
 ````
