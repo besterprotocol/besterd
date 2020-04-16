@@ -137,13 +137,33 @@ private class BesterConnection : Thread
 				JSONValue besterHeader;
 			
 				/* TODO: Check for out of bounds here */
-				besterHeader = jsonMessage["besterHeader"];
+				besterHeader = jsonMessage["header"];
 
 				/* Check if it is a JSON object */
 				if(besterHeader.type == JSONType.object)
 				{
 					/* TODO: Add further checks here */
 
+					/* The header must contain a authentication JSON object */
+					JSONValue authenticationBlock;
+
+					/* TODO: Check for out of bounds here */
+					authenticationBlock = besterHeader["authentication"];
+
+					/* TODO: Bounds check for both below */
+					JSONValue username, password;
+					username = authenticationBlock["username"];
+					password = authenticationBlock["password"];
+
+					if(username.type == JSONType.string && password.type == JSONType.string)
+					{
+						/* TODO: Now do some stuff */
+					}
+					else
+					{
+						/* TODO: Add error handling here */
+						debugPrint("Username or password is not a JSON string");
+					}
 				}
 				else
 				{
