@@ -143,10 +143,12 @@ private class BesterConnection : Thread
 				if(besterHeader.type == JSONType.object)
 				{
 					/* TODO: Add further checks here */
+
 				}
 				else
 				{
 					/* TODO: Add error handling here */
+					debugPrint("Header received was not a JSON object");
 				}
 			}
 			else
