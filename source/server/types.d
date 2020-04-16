@@ -88,11 +88,25 @@ private class BesterConnection : Thread
 
 			/* TODO: Testing locally ain't good as stuff arrives way too fast, although not as fast as I can type */
 			/* What must happen is a loop to loop and wait for data */
-			/* Receive the whole message in its entirety */
-			buffer.length = messageLength;
-			bytesReceived = clientConnection.receive(buffer);
-			writeln("MessageWait: Bytes received: ", cast(ulong)bytesReceived);
-			
+
+			/* Full message buffer */
+			byte[] messageBuffer;
+
+
+			uint currentByte = 0;
+			while(currentByte < cast(uint)messageLength)
+			{
+				/* Receive 20 bytes (at most) at a time */
+				byte[20] messageBufferPartial;
+				bytesReceived = clientConnection.receive(messageBufferPartial);
+
+				/* Append the received bytes to the FULL message buffer */
+				messageBuffer ~= messageBufferPartial[0..bytesReceived];
+
+				/* Increment counter of received bytes */
+				currentByte += bytesReceived;
+			}
+
 
 		}
 	}
