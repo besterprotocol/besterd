@@ -106,6 +106,8 @@ private class BesterConnection : Thread
 				/* Append the received bytes to the FULL message buffer */
 				messageBuffer ~= messageBufferPartial[0..bytesReceived];
 
+				/* TODO: Bug when over send, we must not allow this */
+
 				/* Increment counter of received bytes */
 				currentByte += bytesReceived;
 				writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
