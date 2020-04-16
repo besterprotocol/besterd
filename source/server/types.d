@@ -69,9 +69,9 @@ private class BesterConnection : Thread
 			/* Make the dynamic array's size 4 */
 			buffer.length = 4;
 
-			/* Peek for the first 4 bytes (retrieve message size) */
-			long bytesReceived = clientConnection.receive(buffer, SocketFlags.PEEK);
-			writeln(cast(ulong)bytesReceived);
+			/* Read the first 4 bytes (retrieve message size) */
+			long bytesReceived = clientConnection.receive(buffer);
+			writeln("PreambleWait: Bytes received: ", cast(ulong)bytesReceived);
 
 			/* Make sure exactly 4 bytes were received */
 			if (bytesReceived != 4)
@@ -84,10 +84,14 @@ private class BesterConnection : Thread
 
 			/* Get the message length */
 			int messageLength = *(cast(int*)buffer.ptr);
+			writeln("Message length: ", cast(uint)messageLength);
 
+			/* TODO: Testing locally ain't good as stuff arrives way too fast, although not as fast as I can type */
+			/* What must happen is a loop to loop and wait for data */
 			/* Receive the whole message in its entirety */
 			buffer.length = messageLength;
 			bytesReceived = clientConnection.receive(buffer);
+			writeln("MessageWait: Bytes received: ", cast(ulong)bytesReceived);
 			
 
 		}
