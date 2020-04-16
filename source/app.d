@@ -1,7 +1,7 @@
 module app;
 
 import std.stdio;
-import server.types;
+import server.server;
 
 void main()
 {
@@ -9,5 +9,6 @@ void main()
 	string address = "0.0.0.0";
 	ushort port = 2222;
 
-	BesterServer server = new BesterServer(address, port);
+	/* TODO: Add usage check and arguments before this */
+	startServer(address, port);
 }
