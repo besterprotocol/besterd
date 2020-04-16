@@ -5,7 +5,7 @@ import std.conv : to;
 import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddress, SocketFlags;
 import core.thread : Thread;
 import std.stdio : writeln;
-import std.json : JSONValue, parseJSON, JSONException;
+import std.json : JSONValue, parseJSON, JSONException, JSONType;
 
 public class BesterServer
 {
@@ -128,12 +128,37 @@ private class BesterConnection : Thread
 		{
 			/* Convert message to JSON */
 			jsonMessage = parseJSON(cast(string)messageBuffer);
-
 			writeln("JSON received: ", jsonMessage);
+			
+			/* Make sure we have a JSON object */
+			if(jsonMessage.type == JSONType.object)
+			{
+				/* As per spec, look for the "besterHeader" */
+				JSONValue besterHeader;
+			
+				/* TODO: Check for out of bounds here */
+				besterHeader = jsonMessage["besterHeader"];
+
+				/* Check if it is a JSON object */
+				if(besterHeader.type == JSONType.object)
+				{
+					/* TODO: Add further checks here */
+				}
+				else
+				{
+					/* TODO: Add error handling here */
+				}
+			}
+			else
+			{
+				/* TODO: Add error here */
+				debugPrint("Did not receive a JSON object");
+			}
 		}
 		catch(JSONException exception)
 		{
 			/* TODO: Implement this */
+			debugPrint("Error parsing the received JSON message");
 		}
 	
 	}
