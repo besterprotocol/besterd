@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Tristan B. Kildaire"
+	],
+	"copyright": "Copyright © 2020, Tristan B. Kildaire",
+	"description": "Bester protocol daemon. ",
+	"license": "AGPL v3",
+	"name": "besterd"
+}
