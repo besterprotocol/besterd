@@ -6,6 +6,7 @@ import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddres
 import core.thread : Thread;
 import std.stdio : writeln;
 import std.json : JSONValue, parseJSON, JSONException, JSONType;
+import std.string;
 
 public class BesterServer
 {
@@ -143,6 +144,42 @@ private class BesterConnection : Thread
 				if(besterHeader.type == JSONType.object)
 				{
 					/* TODO: Add further checks here */
+
+
+					/* The header must contain a scope block */
+					JSONValue scopeBlock;
+
+					/* TODO: Add bounds check */
+					scopeBlock = besterHeader["scope"];
+
+					/* Make sure the type of the JSON value is string */
+					if(scopeBlock.type == JSONType.string)
+					{
+						/* Get the scope */
+						string scopeString = scopeBlock.str;
+						debugPrint("Scope selected: " ~ scopeString);
+
+						/* If the message is for client<->server */
+						if(cmp(scopeString, "client"))
+						{
+							
+						}
+						/* If the message is for server<->server */
+						else if(cmp(scopeString, "server"))
+						{
+							
+						}
+						else
+						{
+							
+						}
+					}
+					else
+					{
+						/* TODO: Handle error */
+						debugPrint("Scope block JSON value not a string");
+					}
+
 
 					/* The header must contain a authentication JSON object */
 					JSONValue authenticationBlock;
