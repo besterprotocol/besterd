@@ -38,11 +38,17 @@ public class BesterServer
 			Socket clientConnection = serverSocket.accept();
 
 			/* Create a new client connection handler and start its thread */
-			BesterConnection besterConnection = new BesterConnection(clientConnection);
+			BesterConnection besterConnection = new BesterConnection(clientConnection, this);
 			besterConnection.start();
 		}
 	}
-	
+
+	/* Authenticate the user */
+	public bool authenticate(string username, string password)
+	{
+		/* TODO: Implement me */
+		return true;
+	}
 }
 
 private class BesterConnection : Thread
@@ -51,11 +57,15 @@ private class BesterConnection : Thread
 	/* The socket to the client */
 	private Socket clientConnection;
 
-	this(Socket clientConnection)
+	/* The server backend */
+	private BesterServer server;
+
+	this(Socket clientConnection, BesterServer server)
 	{
 		/* Save socket and set thread worker function pointer */
 		super(&run);
 		this.clientConnection = clientConnection;
+		this.server = server;
 
 		debugPrint("New client handler spawned for " ~ clientConnection.remoteAddress().toAddrString());
 	}
@@ -177,13 +187,29 @@ private class BesterConnection : Thread
 							if(username.type == JSONType.string && password.type == JSONType.string)
 							{
 								/* TODO: Now do some stuff */
+
+								/* TODO: Authenticate the user */
+								string usernameString = username.str;
+								string passwordString = password.str;
+								bool isAuthenticated = server.authenticate(usernameString, passwordString);
+
+								if(isAuthenticated)
+								{
+									debugPrint("Authenticated");
+
+									/* TODO: */
+								}
+								else
+								{
+									/* TODO: Add error handling here */
+									debugPrint("Authentication failure");
+								}
 							}
 							else
 							{
 								/* TODO: Add error handling here */
 								debugPrint("Username or password is not a JSON string");
 							}
-						
 						}
 						/* If the message is for server<->server */
 						else if(cmp(scopeString, "server"))
