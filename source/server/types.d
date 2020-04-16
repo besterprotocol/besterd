@@ -162,6 +162,28 @@ private class BesterConnection : Thread
 						if(cmp(scopeString, "client"))
 						{
 							debugPrint("Scope: client<->server");
+
+							/* The header must contain a authentication JSON object */
+							JSONValue authenticationBlock;
+						
+							/* TODO: Check for out of bounds here */
+							authenticationBlock = besterHeader["authentication"];
+						
+							/* TODO: Bounds check for both below */
+							JSONValue username, password;
+							username = authenticationBlock["username"];
+							password = authenticationBlock["password"];
+						
+							if(username.type == JSONType.string && password.type == JSONType.string)
+							{
+								/* TODO: Now do some stuff */
+							}
+							else
+							{
+								/* TODO: Add error handling here */
+								debugPrint("Username or password is not a JSON string");
+							}
+						
 						}
 						/* If the message is for server<->server */
 						else if(cmp(scopeString, "server"))
@@ -181,26 +203,7 @@ private class BesterConnection : Thread
 					}
 
 
-					/* The header must contain a authentication JSON object */
-					JSONValue authenticationBlock;
-
-					/* TODO: Check for out of bounds here */
-					authenticationBlock = besterHeader["authentication"];
-
-					/* TODO: Bounds check for both below */
-					JSONValue username, password;
-					username = authenticationBlock["username"];
-					password = authenticationBlock["password"];
-
-					if(username.type == JSONType.string && password.type == JSONType.string)
-					{
-						/* TODO: Now do some stuff */
-					}
-					else
-					{
-						/* TODO: Add error handling here */
-						debugPrint("Username or password is not a JSON string");
-					}
+					
 				}
 				else
 				{
