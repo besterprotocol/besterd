@@ -1,4 +1,7 @@
+module app;
+
 import std.stdio;
+import server.server;
 
 void main()
 {
