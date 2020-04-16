@@ -93,6 +93,8 @@ private class BesterConnection : Thread
 			byte[] messageBuffer;
 
 
+			/* TODO: Add timeout if we haven't received a message in a certain amount of time */
+			
 			uint currentByte = 0;
 			while(currentByte < cast(uint)messageLength)
 			{
@@ -105,6 +107,7 @@ private class BesterConnection : Thread
 
 				/* Increment counter of received bytes */
 				currentByte += bytesReceived;
+				writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
 			}
 
 
