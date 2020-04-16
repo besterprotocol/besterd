@@ -2,7 +2,7 @@ module server.types;
 
 import utils.debugging : debugPrint;
 import std.conv : to;
-import std.socket : Socket;
+import std.socket : Socket, AddressFamily, SocketType, ProtocolType;
 
 public class BesterServer
 {
@@ -19,7 +19,7 @@ public class BesterServer
 	private void initialize(string bindAddress, ushort listenPort)
 	{
 		/* Create a socket */
-		//serverSocket = new Socket();
+		serverSocket = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
 	}
 
 	/* Start listen loop */
