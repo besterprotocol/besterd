@@ -173,89 +173,87 @@ private class BesterConnection : Thread
 					if(payloadType.type == JSONType.string)
 					{
 						/* TODO: Move everything into this block */
-					}
-
-
-
-
-					/* The header must contain a scope block */
-					JSONValue scopeBlock;
-
-					/* TODO: Add bounds check */
-					scopeBlock = besterHeader["scope"];
-
-					/* Make sure the type of the JSON value is string */
-					if(scopeBlock.type == JSONType.string)
-					{
-						/* Get the scope */
-						string scopeString = scopeBlock.str;
-
-						/* If the message is for client<->server */
-						if(cmp(scopeString, "client"))
+						/* The header must contain a scope block */
+						JSONValue scopeBlock;
+						
+						/* TODO: Add bounds check */
+						scopeBlock = besterHeader["scope"];
+						
+						/* Make sure the type of the JSON value is string */
+						if(scopeBlock.type == JSONType.string)
 						{
-							debugPrint("Scope: client<->server");
-
-							/* The header must contain a authentication JSON object */
-							JSONValue authenticationBlock;
+							/* Get the scope */
+							string scopeString = scopeBlock.str;
 						
-							/* TODO: Check for out of bounds here */
-							authenticationBlock = besterHeader["authentication"];
-						
-							/* TODO: Bounds check for both below */
-							JSONValue username, password;
-							username = authenticationBlock["username"];
-							password = authenticationBlock["password"];
-
-							
-							
-						
-							if(username.type == JSONType.string && password.type == JSONType.string)
+							/* If the message is for client<->server */
+							if(cmp(scopeString, "client"))
 							{
-								/* TODO: Now do some stuff */
-
-								/* TODO: Authenticate the user */
-								string usernameString = username.str;
-								string passwordString = password.str;
-								bool isAuthenticated = server.authenticate(usernameString, passwordString);
-
-								if(isAuthenticated)
+								debugPrint("Scope: client<->server");
+						
+								/* The header must contain a authentication JSON object */
+								JSONValue authenticationBlock;
+												
+								/* TODO: Check for out of bounds here */
+								authenticationBlock = besterHeader["authentication"];
+												
+								/* TODO: Bounds check for both below */
+								JSONValue username, password;
+								username = authenticationBlock["username"];
+								password = authenticationBlock["password"];
+						
+													
+													
+												
+								if(username.type == JSONType.string && password.type == JSONType.string)
 								{
-									debugPrint("Authenticated");
-
-									/* TODO: Dispatch to the correct message handler */
-									dispatch(jsonMessage);
+									/* TODO: Now do some stuff */
+						
+									/* TODO: Authenticate the user */
+									string usernameString = username.str;
+									string passwordString = password.str;
+									bool isAuthenticated = server.authenticate(usernameString, passwordString);
+						
+									if(isAuthenticated)
+									{
+										debugPrint("Authenticated");
+						
+										/* TODO: Dispatch to the correct message handler */
+										dispatch(jsonMessage);
+									}
+									else
+									{
+										/* TODO: Add error handling here */
+										debugPrint("Authentication failure");
+									}
 								}
 								else
 								{
 									/* TODO: Add error handling here */
-									debugPrint("Authentication failure");
+									debugPrint("Username or password is not a JSON string");
 								}
+							}
+							/* If the message is for server<->server */
+							else if(cmp(scopeString, "server"))
+							{
+								debugPrint("Scope: server<->server");
 							}
 							else
 							{
-								/* TODO: Add error handling here */
-								debugPrint("Username or password is not a JSON string");
+								/* TODO: Error handling */
+								debugPrint("Unknown scope provided");
 							}
-						}
-						/* If the message is for server<->server */
-						else if(cmp(scopeString, "server"))
-						{
-							debugPrint("Scope: server<->server");
 						}
 						else
 						{
-							/* TODO: Error handling */
-							debugPrint("Unknown scope provided");
+							/* TODO: Handle error */
+							debugPrint("Scope block JSON value not a string");
 						}
 					}
 					else
 					{
-						/* TODO: Handle error */
-						debugPrint("Scope block JSON value not a string");
+						/* TODO: Add error handling */
+						debugPrint("Type is not of type JSON string");
 					}
-
-
-					
 				}
 				else
 				{
