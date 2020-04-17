@@ -1,7 +1,7 @@
 module server.handler;
 
 import std.stdio : writeln;
-import std.socket : Socket, AddressFamily, parseAddress, SocketType;
+import std.socket : Socket, AddressFamily, parseAddress, SocketType, SocketOSException;
 import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
 
@@ -108,16 +108,25 @@ public class MessageHandler
 			/* Load module */
 			string pluginName = availableTypes[i];
 			debugPrint("Loading module \"" ~ pluginName ~ "\"...");
-			JSONValue typeMap;
 
-			/* TODO: Bounds check */
-			typeMap = handlerBlock["typeMap"];
+			try
+			{
+				JSONValue typeMap;
+
+				/* TODO: Bounds check */
+				typeMap = handlerBlock["typeMap"];
 			
-			string[2] configuration = getConfigurationArray(pluginName, typeMap);
-			debugPrint("Module executable at: \"" ~ configuration[0] ~ "\"");
-			debugPrint("Module socket path at: \"" ~ configuration[1] ~ "\"");
-			MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1]);
-			handlers ~= constructedMessageHandler;
+				string[2] configuration = getConfigurationArray(pluginName, typeMap);
+				debugPrint("Module executable at: \"" ~ configuration[0] ~ "\"");
+				debugPrint("Module socket path at: \"" ~ configuration[1] ~ "\"");
+				MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1]);
+				handlers ~= constructedMessageHandler;
+				debugPrint("Module \"" ~ pluginName ~ "\" loaded");
+			}
+			catch(SocketOSException exception)
+			{
+				debugPrint("Error whilst loading module \"" ~ pluginName ~ "\": " ~ exception.toString());
+			}
 		}
 
 		return handlers;
