@@ -10,6 +10,12 @@ import std.string;
 
 public class BesterServer
 {
+	/**
+	* Message handlers
+	*
+	* Associative array of `payloadType (string)`:`MessageHandler`
+	* TODO: Implement this
+	*/
 
 	/* The server's socket */
 	private Socket serverSocket;
@@ -18,6 +24,13 @@ public class BesterServer
 	{
 		debugPrint("Binding to address: " ~ bindAddress ~ " and port " ~ to!(string)(listenPort));
 		initialize(bindAddress, listenPort);
+	}
+
+
+	private void loadHandlers(JSONValue handlerBlock)
+	{
+		/* TODO: Implement me */
+		
 	}
 
 	private void initialize(string bindAddress, ushort listenPort)
@@ -135,8 +148,9 @@ private class BesterConnection : Thread
 	{
 		/* TODO: Implement me */
 		debugPrint("Dispatching payload [" ~ payloadType ~ "]");
-
 		debugPrint("Payload: " ~ payload.toPrettyString());
+
+		/* TODO: Lookup the payloadType handler */
 		
 		/* TODO: Set return value */
 		return true;
