@@ -5,9 +5,21 @@ import std.conv : to;
 import std.socket : SocketOSException;
 import utils.debugging : debugPrint;
 
-void startServer(string address, ushort port)
+void startServer(string configurationFilePath)
 {
 	BesterServer server = null;
+
+	/* TODO: Open the file here */
+	File configFile;
+	configFile.open(configurationFilePath);
+
+	/* The file buffer */
+	byte[] fileBuffer;
+
+	/* Allocate the buffer to be the size of the file */
+	fileBuffer.length = configFile.size();
+
+	/* TODO: File read here */
 
 	try
 	{

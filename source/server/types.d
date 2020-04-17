@@ -4,7 +4,7 @@ import utils.debugging : debugPrint;
 import std.conv : to;
 import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddress, SocketFlags;
 import core.thread : Thread;
-import std.stdio : writeln;
+import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType;
 import std.string : cmp;
 import server.handler;
@@ -26,15 +26,15 @@ public class BesterServer
 	{
 		debugPrint("Binding to address: " ~ bindAddress ~ " and port " ~ to!(string)(listenPort));
 		initialize(bindAddress, listenPort);
+		debugPrint("Setting up message handlers...");
+		//setupHandlers(configurationFile);
 	}
-
 
 	private void loadHandlers(JSONValue handlerBlock)
 	{
 		/* TODO: Implement me */
 		debugPrint("Constructing message handlers...");
 		MessageHandler.constructHandlers(handlerBlock);
-		
 	}
 
 	private void initialize(string bindAddress, ushort listenPort)
