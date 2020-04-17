@@ -15,6 +15,7 @@ public class MessageHandler
 
 	this(string executablePath, string socketPath)
 	{
+		/* Initialize the socket */
 		initializeUNIXSocket(socketPath);
 	}
 
@@ -24,7 +25,7 @@ public class MessageHandler
 		domainSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
 
 		/* Bind it to the socket path */
-		domainSocket.bind(parseAddress(socketPath));
+		domainSocket.connect(parseAddress(socketPath));
 	}
 
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
