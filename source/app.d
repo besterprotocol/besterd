@@ -16,5 +16,5 @@ void main()
 	ushort port = 2222;
 
 	/* TODO: Add usage check and arguments before this */
-	startServer(address, port);
+	startServer("server.conf");
 }

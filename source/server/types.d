@@ -22,10 +22,13 @@ public class BesterServer
 	/* The server's socket */
 	private Socket serverSocket;
 
-	this(string bindAddress, ushort listenPort)
+	this(JSONValue config)
 	{
-		debugPrint("Binding to address: " ~ bindAddress ~ " and port " ~ to!(string)(listenPort));
-		initialize(bindAddress, listenPort);
+
+		/* TODO: Bounds check and JSON vtype check */
+		debugPrint("Setting up socket...");
+		setupServerSocket(config["network"]);
+		
 		debugPrint("Setting up message handlers...");
 		//setupHandlers(configurationFile);
 	}
@@ -37,8 +40,26 @@ public class BesterServer
 		MessageHandler.constructHandlers(handlerBlock);
 	}
 
-	private void initialize(string bindAddress, ushort listenPort)
+	/* Setup the server socket */
+	private void setupServerSocket(JSONValue networkBlock)
 	{
+		string bindAddress;
+		ushort listenPort;
+
+		
+		JSONValue jsonAddress, jsonPort;
+
+		writeln(networkBlock);
+
+		/* TODO: Bounds check */
+		jsonAddress = networkBlock["address"];
+		jsonPort = networkBlock["port"];
+
+		bindAddress = jsonAddress.str;
+		listenPort = cast(ushort)jsonPort.integer;
+
+		debugPrint("Binding to address: " ~ bindAddress ~ " and port " ~ to!(string)(listenPort));
+		
 		/* Create a socket */
 		serverSocket = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
 		serverSocket.bind(parseAddress(bindAddress, listenPort));

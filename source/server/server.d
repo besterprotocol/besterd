@@ -4,11 +4,11 @@ import server.types;
 import std.conv : to;
 import std.socket : SocketOSException;
 import utils.debugging : debugPrint;
+import std.stdio : File, writeln;
+import std.json : parseJSON, JSONValue;
 
-void startServer(string configurationFilePath)
+JSONValue getConfig(string configurationFilePath)
 {
-	BesterServer server = null;
-
 	/* TODO: Open the file here */
 	File configFile;
 	configFile.open(configurationFilePath);
@@ -19,16 +19,36 @@ void startServer(string configurationFilePath)
 	/* Allocate the buffer to be the size of the file */
 	fileBuffer.length = configFile.size();
 
-	/* TODO: File read here */
+	/* Read the content of the file */
+	/* TODO: Error handling ErrnoException */
+	fileBuffer = configFile.rawRead(fileBuffer);
+	configFile.close();
+
+	JSONValue config;
+
+	/* TODO: JSON error checking */
+	config = parseJSON(cast(string)fileBuffer);
+
+	return config;	
+}
+
+void startServer(string configurationFilePath)
+{
+	/* The server configuration */
+	JSONValue serverConfiguration = getConfig(configurationFilePath);
+	writeln(serverConfiguration);
+
+	/* The server */
+	BesterServer server = null;
 
 	try
 	{
-		server = new BesterServer(address, port);
+		server = new BesterServer(serverConfiguration);
 		server.run();
 	}
 	catch(SocketOSException exception)
 	{
-		debugPrint("Error binding to address " ~ address ~ " and port " ~ to!(string)(port));
+		debugPrint("Error binding: " ~ exception.toString());
 	}
 	
 }
