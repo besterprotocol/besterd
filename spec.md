@@ -61,3 +61,33 @@ Received message:
 	}
 }
 ````
+
+There *MUST* also be a field in the original JSON message named `payload`,
+the JSON type doesn't matter.
+
+Received message:
+
+````
+"header" : {
+	"scope" : "scope",
+	"type" : "type",
+	"authentication" : {
+		"username" : "username",
+		"password" : "password"
+	}
+},
+"payload" : anything
+````
+
+## Message handling
+
+The way messages are handled depends on their `type`. The way the server deals with it
+works like this.
+
+The server configuration looks like this:
+
+````
+"handlers" : {
+	"type1" : {"handlerBinary"}
+}
+````
