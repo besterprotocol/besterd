@@ -25,15 +25,16 @@ public class BesterServer
 	this(JSONValue config)
 	{
 
-		/* TODO: Bounds check and JSON vtype check */
+		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up socket...");
 		setupServerSocket(config["network"]);
-		
+
+		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up message handlers...");
-		//setupHandlers(configurationFile);
+		setupHandlers(config["handlers"]);
 	}
 
-	private void loadHandlers(JSONValue handlerBlock)
+	private void setupHandlers(JSONValue handlerBlock)
 	{
 		/* TODO: Implement me */
 		debugPrint("Constructing message handlers...");
@@ -45,7 +46,6 @@ public class BesterServer
 	{
 		string bindAddress;
 		ushort listenPort;
-
 		
 		JSONValue jsonAddress, jsonPort;
 
