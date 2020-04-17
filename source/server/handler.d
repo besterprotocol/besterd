@@ -21,7 +21,7 @@ public class MessageHandler
 	private void initializeUNIXSocket(string socketPath)
 	{
 		/* Create the UNIX domain socket */
-		domainSocket = new Socket(AddressFamily.UNIX, SocketType.RAW);
+		domainSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
 
 		/* Bind it to the socket path */
 		domainSocket.bind(parseAddress(socketPath));
