@@ -1,6 +1,7 @@
 {
 	"authors": [
-		"Tristan B. Kildaire"
+		"Tristan B. Kildaire",
+		"Stephen Cochrane"
 	],
 	"copyright": "Copyright © 2020, Tristan B. Kildaire",
 	"description": "Bester protocol daemon. ",
