@@ -6,7 +6,8 @@ import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddres
 import core.thread : Thread;
 import std.stdio : writeln;
 import std.json : JSONValue, parseJSON, JSONException, JSONType;
-import std.string;
+import std.string : cmp;
+import server.handler;
 
 public class BesterServer
 {
