@@ -1,7 +1,7 @@
 module server.handler;
 
 import std.stdio : writeln;
-import std.socket : Socket, AddressFamily, parseAddress, SocketType, ProtocolType;
+import std.socket : Socket, AddressFamily, parseAddress, SocketType;
 import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
 
@@ -20,7 +20,11 @@ public class MessageHandler
 
 	private void initializeUNIXSocket(string socketPath)
 	{
-		// TODO: domainSocket = new Socket();
+		/* Create the UNIX domain socket */
+		domainSocket = new Socket(AddressFamily.UNIX, SocketType.RAW);
+
+		/* Bind it to the socket path */
+		domainSocket.bind(parseAddress(socketPath));
 	}
 
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
@@ -75,7 +79,7 @@ public class MessageHandler
 		/* The configuration string */
 		string[2] configurationString;
 
-		
+		/* The module block */		
 		JSONValue moduleBlock;
 
 		/* TODO: Bounds check */
