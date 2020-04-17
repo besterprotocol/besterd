@@ -47,6 +47,7 @@ public class BesterServer
 	public bool authenticate(string username, string password)
 	{
 		/* TODO: Implement me */
+		debugPrint("Attempting to authenticate:\n\nUsername: " ~ username ~ "\nPassword: " ~ password);
 		return true;
 	}
 }
@@ -162,7 +163,6 @@ private class BesterConnection : Thread
 				if(besterHeader.type == JSONType.object)
 				{
 					/* TODO: Add further checks here */
-
 
 					/* TODO: Bounds check */
 					JSONValue payloadType;
