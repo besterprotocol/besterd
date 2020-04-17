@@ -1,7 +1,7 @@
 module server.handler;
 
 import std.stdio : writeln;
-import std.socket : Socket;
+import std.socket : Socket, AddressFamily, parseAddress, SocketType, ProtocolType;
 import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
 
@@ -15,7 +15,12 @@ public class MessageHandler
 
 	this(string executablePath, string socketPath)
 	{
-		
+		initializeUNIXSocket(socketPath);
+	}
+
+	private void initializeUNIXSocket(string socketPath)
+	{
+		// TODO: domainSocket = new Socket();
 	}
 
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
