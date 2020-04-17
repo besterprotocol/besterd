@@ -167,7 +167,7 @@ private class BesterConnection : Thread
 					/* TODO: Bounds check */
 					JSONValue payloadType;
 
-					payloadType = jsonMessage["type"];
+					payloadType = besterHeader["type"];
 
 					/* The payload type must be a string */
 					if(payloadType.type == JSONType.string)
@@ -270,7 +270,7 @@ private class BesterConnection : Thread
 		catch(JSONException exception)
 		{
 			/* TODO: Implement this */
-			debugPrint("Error parsing the received JSON message");
+			debugPrint("Error parsing the received JSON message: " ~ exception.toString());
 		}
 	
 	}

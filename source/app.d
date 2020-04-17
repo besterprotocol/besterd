@@ -7,7 +7,7 @@ void main()
 {
 	/* TODO: Change this */
 	string address = "0.0.0.0";
-	ushort port = 2225;
+	ushort port = 2222;
 
 	/* TODO: Add usage check and arguments before this */
 	startServer(address, port);
