@@ -131,9 +131,13 @@ private class BesterConnection : Thread
 	}
 
 	/* TODO: Pass in type and just payload or what */
-	private bool dispatch(JSONValue message)
+	private bool dispatch(string payloadType, JSONValue payload)
 	{
+		/* TODO: Implement me */
+		debugPrint("Dispatching payload [" ~ payloadType ~ "]");
 
+		debugPrint("Payload: " ~ payload.toPrettyString());
+		
 		/* TODO: Set return value */
 		return true;
 	}
@@ -172,6 +176,8 @@ private class BesterConnection : Thread
 					/* The payload type must be a string */
 					if(payloadType.type == JSONType.string)
 					{
+						string payloadTypeString = payloadType.str;
+					
 						/* TODO: Move everything into this block */
 						/* The header must contain a scope block */
 						JSONValue scopeBlock;
@@ -200,8 +206,6 @@ private class BesterConnection : Thread
 								JSONValue username, password;
 								username = authenticationBlock["username"];
 								password = authenticationBlock["password"];
-						
-													
 													
 												
 								if(username.type == JSONType.string && password.type == JSONType.string)
@@ -216,9 +220,15 @@ private class BesterConnection : Thread
 									if(isAuthenticated)
 									{
 										debugPrint("Authenticated");
-						
+
+										/* Get the payload */
+										JSONValue payload;
+
+										/* TODO: Bounds check */
+										payload = jsonMessage["payload"];
+
 										/* TODO: Dispatch to the correct message handler */
-										dispatch(jsonMessage);
+										dispatch(payloadTypeString, payload);
 									}
 									else
 									{
