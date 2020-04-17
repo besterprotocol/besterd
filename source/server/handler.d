@@ -33,7 +33,6 @@ public class MessageHandler
 		/* Available types as strings */
 		string[] availableTypesStrings;
 		
-
 		/* Get the available handlers */
 		JSONValue availableTypes;
 		
@@ -45,8 +44,6 @@ public class MessageHandler
 		{
 			/* Get the array of available types */
 			JSONValue[] availableTypesArray = availableTypes.array;
-		
-					
 		
 			for(uint i = 0; i < availableTypesArray.length; i++)
 			{
@@ -63,9 +60,6 @@ public class MessageHandler
 					debugPrint("Available type not of type JSON string");
 				}
 			}
-					
-		
-					
 		}
 		else
 		{

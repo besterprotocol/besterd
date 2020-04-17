@@ -17,6 +17,7 @@ public class BesterServer
 	* Associative array of `payloadType (string)`:`MessageHandler`
 	* TODO: Implement this
 	*/
+	private MessageHandler handlers;
 
 	/* The server's socket */
 	private Socket serverSocket;
@@ -31,6 +32,8 @@ public class BesterServer
 	private void loadHandlers(JSONValue handlerBlock)
 	{
 		/* TODO: Implement me */
+		debugPrint("Constructing message handlers...");
+		MessageHandler.constructHandlers(handlerBlock);
 		
 	}
 
