@@ -68,6 +68,31 @@ public class MessageHandler
 		
 	}
 
+	private static string[2] getConfigurationArray(string pluginName, JSONValue typeMapBlock)
+	{
+		/* The configuration string */
+		string[2] configurationString;
+
+		
+		JSONValue moduleBlock;
+
+		/* TODO: Bounds check */
+		moduleBlock = typeMapBlock[pluginName];
+
+		/* Module block mst be of tpe JSON object */
+		if(moduleBlock.type == JSONType.object)
+		{
+			/* TODO: Set the executable path */
+			/* TODO: Set the UNIX domain socket path */
+		}
+		else
+		{
+			/* TODO: Error handling */
+		}
+
+		return configurationString;
+	}
+
 	/* TODO: Implement me */
 	public static MessageHandler[] constructHandlers(JSONValue handlerBlock)
 	{
@@ -76,6 +101,22 @@ public class MessageHandler
 
 		/* TODO: Throwing error from inside this function */
 		string[] availableTypes = getAvailableTypes(handlerBlock);
+
+		for(uint i = 0; i < availableTypes.length; i++)
+		{
+			/* Load module */
+			string pluginName = availableTypes[i];
+			debugPrint("Loading module \"" ~ pluginName ~ "\"...");
+			JSONValue typeMap;
+
+			/* TODO: Bounds check */
+			typeMap = handlerBlock["typeMap"];
+			
+			string[2] configuration = getConfigurationArray(pluginName, typeMap);
+			debugPrint("Module executable at: \"" ~ configuration[0] ~ "\"");
+			debugPrint("Module socket path at: \"" ~ configuration[1] ~ "\"");
+			MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1]);
+		}
 		
 
 		return handlers;
