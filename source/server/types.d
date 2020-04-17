@@ -17,7 +17,7 @@ public class BesterServer
 	* Associative array of `payloadType (string)`:`MessageHandler`
 	* TODO: Implement this
 	*/
-	private MessageHandler handlers;
+	private MessageHandler[] handlers;
 
 	/* The server's socket */
 	private Socket serverSocket;
@@ -38,7 +38,7 @@ public class BesterServer
 	{
 		/* TODO: Implement me */
 		debugPrint("Constructing message handlers...");
-		MessageHandler.constructHandlers(handlerBlock);
+		handlers = MessageHandler.constructHandlers(handlerBlock);
 	}
 
 	/* Setup the server socket */
@@ -175,7 +175,33 @@ private class BesterConnection : Thread
 		debugPrint("Dispatching payload [" ~ payloadType ~ "]");
 		debugPrint("Payload: " ~ payload.toPrettyString());
 
-		/* TODO: Lookup the payloadType handler */
+		/* Lookup the payloadType handler */
+		MessageHandler chosenHandler;
+
+		for(uint i = 0; i < server.handlers.length; i++)
+		{
+			if(cmp(server.handlers[i].getPluginName(), payloadType))
+			{
+				chosenHandler = server.handlers[i];
+				break;
+			}
+		}
+
+		if(chosenHandler)
+		{
+			/* TODO: Send and receive data here */
+
+			/* TODO: Send payload */
+			debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+
+			/* TODO: Get response */
+			debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+		}
+		else
+		{
+			/* TODO: Error handling */
+			debugPrint("No message handler for payload type \"" ~ payloadType ~ "\" found.");
+		}
 		
 		/* TODO: Set return value */
 		return true;

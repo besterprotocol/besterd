@@ -13,10 +13,21 @@ public class MessageHandler
 	/* The UNIX domain socket */
 	private Socket domainSocket;
 
-	this(string executablePath, string socketPath)
+	/* The pluginName/type */
+	private string pluginName;
+
+	this(string executablePath, string socketPath, string pluginName)
 	{
+		/* Set the plugin name */
+		this.pluginName = pluginName;
+
 		/* Initialize the socket */
 		initializeUNIXSocket(socketPath);
+	}
+
+	public string getPluginName()
+	{
+		return pluginName;
 	}
 
 	private void initializeUNIXSocket(string socketPath)
@@ -122,7 +133,7 @@ public class MessageHandler
 				string[2] configuration = getConfigurationArray(pluginName, typeMap);
 				debugPrint("Module executable at: \"" ~ configuration[0] ~ "\"");
 				debugPrint("Module socket path at: \"" ~ configuration[1] ~ "\"");
-				MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1]);
+				MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1], pluginName);
 				handlers ~= constructedMessageHandler;
 				debugPrint("Module \"" ~ pluginName ~ "\" loaded");
 			}
