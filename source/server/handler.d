@@ -84,7 +84,10 @@ public class MessageHandler
 		if(moduleBlock.type == JSONType.object)
 		{
 			/* TODO: Set the executable path */
+			configurationString[0] = moduleBlock["handlerBinary"].str;
+
 			/* TODO: Set the UNIX domain socket path */
+			configurationString[1] = moduleBlock["unixDomainSocketPath"].str;
 		}
 		else
 		{
