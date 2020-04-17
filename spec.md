@@ -10,7 +10,7 @@ Bester is a protocol for authenticated message-passing in a federated network.
 Every message in bester contains the following:
 
 ````
-[8 bytes - message size][JSON message]
+[4 bytes - message size (little endian)][JSON message]
 ````
 
 ### JSON payload
