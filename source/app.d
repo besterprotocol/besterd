@@ -6,6 +6,7 @@ import server.server;
 unittest d
 {
 	writeln("Hello");
+	main();
 }
 
 void main()
