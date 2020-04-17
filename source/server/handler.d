@@ -25,52 +25,49 @@ public class MessageHandler
 
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
 	{
-		/* TODO: Use this */
-
-/* AVailable types as strings */
-					string[] availableTypesStrings;
+		/* Available types as strings */
+		string[] availableTypesStrings;
 		
 
 		/* Get the available handlers */
-				JSONValue availableTypes;
+		JSONValue availableTypes;
 		
-				/* TODO: Bounds check */
-				availableTypes = handlerBlock["availableTypes"];
+		/* TODO: Bounds check */
+		availableTypes = handlerBlock["availableTypes"];
 		
-				/* Make sure it is an array */
-				if(availableTypes.type == JSONType.array)
+		/* Make sure it is an array */
+		if(availableTypes.type == JSONType.array)
+		{
+			/* Get the array of available types */
+			JSONValue[] availableTypesArray = availableTypes.array;
+		
+					
+		
+			for(uint i = 0; i < availableTypesArray.length; i++)
+			{
+				/* Make sure that it is a string */
+				if(availableTypesArray[i].type == JSONType.string)
 				{
-					/* Get the array of available types */
-					JSONValue[] availableTypesArray = availableTypes.array;
-		
-					
-		
-					for(uint i = 0; i < availableTypesArray.length; i++)
-					{
-						/* Make sure that it is a string */
-						if(availableTypesArray[i].type == JSONType.string)
-						{
-							/* Add the type handler to the list of available types */
-							availableTypesStrings ~= availableTypesArray[i].str;
-							debugPrint("Module wanted: " ~ availableTypesArray[i].str);
-						}
-						else
-						{
-							/* TODO: Error handling here */
-							debugPrint("Available type not of type JSON string");
-						}
-					}
-					
-		
-					
+					/* Add the type handler to the list of available types */
+					availableTypesStrings ~= availableTypesArray[i].str;
+					debugPrint("Module wanted: " ~ availableTypesArray[i].str);
 				}
 				else
 				{
-					/* TODO: Error handling */
+					/* TODO: Error handling here */
+					debugPrint("Available type not of type JSON string");
 				}
-
-				return availableTypesStrings;
+			}
+					
 		
+					
+		}
+		else
+		{
+			/* TODO: Error handling */
+		}
+
+		return availableTypesStrings;
 	}
 
 	private static string[2] getConfigurationArray(string pluginName, JSONValue typeMapBlock)
@@ -123,7 +120,6 @@ public class MessageHandler
 			MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1]);
 			handlers ~= constructedMessageHandler;
 		}
-		
 
 		return handlers;
 	}
