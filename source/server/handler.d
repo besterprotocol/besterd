@@ -116,6 +116,7 @@ public class MessageHandler
 			debugPrint("Module executable at: \"" ~ configuration[0] ~ "\"");
 			debugPrint("Module socket path at: \"" ~ configuration[1] ~ "\"");
 			MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1]);
+			handlers ~= constructedMessageHandler;
 		}
 		
 
