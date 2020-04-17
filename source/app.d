@@ -3,6 +3,11 @@ module app;
 import std.stdio;
 import server.server;
 
+unittest d
+{
+	writeln("Hello");
+}
+
 void main()
 {
 	/* TODO: Change this */
