@@ -88,6 +88,10 @@ The server configuration looks like this:
 
 ````
 "handlers" : {
-	"type1" : {"handlerBinary"}
+	"availableTypes" : ["type1", "type2"],
+	"typeMap" :{
+		"type1" : {"handlerBinary" : "aBin", "unixDomainSocketPath" : "aSock"},
+		"type2" : {"handlerBinary" : "bBin", "unixDomainSocketPath" : "bSock"}
+	}
 }
 ````
