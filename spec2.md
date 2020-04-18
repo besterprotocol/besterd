@@ -71,5 +71,30 @@ be a JSON object and *MUST* contain two fields, `type` and `data`, where
 
 #### `Client <- Server`
 
-*TODO*: But basically anything can go here as it is all in order so you will get your
-reply.
+If a server wants to reply to a client (that just sent a message to it) then
+the following bytes must be sent to the client:
+
+````
+[ 4 bytes (size - little endian)][JSON message]
+````
+
+The `[JSON message]` contains information that the client will
+use to gain the following information:
+	* *Status*: Did the command sent prior to this response
+		run successfully?
+	* *Payload*: The data to be processed by the _client_.
+
+The structure of the `[JSON message]` is as follows:
+
+````
+{
+	"header" : {
+		"status" : "status"
+	},
+	"payload" : {
+		"data" : ...
+	}
+}
+````
+
+
