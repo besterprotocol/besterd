@@ -25,6 +25,8 @@ Spec v2
 
 Describes client-to-server and server-to-client communications.
 
+<hr>
+
 #### `Client -> Server`
 
 If a client wants to send a command through to the server
@@ -68,6 +70,8 @@ be a JSON object and *MUST* contain two fields, `type` and `data`, where
 `type` *MUST* be a JSON string and `data` can be any JSON type.
 
 *TODO*
+
+<hr>
 
 #### `Client <- Server`
 
