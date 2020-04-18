@@ -414,11 +414,89 @@ private class BesterConnection : Thread
 		return dispatchStatus;
 	}
 
+	/* TODO: Version 2 of message dispatcher */
+	private bool dispatchMessage(JSONValue payloadBlock)
+	{
+		/* Status of dispatch */
+		bool dispatchStatus = true;
+
+		/* TODO: Bounds checking, type checking */
+
+		/* Get the payload type */
+		string payloadType = payloadBlock["type"].str;
+		debugPrint("Payload type is \"" ~ payloadType ~ "\"");
+
+		/* Get the payload data */
+		JSONValue payloadData = payloadBlock["data"];
+
+		/* Lookup the payloadType handler */
+				MessageHandler chosenHandler;
+		
+				for(uint i = 0; i < server.handlers.length; i++)
+				{
+					if(cmp(server.handlers[i].getPluginName(), payloadType) == 0)
+					{
+						chosenHandler = server.handlers[i];
+						break;
+					}
+				}
+		
+
+
+		return dispatchStatus;
+	}
+
 	/* Process the received message */
 	private void processMessage(byte[] messageBuffer)
 	{
 		/* The message as a JSONValue struct */
 		JSONValue jsonMessage;
+
+
+		/* Attempt to convert the message to JSON */
+		try
+		{
+			/* Convert message to JSON */
+			jsonMessage = parseJSON(cast(string)messageBuffer);
+			debugPrint("<<< Received JSON >>>\n\n" ~ jsonMessage.toPrettyString());
+
+			/* TODO: Bounds checking, type checking */
+
+			/* Get the header */
+			JSONValue headerBlock = jsonMessage["header"];
+
+			/* Get the authentication block */
+			JSONValue authenticationBlock = headerBlock["authentication"];
+
+			/* Get the username and password */
+			JSONValue username = authenticationBlock["username"], password = authenticationBlock["password"];
+
+			/* Get the payload block */
+			JSONValue payloadBlock = jsonMessage["payload"];
+
+			/* Dispatch the message */
+			bool dispatchStatus = dispatchMessage(payloadBlock);
+
+			if(dispatchStatus)
+			{
+				debugPrint("Dispatch succeeded");
+			}
+			else
+			{
+				/* TODO: Error handling */
+				debugPrint("Dispatching failed...");
+			}
+		}
+		/* If thr attempt to convert the message to JSON fails */
+		catch(JSONException exception)
+		{
+			debugPrint("<<< There was an error whilst parsing the JSON message >>>\n\n"~exception.toString());
+		}
+
+
+
+
+
 		
 		try
 		{

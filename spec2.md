@@ -107,7 +107,7 @@ follows:
 *SHOULD* be inetrpreted as such. Within it there is a field
 called `status` which is a JSON string and *SHOULD* be interpreted
 as such.
-* There is a field called `data` which is of aa JSON type up to
+* There is a field called `data` which is of a JSON type up to
 the _message handler_ and *SHOULD* be interpreted in accordance to
 its (the _message handler_'s) rules.
 
