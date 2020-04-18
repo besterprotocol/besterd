@@ -494,11 +494,13 @@ private class BesterConnection : Thread
 			debugPrint("<<< There was an error whilst parsing the JSON message >>>\n\n"~exception.toString());
 		}
 
+		/* TODO: Remove me once v2 is implemented */
+		bool f = true;
+		if(f)
+		{
+			goto skip_v1;
+		}
 
-
-
-
-		
 		try
 		{
 			/* Convert message to JSON */
@@ -633,7 +635,7 @@ private class BesterConnection : Thread
 			/* TODO: Implement this */
 			debugPrint("Error parsing the received JSON message: " ~ exception.toString());
 		}
-	
+		skip_v1:
 	}
 
 	
