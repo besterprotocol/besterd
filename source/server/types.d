@@ -386,13 +386,17 @@ private class BesterConnection : Thread
 				}
 			}
 
-			/* TODO: Loop for size (4 bytes, little endian) */
 
 			writeln("MEssage ", fullMessage);
 
 			//int messageLength = 0;
 
 			/* TODO: Loop for collect message */
+
+			/* TODO: So now we have to think about what the hell it means
+			 * for a response to be received, like cool and all, but we need
+			 * the server to now do something.
+			 */
 
 
 			/* TODO: Set dispatchStatus */
