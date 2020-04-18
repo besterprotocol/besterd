@@ -36,3 +36,29 @@ use to gain the following information:
 	* *Type*: Which _message handler_ should be responsible for
 		processing this message.
 	* *Payload*: The data to be processed by the _message handler_.
+
+The structure of the `[JSON message]` is as follows:
+
+````
+{
+	"header" : {
+		"authentication" : {
+			"username" : "username",
+			"password" : "password"
+		}
+	},
+	"payload" : {
+		"type" : "type",
+		"data" : ...
+	}
+}
+````
+
+* The `[JSON message]` *MUST* contain two fields, `header` and `payload`
+which *MUST* be JSON objects.
+* The `header` field *MUST* contain a field named `authentication` which
+*MUST* be a JSON object and must contain two fields, `username` and `password`,
+which *MUST* be JSON strings.
+* The `[JSON message]` *MUST* contain a field named `payload` which *MUST*
+be a JSON object and *MUST* contain two fields, `type` and `data`, where
+`type` *MUST* be a JSON string and `data` can be any JSON type.
