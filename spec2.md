@@ -23,6 +23,10 @@ Spec v2
 
 ### Client
 
+Describes client-to-server and server-to-client communications.
+
+#### `Client -> Server`
+
 If a client wants to send a command through to the server
 then the following bytes must be sent:
 
@@ -62,3 +66,10 @@ which *MUST* be JSON strings.
 * The `[JSON message]` *MUST* contain a field named `payload` which *MUST*
 be a JSON object and *MUST* contain two fields, `type` and `data`, where
 `type` *MUST* be a JSON string and `data` can be any JSON type.
+
+*TODO*
+
+#### `Client <- Server`
+
+*TODO*: But basically anything can go here as it is all in order so you will get your
+reply.
