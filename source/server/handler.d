@@ -16,6 +16,11 @@ public class MessageHandler
 	/* The pluginName/type */
 	private string pluginName;
 
+	public Socket getSocket()
+	{
+		return domainSocket;
+	}
+
 	this(string executablePath, string socketPath, string pluginName)
 	{
 		/* Set the plugin name */

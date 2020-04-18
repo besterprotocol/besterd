@@ -117,22 +117,40 @@ private class BesterConnection : Thread
 
 		while(true)
 		{
-			/* Make the dynamic array's size 4 */
-			buffer.length = 4;
+			/* Byte counter for loop-consumer */
+			uint currentByte = 0;
 
-			/* Read the first 4 bytes (retrieve message size) */
-			long bytesReceived = clientConnection.receive(buffer);
-			writeln("PreambleWait: Bytes received: ", cast(ulong)bytesReceived);
-
-			/* Make sure exactly 4 bytes were received */
-			if (bytesReceived != 4)
+			/* Bytes received counter */
+			long bytesReceived;
+			
+			/* TODO: Add fix here to loop for bytes */
+			while(currentByte < 4)
 			{
-				/* If we don't get exactly 4 bytes, drop the client */
-				debugPrint("Did not get exactly 4 bytes for preamble, disconnecting client...");
-				clientConnection.close();
-				break;
-			}
+				/* Size buffer */
+				byte[4] tempBuffer;
+				
+				/* Read at most 4 bytes */
+				bytesReceived = clientConnection.receive(tempBuffer);
 
+				if(!(bytesReceived > 0))
+				{
+					/* TODO: Handle error here */
+					debugPrint("Error with receiving");
+					return;
+				}
+				else
+				{
+					/**
+					 * Read the bytes from the temp buffer (as many as was received)
+					 * and append them to the *real* buffer.
+					 */
+					buffer ~= tempBuffer[0..bytesReceived];
+						
+					/* Increment the byte counter */
+					currentByte += bytesReceived;	
+				}
+			}
+			
 			/* Get the message length */
 			int messageLength = *(cast(int*)buffer.ptr);
 			writeln("Message length: ", cast(uint)messageLength);
@@ -145,22 +163,59 @@ private class BesterConnection : Thread
 
 
 			/* TODO: Add timeout if we haven't received a message in a certain amount of time */
+
+			/* Reset the current byte counter */
+			currentByte = 0;
 			
-			uint currentByte = 0;
-			while(currentByte < cast(uint)messageLength)
+			while(currentByte < messageLength)
 			{
 				/* Receive 20 bytes (at most) at a time */
 				byte[20] messageBufferPartial;
-				bytesReceived = clientConnection.receive(messageBufferPartial);
+				bytesReceived = clientConnection.receive(messageBufferPartial, SocketFlags.PEEK);
 
-				/* Append the received bytes to the FULL message buffer */
-				messageBuffer ~= messageBufferPartial[0..bytesReceived];
+				/* Check for receive error */
+				if(!(bytesReceived > 0))
+				{
+					debugPrint("Error receiving");
+					return;
+				}
+				else
+				{
+					/* TODO: Make sure we only take [0, messageLength) bytes */
+					if(cast(uint)bytesReceived+currentByte > messageLength)
+					{
+						byte[] remainingBytes;
+						remainingBytes.length = messageLength-currentByte;
 
-				/* TODO: Bug when over send, we must not allow this */
+						clientConnection.receive(remainingBytes);
 
-				/* Increment counter of received bytes */
-				currentByte += bytesReceived;
-				writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
+						/* Increment counter of received bytes */
+						currentByte += remainingBytes.length;
+
+						/* Append the received bytes to the FULL message buffer */
+						messageBuffer ~= remainingBytes;
+
+						writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
+					}
+					else
+					{
+						/* Increment counter of received bytes */
+						currentByte += bytesReceived;
+
+						
+						/* Append the received bytes to the FULL message buffer */
+						messageBuffer ~= messageBufferPartial[0..bytesReceived];
+
+						/* TODO: Bug when over send, we must not allow this */
+
+						
+						writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
+
+						clientConnection.receive(messageBufferPartial);
+					}
+
+					
+				}
 			}
 
 			/* Process the message */
@@ -187,12 +242,20 @@ private class BesterConnection : Thread
 			}
 		}
 
+		
+
 		if(chosenHandler)
 		{
 			/* TODO: Send and receive data here */
 
+			/* Handler's UNIX domain socket */
+			Socket handlerSocket = chosenHandler.getSocket();
+
 			/* TODO: Send payload */
+			/* Get the chosen string */
+			
 			debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+			
 
 			/* TODO: Get response */
 			debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
