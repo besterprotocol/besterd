@@ -27,7 +27,7 @@ Describes client-to-server and server-to-client communications.
 
 <hr>
 
-#### `Client -> Server`
+#### Client -> Server
 
 If a client wants to send a command through to the server
 then the following bytes must be sent:
@@ -73,7 +73,7 @@ be a JSON object and *MUST* contain two fields, `type` and `data`, where
 
 <hr>
 
-#### `Client <- Server`
+#### Client <- Server
 
 If a server wants to reply to a client (that just sent a message to it) then
 the following bytes must be sent to the client:
@@ -95,10 +95,19 @@ The structure of the `[JSON message]` is as follows:
 	"header" : {
 		"status" : "status"
 	},
-	"payload" : {
-		"data" : ...
-	}
+	"data" : ...
 }
 ````
 
+The interpretation of the entirety of the `[JSON message]` is up
+to the client but the client *SHOULD* expect and interpret as
+follows:
+
+* There is a field called `header` which is a JSON object and
+*SHOULD* be inetrpreted as such. Within it there is a field
+called `status` which is a JSON string and *SHOULD* be interpreted
+as such.
+* There is a field called `data` which is of aa JSON type up to
+the _message handler_ and *SHOULD* be interpreted in accordance to
+its (the _message handler_'s) rules.
 
