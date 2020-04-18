@@ -3,7 +3,7 @@ import json
 
 def basicTest():
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    d.connect(("127.0.0.1",2222))
+    d.connect(("127.0.0.1",2223))
     bys=json.dumps({"header":{"authentication":{"username":"tbk", "password":"passwd"},"type":"type1", "scope":"poes"},"payload":"ABBA"})
     print(bys)
     d.send(bytes([len(bys),0,0,0]))

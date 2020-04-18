@@ -231,6 +231,9 @@ private class BesterConnection : Thread
 		debugPrint("Dispatching payload [" ~ payloadType ~ "]");
 		debugPrint("Payload: " ~ payload.toPrettyString());
 
+		/* Status of dispatch */
+		bool dispatchStatus = true;
+
 		/* Lookup the payloadType handler */
 		MessageHandler chosenHandler;
 
@@ -281,18 +284,77 @@ private class BesterConnection : Thread
 			/* TODO: Get response */
 			debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 
-			/* TODO: Loop for size */
+			/* Construct a buffer to receive into */
+			byte[] receiveBuffer;
+
+			/* The current byte */
+			uint currentByte = 0;
+
+			/* The amount of bytes received */
+			long bytesReceived;
+
+			/* Loop consume the next 4 bytes */
+			while(currentByte < 4)
+			{
+				/* Temporary buffer */
+				byte[4] tempBuffer;
+
+				/* Read at-most 4 bytes */
+				bytesReceived = handlerSocket.receive(tempBuffer);
+
+				/* If there was an error reading from the socket */
+				if(!(bytesReceived > 0))
+				{
+					/* TODO: Error handling */
+					debugPrint("Error receiving from UNIX domain socket");
+				}
+				/* If there is no error reading from the socket */
+				else
+				{
+					/* Add the read bytes to the *real* buffer */
+					receiveBuffer ~= tempBuffer[0..bytesReceived];
+
+					/* Increment the byte counter */
+					currentByte += bytesReceived;
+				}
+			}
+
+			/* Response message length */
+			int messageLength = *cast(int*)receiveBuffer.ptr;
+			writeln("Message length is: ", cast(uint)messageLength);
+
+			/* Response message buffer */
+			byte[] fullMessage;
+
+			/* Reset the byte counter */
+			currentByte = 0;
+
+			while(currentByte < messageLength)
+			{
+				debugPrint("dhjkh");
+			}
+
+			/* TODO: Loop for size (4 bytes, little endian) */
+
+
+			//int messageLength = 0;
 
 			/* TODO: Loop for collect message */
+
+
+			/* TODO: Set dispatchStatus */
 		}
 		else
 		{
 			/* TODO: Error handling */
 			debugPrint("No message handler for payload type \"" ~ payloadType ~ "\" found.");
+			dispatchStatus = false;
 		}
 		
 		/* TODO: Set return value */
-		return true;
+		debugPrint("Dispatch status: " ~ to!(string)(dispatchStatus));
+
+		return dispatchStatus;
 	}
 
 	/* Process the received message */
