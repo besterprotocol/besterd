@@ -1,7 +1,7 @@
 module server.handler;
 
 import std.stdio : writeln;
-import std.socket : Socket, AddressFamily, parseAddress, SocketType, SocketOSException;
+import std.socket : Socket, AddressFamily, parseAddress, SocketType, SocketOSException, UnixAddress;
 import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
 
@@ -41,7 +41,7 @@ public class MessageHandler
 		domainSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
 
 		/* Bind it to the socket path */
-		domainSocket.connect(parseAddress(socketPath));
+		domainSocket.connect(new UnixAddress(socketPath));
 	}
 
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
