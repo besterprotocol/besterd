@@ -39,6 +39,7 @@ public class BesterServer
 		/* TODO: Implement me */
 		debugPrint("Constructing message handlers...");
 		handlers = MessageHandler.constructHandlers(handlerBlock);
+		writeln(handlers[0].getPluginName());
 	}
 
 	/* Setup the server socket */
@@ -235,7 +236,7 @@ private class BesterConnection : Thread
 
 		for(uint i = 0; i < server.handlers.length; i++)
 		{
-			if(cmp(server.handlers[i].getPluginName(), payloadType))
+			if(cmp(server.handlers[i].getPluginName(), payloadType) == 0)
 			{
 				chosenHandler = server.handlers[i];
 				break;
@@ -274,10 +275,15 @@ private class BesterConnection : Thread
 			writeln("Send buffer: ", sendBuffer);
 			
 			debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+			handlerSocket.send(sendBuffer);
 			
 
 			/* TODO: Get response */
 			debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+
+			/* TODO: Loop for size */
+
+			/* TODO: Loop for collect message */
 		}
 		else
 		{
