@@ -170,7 +170,10 @@ private class BesterConnection : Thread
 			
 			while(currentByte < messageLength)
 			{
-				/* Receive 20 bytes (at most) at a time */
+				/**
+				 * Receive 20 bytes (at most) at a time and don't dequeue from
+				 * the kernel's TCP stack's buffer.
+				 */
 				byte[20] messageBufferPartial;
 				bytesReceived = clientConnection.receive(messageBufferPartial, SocketFlags.PEEK);
 
@@ -332,10 +335,60 @@ private class BesterConnection : Thread
 			while(currentByte < messageLength)
 			{
 				debugPrint("dhjkh");
+
+				/**
+				 * Receive 20 bytes (at most) at a time and don't dequeue from
+				 * the kernel's TCP stack's buffer.
+				 */
+				byte[20] tempBuffer;
+				bytesReceived = handlerSocket.receive(tempBuffer, SocketFlags.PEEK);
+
+				/* Check for an error whilst receiving */
+				if(!(bytesReceived > 0))
+				{
+					/* TODO: Error handling */
+					debugPrint("Error whilst receiving from unix domain socket");
+				}
+				else
+				{
+					/* TODO: Make sure we only take [0, messageLength) bytes */
+					if(cast(uint)bytesReceived+currentByte > messageLength)
+					{
+						byte[] remainingBytes;
+						remainingBytes.length = messageLength-currentByte;
+
+						handlerSocket.receive(remainingBytes);
+
+						/* Increment counter of received bytes */
+						currentByte += remainingBytes.length;
+
+						/* Append the received bytes to the FULL message buffer */
+						fullMessage ~= remainingBytes;
+
+						writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
+					}
+					else
+					{
+						/* Increment counter of received bytes */
+						currentByte += bytesReceived;
+
+						
+						/* Append the received bytes to the FULL message buffer */
+						fullMessage ~= tempBuffer[0..bytesReceived];
+
+						/* TODO: Bug when over send, we must not allow this */
+
+						
+						writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
+
+						handlerSocket.receive(tempBuffer);
+					}
+				}
 			}
 
 			/* TODO: Loop for size (4 bytes, little endian) */
 
+			writeln("MEssage ", fullMessage);
 
 			//int messageLength = 0;
 
