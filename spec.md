@@ -95,3 +95,29 @@ The server configuration looks like this:
 	}
 }
 ````
+
+### Sending payloads
+
+When it comes to payloads, all that is needed is a field called `payload` that is
+a of any JSON type.
+
+Received message (from client to server):
+
+````
+"payload" = ...
+````
+
+### Receiving responses
+
+When the payload has been passed off from client to server and server to message handler
+then the response from the message handler must be as follows:
+
+````
+"response" : {
+	"scope" : "scope",
+	"type" : "type",
+	"payload" : ...
+}
+````
+
+TODO: To field and also add examples of usage
