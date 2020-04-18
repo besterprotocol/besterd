@@ -5,7 +5,7 @@ import std.conv : to;
 import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddress, SocketFlags;
 import core.thread : Thread;
 import std.stdio : writeln, File;
-import std.json : JSONValue, parseJSON, JSONException, JSONType;
+import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp;
 import server.handler;
 
@@ -251,8 +251,27 @@ private class BesterConnection : Thread
 			/* Handler's UNIX domain socket */
 			Socket handlerSocket = chosenHandler.getSocket();
 
+
+			/* Get the payload as a string */
+			string payloadString = toJSON(payload);
+			
+
+			/* Construct the data to send */
+			byte[] sendBuffer;
+	
+			/* TODO: Add 4 bytes of payload length encded in little endian */
+			int payloadLength = cast(int)payloadString.length;
+			byte* lengthBytes = cast(byte*)&payloadLength;
+			sendBuffer ~= *(lengthBytes+0);
+			sendBuffer ~= *(lengthBytes+1);
+			sendBuffer ~= *(lengthBytes+2);
+			sendBuffer ~= *(lengthBytes+3);
+
+			/* Add the string bytes */
+			sendBuffer ~= cast(byte[])payloadString;
+
 			/* TODO: Send payload */
-			/* Get the chosen string */
+			writeln("Send buffer: ", sendBuffer);
 			
 			debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 			
