@@ -430,17 +430,18 @@ private class BesterConnection : Thread
 		JSONValue payloadData = payloadBlock["data"];
 
 		/* Lookup the payloadType handler */
-				MessageHandler chosenHandler;
+		MessageHandler chosenHandler;
 		
-				for(uint i = 0; i < server.handlers.length; i++)
-				{
-					if(cmp(server.handlers[i].getPluginName(), payloadType) == 0)
-					{
-						chosenHandler = server.handlers[i];
-						break;
-					}
-				}
-		
+		for(uint i = 0; i < server.handlers.length; i++)
+		{
+			if(cmp(server.handlers[i].getPluginName(), payloadType) == 0)
+			{
+				chosenHandler = server.handlers[i];
+				break;
+			}
+		}
+
+		/* TODO: Continue here */
 
 
 		return dispatchStatus;
