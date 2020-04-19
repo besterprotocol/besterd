@@ -441,7 +441,7 @@ private class BesterConnection : Thread
 	}
 
 
-	private bool handlerRun(MessageHandler chosenHandler, JSONValue payload)
+	private JSONValue handlerRun(MessageHandler chosenHandler, JSONValue payload)
 	{
 		/* TODO: Send and receive data here */
 		
@@ -591,7 +591,7 @@ private class BesterConnection : Thread
 		
 					/* TODO: Set dispatchStatus */
 
-					return true;
+					return parseJSON(cast(string)fullMessage);
 	}
 
 	/* TODO: Version 2 of message dispatcher */
@@ -625,7 +625,11 @@ private class BesterConnection : Thread
 			debugPrint("Chosen handler for payload type \"" ~ payloadType ~ "\" is " ~ chosenHandler.getPluginName());
 
 			/* TODO: Collect return value */
-			handlerRun(chosenHandler, payloadData);
+			JSONValue response = handlerRun(chosenHandler, payloadData);
+			debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ response.toPrettyString());
+
+			/* TODO: Handle response */
+			
 		}
 		else
 		{

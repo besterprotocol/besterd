@@ -1,5 +1,5 @@
 import socket
-
+import json
 
 def runTest():
     d=socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -8,7 +8,9 @@ def runTest():
     while True:
         s = d.accept()[0]
         print(list(s.recv(130)))
-        print(s.send(bytes([4,0,0,0,65,66,66,65])))
+        bys = json.dumps({"response" : "ppoop"})
+        print(s.send(bytes([len(bys),0,0,0])))
+        print(s.send(bys.encode()))
 
     while True: pass
 
