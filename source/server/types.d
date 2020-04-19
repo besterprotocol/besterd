@@ -661,6 +661,7 @@ private class BesterConnection : Thread
 
 		return dispatchStatus;
 	}
+	
 
 	/* Process the received message */
 	private void processMessage(byte[] messageBuffer)
