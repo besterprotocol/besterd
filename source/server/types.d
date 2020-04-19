@@ -632,29 +632,29 @@ private class BesterConnection : Thread
 			ulong statusCode = to!(ulong)(headerBlock["status"].str);
 			debugPrint("Status code: " ~ to!(string)(statusCode));
 
+			/* The command block */
+			JSONValue commandBlock = headerBlock["command"];
+
 			/**
 			 * Get the command that the message handler wants the
 			 * server to run.
 			 */
-			string serverCommand = headerBlock["command"].str;
+			string serverCommand = commandBlock["type"].str;
 			debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
-
-			/* Get the command meta-data */
-			JSONValue commandMeta = headerBlock["commandData"];
-			debugPrint("CommandData: \"" ~ commandMeta.toPrettyString() ~ "\"");
 
 			/* Check the command to be run */
 			if(cmp(serverCommand, "sendClients") == 0)
 			{
 				/* Get the list of clients to send to */
 				string[] clients;
-				JSONValue[] clientList = commandMeta.array();
+				JSONValue[] clientList = commandBlock["data"].array();
 				for(ulong i = 0; i < clientList.length; i++)
 				{
 					clients ~= clientList[i].str();
 				}
 
 				/* TODO: Implement me */
+				writeln("Users wanting to send to ", clients);
 			}
 			else if(cmp(serverCommand, "sendServers") == 0)
 			{
