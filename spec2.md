@@ -39,6 +39,8 @@ then the following bytes must be sent:
 The `[JSON message]` contains information that the server will
 use to gain the following information:
 	* *Authentication*: Is the user allowed to use this server?
+	* *Scope*: Is this a client-to-server of server-to-server
+		communication?
 	* *Type*: Which _message handler_ should be responsible for
 		processing this message.
 	* *Payload*: The data to be processed by the _message handler_.
@@ -51,7 +53,8 @@ The structure of the `[JSON message]` is as follows:
 		"authentication" : {
 			"username" : "username",
 			"password" : "password"
-		}
+		},
+		"scope" : "client"
 	},
 	"payload" : {
 		"type" : "type",
@@ -64,7 +67,9 @@ The structure of the `[JSON message]` is as follows:
 which *MUST* be JSON objects.
 * The `header` field *MUST* contain a field named `authentication` which
 *MUST* be a JSON object and must contain two fields, `username` and `password`,
-which *MUST* be JSON strings.
+which *MUST* be JSON strings. The `header` field *MUST* also contain a field
+named `scope` which *MUST* be a JSON string (and in this case must be equal
+to `"client"`).
 * The `[JSON message]` *MUST* contain a field named `payload` which *MUST*
 be a JSON object and *MUST* contain two fields, `type` and `data`, where
 `type` *MUST* be a JSON string and `data` can be any JSON type.
