@@ -465,153 +465,152 @@ private class BesterConnection : Thread
 	{
 		/* TODO: Send and receive data here */
 		
-					/* Handler's UNIX domain socket */
-					Socket handlerSocket = chosenHandler.getSocket();
+		/* Handler's UNIX domain socket */
+		Socket handlerSocket = chosenHandler.getSocket();
 		
 		
-					/* Get the payload as a string */
-					string payloadString = toJSON(payload);
+		/* Get the payload as a string */
+		string payloadString = toJSON(payload);
 					
 		
-					/* Construct the data to send */
-					byte[] sendBuffer;
+		/* Construct the data to send */
+		byte[] sendBuffer;
 			
-					/* TODO: Add 4 bytes of payload length encded in little endian */
-					int payloadLength = cast(int)payloadString.length;
-					byte* lengthBytes = cast(byte*)&payloadLength;
-					sendBuffer ~= *(lengthBytes+0);
-					sendBuffer ~= *(lengthBytes+1);
-					sendBuffer ~= *(lengthBytes+2);
-					sendBuffer ~= *(lengthBytes+3);
+		/* TODO: Add 4 bytes of payload length encded in little endian */
+		int payloadLength = cast(int)payloadString.length;
+		byte* lengthBytes = cast(byte*)&payloadLength;
+		sendBuffer ~= *(lengthBytes+0);
+		sendBuffer ~= *(lengthBytes+1);
+		sendBuffer ~= *(lengthBytes+2);
+		sendBuffer ~= *(lengthBytes+3);
 		
-					/* Add the string bytes */
-					sendBuffer ~= cast(byte[])payloadString;
+		/* Add the string bytes */
+		sendBuffer ~= cast(byte[])payloadString;
 		
-					/* TODO: Send payload */
-					writeln("Send buffer: ", sendBuffer);
+		/* TODO: Send payload */
+		writeln("Send buffer: ", sendBuffer);
 					
-					debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
-					handlerSocket.send(sendBuffer);
+		debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+		handlerSocket.send(sendBuffer);
 					
 		
-					/* TODO: Get response */
-					debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
+		/* TODO: Get response */
+		debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 		
-					/* Construct a buffer to receive into */
-					byte[] receiveBuffer;
+		/* Construct a buffer to receive into */
+		byte[] receiveBuffer;
 		
-					/* The current byte */
-					uint currentByte = 0;
+		/* The current byte */
+		uint currentByte = 0;
 		
-					/* The amount of bytes received */
-					long bytesReceived;
+		/* The amount of bytes received */
+		long bytesReceived;
 		
-					/* Loop consume the next 4 bytes */
-					while(currentByte < 4)
-					{
-						/* Temporary buffer */
-						byte[4] tempBuffer;
+		/* Loop consume the next 4 bytes */
+		while(currentByte < 4)
+		{
+			/* Temporary buffer */
+			byte[4] tempBuffer;
 		
-						/* Read at-most 4 bytes */
-						bytesReceived = handlerSocket.receive(tempBuffer);
+			/* Read at-most 4 bytes */
+			bytesReceived = handlerSocket.receive(tempBuffer);
 		
-						/* If there was an error reading from the socket */
-						if(!(bytesReceived > 0))
-						{
-							/* TODO: Error handling */
-							debugPrint("Error receiving from UNIX domain socket");
-						}
-						/* If there is no error reading from the socket */
-						else
-						{
-							/* Add the read bytes to the *real* buffer */
-							receiveBuffer ~= tempBuffer[0..bytesReceived];
+			/* If there was an error reading from the socket */
+			if(!(bytesReceived > 0))
+			{
+				/* TODO: Error handling */
+				debugPrint("Error receiving from UNIX domain socket");
+			}
+			/* If there is no error reading from the socket */
+			else
+			{
+				/* Add the read bytes to the *real* buffer */
+				receiveBuffer ~= tempBuffer[0..bytesReceived];
 		
-							/* Increment the byte counter */
-							currentByte += bytesReceived;
-						}
-					}
+				/* Increment the byte counter */
+				currentByte += bytesReceived;
+			}
+		}
 		
-					/* Response message length */
-					int messageLength = *cast(int*)receiveBuffer.ptr;
-					writeln("Message length is: ", cast(uint)messageLength);
+		/* Response message length */
+		int messageLength = *cast(int*)receiveBuffer.ptr;
+		writeln("Message length is: ", cast(uint)messageLength);
 		
-					/* Response message buffer */
-					byte[] fullMessage;
+		/* Response message buffer */
+		byte[] fullMessage;
 		
-					/* Reset the byte counter */
-					currentByte = 0;
+		/* Reset the byte counter */
+		currentByte = 0;
 		
-					while(currentByte < messageLength)
-					{
-						debugPrint("dhjkh");
+		while(currentByte < messageLength)
+		{
+			debugPrint("dhjkh");
 		
-						/**
-						 * Receive 20 bytes (at most) at a time and don't dequeue from
-						 * the kernel's TCP stack's buffer.
-						 */
-						byte[20] tempBuffer;
-						bytesReceived = handlerSocket.receive(tempBuffer, SocketFlags.PEEK);
+			/**
+			 * Receive 20 bytes (at most) at a time and don't dequeue from
+			 * the kernel's TCP stack's buffer.
+			 */
+			byte[20] tempBuffer;
+			bytesReceived = handlerSocket.receive(tempBuffer, SocketFlags.PEEK);
 		
-						/* Check for an error whilst receiving */
-						if(!(bytesReceived > 0))
-						{
-							/* TODO: Error handling */
-							debugPrint("Error whilst receiving from unix domain socket");
-						}
-						else
-						{
-							/* TODO: Make sure we only take [0, messageLength) bytes */
-							if(cast(uint)bytesReceived+currentByte > messageLength)
-							{
-								byte[] remainingBytes;
-								remainingBytes.length = messageLength-currentByte;
+			/* Check for an error whilst receiving */
+			if(!(bytesReceived > 0))
+			{
+				/* TODO: Error handling */
+				debugPrint("Error whilst receiving from unix domain socket");
+			}
+			else
+			{
+				/* TODO: Make sure we only take [0, messageLength) bytes */
+				if(cast(uint)bytesReceived+currentByte > messageLength)
+				{
+					byte[] remainingBytes;
+					remainingBytes.length = messageLength-currentByte;
 		
-								handlerSocket.receive(remainingBytes);
+					handlerSocket.receive(remainingBytes);
 		
-								/* Increment counter of received bytes */
-								currentByte += remainingBytes.length;
+					/* Increment counter of received bytes */
+					currentByte += remainingBytes.length;
 		
-								/* Append the received bytes to the FULL message buffer */
-								fullMessage ~= remainingBytes;
+					/* Append the received bytes to the FULL message buffer */
+					fullMessage ~= remainingBytes;
 		
-								writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
-							}
-							else
-							{
-								/* Increment counter of received bytes */
-								currentByte += bytesReceived;
+					writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
+				}
+				else
+				{
+					/* Increment counter of received bytes */
+					currentByte += bytesReceived;
 		
 								
-								/* Append the received bytes to the FULL message buffer */
-								fullMessage ~= tempBuffer[0..bytesReceived];
+					/* Append the received bytes to the FULL message buffer */
+					fullMessage ~= tempBuffer[0..bytesReceived];
 		
-								/* TODO: Bug when over send, we must not allow this */
+					/* TODO: Bug when over send, we must not allow this */
 		
 								
-								writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
+					writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
 		
-								handlerSocket.receive(tempBuffer);
-							}
-						}
-					}
-		
-		
-					writeln("MEssage ", fullMessage);
-		
-					//int messageLength = 0;
-		
-					/* TODO: Loop for collect message */
-		
-					/* TODO: So now we have to think about what the hell it means
-					 * for a response to be received, like cool and all, but we need
-					 * the server to now do something.
-					 */
+					handlerSocket.receive(tempBuffer);
+				}
+			}
+		}
 		
 		
-					/* TODO: Set dispatchStatus */
+		writeln("MEssage ", fullMessage);
+		
+		//int messageLength = 0;
+		
+		/* TODO: Loop for collect message */
 
-					return parseJSON(cast(string)fullMessage);
+		/* TODO: So now we have to think about what the hell it means
+		 * for a response to be received, like cool and all, but we need
+		 * the server to now do something.
+		 */
+		
+		
+		/* TODO: Set dispatchStatus */
+		return parseJSON(cast(string)fullMessage);
 	}
 
 	/**
