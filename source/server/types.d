@@ -506,7 +506,7 @@ private class BesterConnection : Thread
 			else
 			{
 				/* TODO: Error handling */
-				debugPrint("Unknwon scope selected: " ~ scopeField);
+				debugPrint("Unknown scope selected: " ~ scopeField);
 			}
 		}
 		/* If thr attempt to convert the message to JSON fails */
