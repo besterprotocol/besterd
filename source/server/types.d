@@ -89,6 +89,11 @@ public class BesterServer
 		debugPrint("Attempting to authenticate:\n\nUsername: " ~ username ~ "\nPassword: " ~ password);
 		return true;
 	}
+
+	public static bool isBuiltInCommand(string payloadType)
+	{
+		/* TODO: Implement me */
+	}
 }
 
 private class BesterConnection : Thread
@@ -441,8 +446,20 @@ private class BesterConnection : Thread
 			}
 		}
 
-		/* TODO: Continue here */
-
+		/* Check if the payload is a built-in command */
+		if(BesterServer.isBuiltInCommand(payloadType))
+		{
+			/* TODO: Implement me */
+		}
+		/* If an external handler is found (i.e. not a built-in command) */
+		else if(chosenHandler)
+		{
+			/* TODO: Implement me */
+		}
+		else
+		{
+			/* TODO: Implement error handling */
+		}
 
 		return dispatchStatus;
 	}
