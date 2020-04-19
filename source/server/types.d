@@ -725,7 +725,7 @@ private class BesterConnection : Thread
 			 */
 			JSONValue commandBlock = payloadData["command"];
 			string commandType = commandBlock["type"].str;
-			JSONValue command = commandBlock["command"];
+			JSONValue command = commandBlock["args"];
 
 			/* Check if the command is the `login` */
 			if(cmp(commandType, "login") == 0)
@@ -761,7 +761,7 @@ private class BesterConnection : Thread
 			else if(cmp(commandType, "close") == 0)
 			{
 				debugPrint("Closing socket...");
-				chosenHandler.getSocket().close();
+				this.clientConnection.close();
 			}
 			else
 			{
@@ -836,22 +836,6 @@ private class BesterConnection : Thread
 			{
 				debugPrint("Client to server selected");
 
-				/* Get the authentication block */
-				JSONValue authenticationBlock = headerBlock["authentication"];
-				
-				/* Get the username and password */
-				string username = authenticationBlock["username"].str, password = authenticationBlock["password"].str;
-				
-				/* Authenticate the user */
-				bool authenticationStatus = server.authenticate(username, password);
-				debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
-				
-				/* If the authentication succeeded */
-				if(!authenticationStatus)
-				{
-					/* TODO: Error handling */
-					return;
-				}
 			}
 			/* If the communication is server->server */
 			else if(scopeField == Scope.SERVER)
