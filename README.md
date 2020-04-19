@@ -23,3 +23,7 @@ Make sure you have `dub` and `dmd` installed, clone the repository and run the f
 ````
 dub build
 ````
+
+## Testing
+
+*TODO*
