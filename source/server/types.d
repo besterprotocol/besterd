@@ -454,15 +454,18 @@ private class BesterConnection : Thread
 		if(cmp(payloadType, "builtin") == 0)
 		{
 			/* TODO: Implement me */
+			debugPrint("Built-in payload type");
 		}
 		/* If an external handler is found (i.e. not a built-in command) */
 		else if(chosenHandler)
 		{
 			/* TODO: Implement me */
+			debugPrint("Chosen handler for payload type \"" ~ payloadType ~ "\" is " ~ chosenHandler.getPluginName());
 		}
 		else
 		{
 			/* TODO: Implement error handling */
+			debugPrint("No handler available for payload type \"" ~ payloadType ~ "\"");
 		}
 
 		return dispatchStatus;
