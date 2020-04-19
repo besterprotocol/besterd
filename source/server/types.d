@@ -466,6 +466,21 @@ private class BesterConnection : Thread
 			/* Get the header */
 			JSONValue headerBlock = jsonMessage["header"];
 
+			/* Get the scope of the message */
+			string scopeField = headerBlock["scope"].str;
+			debugPrint("Scope selected: " ~ scopeField);
+
+			/* If the communication is client->server */
+			if(cmp(scopeField, "client") == 0)
+			{
+				debugPrint("Client to server selected");
+			}
+			/* If the communication is server->server */
+			else if(cmp(scopeField, "server") == 0)
+			{
+				
+			}
+
 			/* Get the authentication block */
 			JSONValue authenticationBlock = headerBlock["authentication"];
 
