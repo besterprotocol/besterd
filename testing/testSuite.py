@@ -11,6 +11,20 @@ def basicTest():
     d.send(bys.encode())
     d.close()
 
+def basicTest2():
+    d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    d.connect(("127.0.0.1",2223))
+    bys=json.dumps({"header": {"scope" : "client"},"payload": {
+    "data": {
+        "command" : {"type" : "close", "command" : None}
+    },"type":"builtin"}})
+    print(bys)
+    d.send(bytes([len(bys),0,0,0]))
+    d.send(bys.encode())
+    d.close()
+
+
+
 def simpleTest():
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     d.connect(("127.0.0.1",2224))
@@ -25,5 +39,6 @@ def simpleTest():
 def runTests():
     #simpleTest()
     basicTest()
+    basicTest2()
 
 runTests()
