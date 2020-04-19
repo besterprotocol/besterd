@@ -146,8 +146,6 @@ private class BesterConnection : Thread
 	private string authUsername;
 	private string authPassword;
 
-	
-
 	this(Socket clientConnection, BesterServer server)
 	{
 		/* Save socket and set thread worker function pointer */
@@ -658,7 +656,16 @@ private class BesterConnection : Thread
 			}
 			else if(cmp(serverCommand, "sendServers") == 0)
 			{
+				/* Get the list of clients to send to */
+				string[] clients;
+				JSONValue[] clientList = commandBlock["data"].array();
+				for(ulong i = 0; i < clientList.length; i++)
+				{
+					clients ~= clientList[i].str();
+				}
+				
 				/* TODO: Implement me */
+				writeln("Users wanting to send to ", clients);
 			}
 			else
 			{
@@ -676,8 +683,15 @@ private class BesterConnection : Thread
 		return true;
 	}
 
+	public enum Scope
+	{
+		CLIENT,
+		SERVER,
+		UNKNOWN
+	}
+
 	/* TODO: Version 2 of message dispatcher */
-	private bool dispatchMessage(JSONValue payloadBlock)
+	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
 	{
 		/* Status of dispatch */
 		bool dispatchStatus = true;
@@ -699,6 +713,21 @@ private class BesterConnection : Thread
 		{
 			/* TODO: Implement me */
 			debugPrint("Built-in payload type");
+
+			/**
+			 * Built-in commands follow the structure of 
+			 * "command" : {"type" : "cmdType", "command" : ...}
+			 */
+			JSONValue commandBlock = payloadData["command"];
+			string commandType = commandBlock["type"].str;
+			JSONValue command = commandBlock["command"];
+
+			/* Check if the command is the `login` */
+			if(cmp(commandType, "login") == 0)
+			{
+				debugPrint("User wants to login");
+			}
+			//if(cmp(payloadType))
 		}
 		/* If an external handler is found (i.e. not a built-in command) */
 		else if(chosenHandler)
@@ -743,15 +772,27 @@ private class BesterConnection : Thread
 			JSONValue headerBlock = jsonMessage["header"];
 
 			/* Get the scope of the message */
-			string scopeField = headerBlock["scope"].str;
-			debugPrint("Scope selected: " ~ scopeField);
-
+			Scope scopeField;
+			if(cmp(headerBlock["scope"].str, "client") == 0)
+			{
+				scopeField = Scope.CLIENT;
+			}
+			else if(cmp(headerBlock["scope"].str, "server") == 0)
+			{
+				scopeField = Scope.CLIENT;
+			}
+			else
+			{
+				scopeField = Scope.UNKNOWN;
+			}
+									
+			
 			/* Get the payload block */
 			JSONValue payloadBlock = jsonMessage["payload"];
 			debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
 
 			/* If the communication is client->server */
-			if(cmp(scopeField, "client") == 0)
+			if(scopeField == Scope.CLIENT)
 			{
 				debugPrint("Client to server selected");
 
@@ -773,7 +814,7 @@ private class BesterConnection : Thread
 				}
 			}
 			/* If the communication is server->server */
-			else if(cmp(scopeField, "server") == 0)
+			else if(scopeField == Scope.SERVER)
 			{
 				debugPrint("Server to server selected");
 
@@ -783,12 +824,12 @@ private class BesterConnection : Thread
 			else
 			{
 				/* TODO: Error handling */
-				debugPrint("Unknown scope selected \"" ~ scopeField ~ "\"");
+				debugPrint("Unknown scope selected \"" ~ to!(string)(cast(uint)scopeField) ~ "\"");
 				return;
 			}
 
 			/* Dispatch the message */
-			bool dispatchStatus = dispatchMessage(payloadBlock);
+			bool dispatchStatus = dispatchMessage(scopeField, payloadBlock);
 								
 			if(dispatchStatus)
 			{
