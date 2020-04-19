@@ -21,7 +21,7 @@ Spec v2
 
 ## Flow
 
-### Client
+### Client and Server
 
 Describes client-to-server and server-to-client communications.
 
@@ -115,6 +115,61 @@ as such.
 * There is a field called `data` which is of a JSON type up to
 the _message handler_ and *SHOULD* be interpreted in accordance to
 its (the _message handler_'s) rules.
+
+
+#### Server and Message Handler
+
+Describes server-to-message-handler and message-handler-to-server communications.
+
+<hr>
+
+#### Message Handler -> Server
+
+If a message handler sends a reply back to the server then the following
+bytes should be sent to the server:
+
+````
+[ 4 bytes (size - little endian)][JSON message]
+````
+
+The `[JSON message]` contains information that the server will
+use to gain the following information:
+	* *Status*: Did the command sent prior to this response
+		run successfully?
+	* *Command*: To tell the server what to do with the response.
+	* *Payload*: The data to be processed by the _server_.
+
+The structure of the `[JSON message]` is as follows:
+
+````
+{
+	"header" : {
+		"status" : "status",
+		"command" : "command",
+		"commandData" : ...
+	},
+	"payload" : {
+		"type" : "",
+		"data" : ...
+	}
+}
+````
+
+Allowed values for `command` are:
+	1. `"replyClient"`: The generated response is sent back to the
+		client who caused the message handler to process the original
+		message.
+	2. `"sendClients"`: The generated response must be sent to a client(s)
+		attached to the local server.
+	3. `"sendServers"`: The generated response must be sent to a remote
+		server(s).
+
+The interpretation of the entirety of the `[JSON message]` is up
+to the client but the client *SHOULD* expect and interpret as
+follows:
+
+* There is a field called `header` which is a JSON object and
+
 
 
 
