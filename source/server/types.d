@@ -594,6 +594,11 @@ private class BesterConnection : Thread
 					return parseJSON(cast(string)fullMessage);
 	}
 
+	private bool handleResponse(JSONValue handlerResponse)
+	{
+		return true;
+	}
+
 	/* TODO: Version 2 of message dispatcher */
 	private bool dispatchMessage(JSONValue payloadBlock)
 	{
@@ -629,7 +634,7 @@ private class BesterConnection : Thread
 			debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ response.toPrettyString());
 
 			/* TODO: Handle response */
-			
+			handleResponse(response);
 		}
 		else
 		{
