@@ -474,49 +474,50 @@ private class BesterConnection : Thread
 			if(cmp(scopeField, "client") == 0)
 			{
 				debugPrint("Client to server selected");
-			}
-			/* If the communication is server->server */
-			else if(cmp(scopeField, "server") == 0)
-			{
+
+				/* Get the authentication block */
+				JSONValue authenticationBlock = headerBlock["authentication"];
 				
-			}
-
-			/* Get the authentication block */
-			JSONValue authenticationBlock = headerBlock["authentication"];
-
-			/* Get the username and password */
-			string username = authenticationBlock["username"].str, password = authenticationBlock["password"].str;
-
-			/* Authenticate the user */
-			bool authenticationStatus = server.authenticate(username, password);
-			debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
-
-			/* If the authentication succeeded */
-			if(authenticationStatus)
-			{
-				/* Get the payload block */
-				JSONValue payloadBlock = jsonMessage["payload"];
+				/* Get the username and password */
+				string username = authenticationBlock["username"].str, password = authenticationBlock["password"].str;
 				
-				/* Dispatch the message */
-				bool dispatchStatus = dispatchMessage(payloadBlock);
+				/* Authenticate the user */
+				bool authenticationStatus = server.authenticate(username, password);
+				debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
 				
-				if(dispatchStatus)
+				/* If the authentication succeeded */
+				if(authenticationStatus)
 				{
-					debugPrint("Dispatch succeeded");
+					/* Get the payload block */
+					JSONValue payloadBlock = jsonMessage["payload"];
+					
+					/* Dispatch the message */
+					bool dispatchStatus = dispatchMessage(payloadBlock);
+					
+					if(dispatchStatus)
+					{
+						debugPrint("Dispatch succeeded");
+					}
+					else
+					{
+						/* TODO: Error handling */
+						debugPrint("Dispatching failed...");
+					}
 				}
 				else
 				{
 					/* TODO: Error handling */
-					debugPrint("Dispatching failed...");
 				}
+			}
+			/* If the communication is server->server */
+			else if(cmp(scopeField, "server") == 0)
+			{
+				/* TODO: Implement me */		
 			}
 			else
 			{
 				/* TODO: Error handling */
 			}
-
-
-			
 		}
 		/* If thr attempt to convert the message to JSON fails */
 		catch(JSONException exception)
