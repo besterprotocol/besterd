@@ -116,3 +116,11 @@ as such.
 the _message handler_ and *SHOULD* be interpreted in accordance to
 its (the _message handler_'s) rules.
 
+
+
+
+## TODO: Built in server commands
+
+TODO: Authentication for users should be a command.
+
+logout, authenticate, change password
