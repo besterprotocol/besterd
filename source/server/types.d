@@ -90,6 +90,23 @@ public class BesterServer
 		return true;
 	}
 
+	/* Returns the MessageHandler object of the requested type */
+	public MessageHandler findHandler(string payloadType)
+	{
+		/* The found MessageHandler */
+		MessageHandler foundHandler;
+		
+		for(uint i = 0; i < handlers.length; i++)
+		{
+			if(cmp(handlers[i].getPluginName(), payloadType) == 0)
+			{
+				foundHandler = handlers[i];
+				break;
+			}
+		}
+		return foundHandler;
+	}
+
 	public static bool isBuiltInCommand(string command)
 	{
 		/* Whether or not `payloadType` is a built-in command */
@@ -593,16 +610,7 @@ private class BesterConnection : Thread
 		JSONValue payloadData = payloadBlock["data"];
 
 		/* Lookup the payloadType handler */
-		MessageHandler chosenHandler;
-		
-		for(uint i = 0; i < server.handlers.length; i++)
-		{
-			if(cmp(server.handlers[i].getPluginName(), payloadType) == 0)
-			{
-				chosenHandler = server.handlers[i];
-				break;
-			}
-		}
+		MessageHandler chosenHandler = server.findHandler(payloadType);
 
 		/* Check if the payload is a built-in command */
 		if(cmp(payloadType, "builtin") == 0)
