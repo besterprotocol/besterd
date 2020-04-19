@@ -466,47 +466,26 @@ private class BesterConnection : Thread
 			/* Get the header */
 			JSONValue headerBlock = jsonMessage["header"];
 
-			/* Get the scope field */
-			string scopeField = headerBlock["scope"].str;
+			/* Get the authentication block */
+			JSONValue authenticationBlock = headerBlock["authentication"];
 
-			/* Check whether the message is for client->server */
-			if(cmp(scopeField, "client") == 0)
+			/* Get the username and password */
+			JSONValue username = authenticationBlock["username"], password = authenticationBlock["password"];
+
+			/* Get the payload block */
+			JSONValue payloadBlock = jsonMessage["payload"];
+
+			/* Dispatch the message */
+			bool dispatchStatus = dispatchMessage(payloadBlock);
+
+			if(dispatchStatus)
 			{
-				debugPrint("Scope selected: Client->Server");
-
-				/* Get the authentication block */
-				JSONValue authenticationBlock = headerBlock["authentication"];
-
-				/* Get the username and password */
-				JSONValue username = authenticationBlock["username"], password = authenticationBlock["password"];
-
-				/* Get the payload block */
-				JSONValue payloadBlock = jsonMessage["payload"];
-
-				/* Dispatch the message */
-				bool dispatchStatus = dispatchMessage(payloadBlock);
-
-				if(dispatchStatus)
-				{
-					debugPrint("Dispatch succeeded");
-				}
-				else
-				{
-					/* TODO: Error handling */
-					debugPrint("Dispatching failed...");
-				}
+				debugPrint("Dispatch succeeded");
 			}
-			/* Check whether the message is for server->server */
-			else if(cmp(scopeField, "server") == 0)
-			{
-				debugPrint("Scope selected: Server->Server");
-				/* TODO: Implement me */
-			}
-			/* If the scope is invalid */
 			else
 			{
 				/* TODO: Error handling */
-				debugPrint("Unknown scope selected: " ~ scopeField);
+				debugPrint("Dispatching failed...");
 			}
 		}
 		/* If thr attempt to convert the message to JSON fails */
