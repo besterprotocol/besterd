@@ -92,7 +92,10 @@ public class BesterServer
 
 	public static bool isBuiltInCommand(string payloadType)
 	{
-		/* TODO: Implement me */
+		/* Whether or not `payloadType` is a built-in command */
+		bool isBuiltIn = true;
+
+		return isBuiltIn;
 	}
 }
 
