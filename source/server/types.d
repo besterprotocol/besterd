@@ -690,6 +690,11 @@ private class BesterConnection : Thread
 		UNKNOWN
 	}
 
+	private bool isAuthenticated()
+	{
+		return authUsername != null && authPassword != null;
+	}
+
 	/* TODO: Version 2 of message dispatcher */
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
 	{
@@ -726,8 +731,43 @@ private class BesterConnection : Thread
 			if(cmp(commandType, "login") == 0)
 			{
 				debugPrint("User wants to login");
+
+				/* Get the username and password fields */
+				string username = command["username"].str(), password = command["password"].str();
+				debugPrint("Username: \"" ~ username ~ "\" Password: \"" ~ password ~ "\"");
+
+				/* Authenticate the user and get the status */
+				bool authenticationStatus = server.authenticate(username, password);
+				debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
+
+				/* If the authentication succeeded */
+				if(authenticationStatus)
+				{
+					/* Update this client's authentication status */
+					authUsername = username, authPassword = password;
+					debugPrint("User authenticated!");
+
+					/* TODO: Implement response */
+				}
+				else
+				{
+					debugPrint("User authentication FAILED!");
+					/* TODO: Implement response */
+				}
+
+				/* TODO: Implement me */
 			}
-			//if(cmp(payloadType))
+			/* If the command is `close` */
+			else if(cmp(commandType, "close") == 0)
+			{
+				debugPrint("Closing socket...");
+				chosenHandler.getSocket();
+			}
+			else
+			{
+				debugPrint("Invalid built-in command type");
+				/* TODO: Generate error response */
+			}
 		}
 		/* If an external handler is found (i.e. not a built-in command) */
 		else if(chosenHandler)
