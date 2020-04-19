@@ -470,6 +470,10 @@ private class BesterConnection : Thread
 			string scopeField = headerBlock["scope"].str;
 			debugPrint("Scope selected: " ~ scopeField);
 
+			/* Get the payload block */
+			JSONValue payloadBlock = jsonMessage["payload"];
+			debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
+
 			/* If the communication is client->server */
 			if(cmp(scopeField, "client") == 0)
 			{
@@ -488,9 +492,6 @@ private class BesterConnection : Thread
 				/* If the authentication succeeded */
 				if(authenticationStatus)
 				{
-					/* Get the payload block */
-					JSONValue payloadBlock = jsonMessage["payload"];
-					
 					/* Dispatch the message */
 					bool dispatchStatus = dispatchMessage(payloadBlock);
 					
