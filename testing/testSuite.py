@@ -9,7 +9,6 @@ def basicTest():
     print(bys)
     d.send(bytes([len(bys),0,0,0]))
     d.send(bys.encode())
-    while True: pass
     d.close()
 
 def simpleTest():

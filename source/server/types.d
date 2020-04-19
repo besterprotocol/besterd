@@ -761,7 +761,7 @@ private class BesterConnection : Thread
 			else if(cmp(commandType, "close") == 0)
 			{
 				debugPrint("Closing socket...");
-				chosenHandler.getSocket();
+				chosenHandler.getSocket().close();
 			}
 			else
 			{
