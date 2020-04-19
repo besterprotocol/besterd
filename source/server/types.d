@@ -596,6 +596,23 @@ private class BesterConnection : Thread
 
 	private bool handleResponse(JSONValue handlerResponse)
 	{
+		/* TODO: Bounds checking, type checking */
+		try
+		{
+			/* Get the header block */
+			JSONValue headerBlock = handlerResponse["header"];
+
+			/* Get the status */
+			ulong statusCode = headerBlock["status"].uinteger;
+			debugPrint("Status code: " ~ to!(string)(statusCode));
+			
+		}
+		catch(JSONException exception)
+		{
+			debugPrint("<<< There was an error handling the response message >>>\n\n" ~ exception.toString());
+			return false;
+		}
+
 		return true;
 	}
 

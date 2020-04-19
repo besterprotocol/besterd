@@ -8,7 +8,11 @@ def runTest():
     while True:
         s = d.accept()[0]
         print(list(s.recv(130)))
-        bys = json.dumps({"response" : "ppoop"})
+        bys = json.dumps({
+            "header" : {
+                "status" : 0,
+                "command" : "sendClient"
+            } })
         print(s.send(bytes([len(bys),0,0,0])))
         print(s.send(bys.encode()))
 

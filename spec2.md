@@ -156,13 +156,13 @@ The structure of the `[JSON message]` is as follows:
 ````
 
 Allowed values for `command` are:
-	1. `"replyClient"`: The generated response is sent back to the
-		client who caused the message handler to process the original
-		message.
-	2. `"sendClients"`: The generated response must be sent to a client(s)
+	1. `"sendClients"`: The generated response must be sent to a client(s)
 		attached to the local server.
-	3. `"sendServers"`: The generated response must be sent to a remote
+	2. `"sendServers"`: The generated response must be sent to a remote
 		server(s).
+
+The above two tell the server where to send the response from the
+_message handler_ to. Either it can be sent
 
 The interpretation of the entirety of the `[JSON message]` is up
 to the client but the client *SHOULD* expect and interpret as
