@@ -11,12 +11,24 @@ def basicTest():
     d.send(bys.encode())
     d.close()
 
-def basicTest2():
+def commandBuiltInClose():
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     d.connect(("127.0.0.1",2223))
     bys=json.dumps({"header": {"scope" : "client"},"payload": {
     "data": {
-        "command" : {"type" : "close", "command" : None}
+        "command" : {"type" : "close", "args" : None}
+    },"type":"builtin"}})
+    print(bys)
+    d.send(bytes([len(bys),0,0,0]))
+    d.send(bys.encode())
+    d.close()
+
+def commandAuthTest():
+    d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    d.connect(("127.0.0.1",2223))
+    bys=json.dumps({"header": {"scope" : "client"},"payload": {
+    "data": {
+        "command" : {"type" : "login", "args" : {"username" :"1", "password":"2"}}
     },"type":"builtin"}})
     print(bys)
     d.send(bytes([len(bys),0,0,0]))
@@ -39,6 +51,7 @@ def simpleTest():
 def runTests():
     #simpleTest()
     basicTest()
-    basicTest2()
+    commandBuiltInClose()
+    commandAuthTest()
 
 runTests()
