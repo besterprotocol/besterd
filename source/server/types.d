@@ -470,23 +470,38 @@ private class BesterConnection : Thread
 			JSONValue authenticationBlock = headerBlock["authentication"];
 
 			/* Get the username and password */
-			JSONValue username = authenticationBlock["username"], password = authenticationBlock["password"];
+			string username = authenticationBlock["username"].str, password = authenticationBlock["password"].str;
 
-			/* Get the payload block */
-			JSONValue payloadBlock = jsonMessage["payload"];
+			/* Authenticate the user */
+			bool authenticationStatus = server.authenticate(username, password);
+			debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
 
-			/* Dispatch the message */
-			bool dispatchStatus = dispatchMessage(payloadBlock);
-
-			if(dispatchStatus)
+			/* If the authentication succeeded */
+			if(authenticationStatus)
 			{
-				debugPrint("Dispatch succeeded");
+				/* Get the payload block */
+				JSONValue payloadBlock = jsonMessage["payload"];
+				
+				/* Dispatch the message */
+				bool dispatchStatus = dispatchMessage(payloadBlock);
+				
+				if(dispatchStatus)
+				{
+					debugPrint("Dispatch succeeded");
+				}
+				else
+				{
+					/* TODO: Error handling */
+					debugPrint("Dispatching failed...");
+				}
 			}
 			else
 			{
 				/* TODO: Error handling */
-				debugPrint("Dispatching failed...");
 			}
+
+
+			
 		}
 		/* If thr attempt to convert the message to JSON fails */
 		catch(JSONException exception)

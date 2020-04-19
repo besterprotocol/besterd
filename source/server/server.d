@@ -4,7 +4,7 @@ import server.types;
 import std.conv : to;
 import std.socket : SocketOSException;
 import utils.debugging : debugPrint;
-import std.stdio : File,;
+import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
 
 JSONValue getConfig(string configurationFilePath)

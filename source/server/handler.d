@@ -41,7 +41,7 @@ public class MessageHandler
 		domainSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
 
 		/* Bind it to the socket path */
-		domainSocket.connect(new UnixAddressx(socketPath));
+		domainSocket.connect(new UnixAddress(socketPath));
 	}
 
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
