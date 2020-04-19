@@ -22,6 +22,9 @@ public class BesterServer
 	/* The server's socket */
 	private Socket serverSocket;
 
+	/* Connected clients */
+	private BesterConnection[] clients;
+
 	this(JSONValue config)
 	{
 
@@ -79,6 +82,9 @@ public class BesterServer
 			/* Create a new client connection handler and start its thread */
 			BesterConnection besterConnection = new BesterConnection(clientConnection, this);
 			besterConnection.start();
+
+			/* Add this client to the list of connected clients */
+			clients ~= besterConnection;
 		}
 	}
 
@@ -87,6 +93,16 @@ public class BesterServer
 	{
 		/* TODO: Implement me */
 		debugPrint("Attempting to authenticate:\n\nUsername: " ~ username ~ "\nPassword: " ~ password);
+
+		/* If the authentication went through */
+		bool authed = true;
+
+		/* If the authentication succeeded */
+		if(authed)
+		{
+			/* Add the user to the list of authenticated clients */
+		}
+		
 		return true;
 	}
 
@@ -125,6 +141,12 @@ private class BesterConnection : Thread
 
 	/* The server backend */
 	private BesterServer server;
+
+	/* The client's credentials  */
+	private string authUsername;
+	private string authPassword;
+
+	
 
 	this(Socket clientConnection, BesterServer server)
 	{
@@ -594,6 +616,10 @@ private class BesterConnection : Thread
 					return parseJSON(cast(string)fullMessage);
 	}
 
+	/**
+	 * Handles the response sent back to the server from the
+	 * message handler.
+	 */
 	private bool handleResponse(JSONValue handlerResponse)
 	{
 		/* TODO: Bounds checking, type checking */
@@ -603,8 +629,42 @@ private class BesterConnection : Thread
 			JSONValue headerBlock = handlerResponse["header"];
 
 			/* Get the status */
-			ulong statusCode = headerBlock["status"].uinteger;
+			ulong statusCode = to!(ulong)(headerBlock["status"].str);
 			debugPrint("Status code: " ~ to!(string)(statusCode));
+
+			/**
+			 * Get the command that the message handler wants the
+			 * server to run.
+			 */
+			string serverCommand = headerBlock["command"].str;
+			debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
+
+			/* Get the command meta-data */
+			JSONValue commandMeta = headerBlock["commandData"];
+			debugPrint("CommandData: \"" ~ commandMeta.toPrettyString() ~ "\"");
+
+			/* Check the command to be run */
+			if(cmp(serverCommand, "sendClients") == 0)
+			{
+				/* Get the list of clients to send to */
+				string[] clients;
+				JSONValue[] clientList = commandMeta.array();
+				for(ulong i = 0; i < clientList.length; i++)
+				{
+					clients ~= clientList[i].str();
+				}
+
+				/* TODO: Implement me */
+			}
+			else if(cmp(serverCommand, "sendServers") == 0)
+			{
+				/* TODO: Implement me */
+			}
+			else
+			{
+				/* TODO: Error handling */
+				debugPrint("The message handler is using an invalid command");
+			}
 			
 		}
 		catch(JSONException exception)
@@ -706,35 +766,39 @@ private class BesterConnection : Thread
 				debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
 				
 				/* If the authentication succeeded */
-				if(authenticationStatus)
-				{
-					/* Dispatch the message */
-					bool dispatchStatus = dispatchMessage(payloadBlock);
-					
-					if(dispatchStatus)
-					{
-						debugPrint("Dispatch succeeded");
-					}
-					else
-					{
-						/* TODO: Error handling */
-						debugPrint("Dispatching failed...");
-					}
-				}
-				else
+				if(!authenticationStatus)
 				{
 					/* TODO: Error handling */
+					return;
 				}
 			}
 			/* If the communication is server->server */
 			else if(cmp(scopeField, "server") == 0)
 			{
-				/* TODO: Implement me */		
+				debugPrint("Server to server selected");
+
+				/* TODO: Implement me */	
+					
 			}
 			else
 			{
 				/* TODO: Error handling */
+				debugPrint("Unknown scope selected \"" ~ scopeField ~ "\"");
+				return;
 			}
+
+			/* Dispatch the message */
+			bool dispatchStatus = dispatchMessage(payloadBlock);
+								
+			if(dispatchStatus)
+			{
+				debugPrint("Dispatch succeeded");
+			}
+			else
+			{
+				/* TODO: Error handling */
+				debugPrint("Dispatching failed...");
+			}	
 		}
 		/* If thr attempt to convert the message to JSON fails */
 		catch(JSONException exception)
@@ -742,148 +806,8 @@ private class BesterConnection : Thread
 			debugPrint("<<< There was an error whilst parsing the JSON message >>>\n\n"~exception.toString());
 		}
 
-		/* TODO: Remove me once v2 is implemented */
-		bool f = true;
-		if(f)
-		{
-			goto skip_v1;
-		}
+		/* TODO: Return value */
 
-		try
-		{
-			/* Convert message to JSON */
-			jsonMessage = parseJSON(cast(string)messageBuffer);
-			writeln("JSON received: ", jsonMessage);
-			
-			/* Make sure we have a JSON object */
-			if(jsonMessage.type == JSONType.object)
-			{
-				/* As per spec, look for the "besterHeader" */
-				JSONValue besterHeader;
-			
-				/* TODO: Check for out of bounds here */
-				besterHeader = jsonMessage["header"];
-
-				/* Check if it is a JSON object */
-				if(besterHeader.type == JSONType.object)
-				{
-					/* TODO: Add further checks here */
-
-					/* TODO: Bounds check */
-					JSONValue payloadType;
-
-					payloadType = besterHeader["type"];
-
-					/* The payload type must be a string */
-					if(payloadType.type == JSONType.string)
-					{
-						string payloadTypeString = payloadType.str;
-					
-						/* TODO: Move everything into this block */
-						/* The header must contain a scope block */
-						JSONValue scopeBlock;
-						
-						/* TODO: Add bounds check */
-						scopeBlock = besterHeader["scope"];
-						
-						/* Make sure the type of the JSON value is string */
-						if(scopeBlock.type == JSONType.string)
-						{
-							/* Get the scope */
-							string scopeString = scopeBlock.str;
-						
-							/* If the message is for client<->server */
-							if(cmp(scopeString, "client"))
-							{
-								debugPrint("Scope: client<->server");
-						
-								/* The header must contain a authentication JSON object */
-								JSONValue authenticationBlock;
-												
-								/* TODO: Check for out of bounds here */
-								authenticationBlock = besterHeader["authentication"];
-												
-								/* TODO: Bounds check for both below */
-								JSONValue username, password;
-								username = authenticationBlock["username"];
-								password = authenticationBlock["password"];
-													
-												
-								if(username.type == JSONType.string && password.type == JSONType.string)
-								{
-									/* TODO: Now do some stuff */
-						
-									/* TODO: Authenticate the user */
-									string usernameString = username.str;
-									string passwordString = password.str;
-									bool isAuthenticated = server.authenticate(usernameString, passwordString);
-						
-									if(isAuthenticated)
-									{
-										debugPrint("Authenticated");
-
-										/* Get the payload */
-										JSONValue payload;
-
-										/* TODO: Bounds check */
-										payload = jsonMessage["payload"];
-
-										/* TODO: Dispatch to the correct message handler */
-										dispatch(payloadTypeString, payload);
-									}
-									else
-									{
-										/* TODO: Add error handling here */
-										debugPrint("Authentication failure");
-									}
-								}
-								else
-								{
-									/* TODO: Add error handling here */
-									debugPrint("Username or password is not a JSON string");
-								}
-							}
-							/* If the message is for server<->server */
-							else if(cmp(scopeString, "server"))
-							{
-								debugPrint("Scope: server<->server");
-							}
-							else
-							{
-								/* TODO: Error handling */
-								debugPrint("Unknown scope provided");
-							}
-						}
-						else
-						{
-							/* TODO: Handle error */
-							debugPrint("Scope block JSON value not a string");
-						}
-					}
-					else
-					{
-						/* TODO: Add error handling */
-						debugPrint("Type is not of type JSON string");
-					}
-				}
-				else
-				{
-					/* TODO: Add error handling here */
-					debugPrint("Header received was not a JSON object");
-				}
-			}
-			else
-			{
-				/* TODO: Add error here */
-				debugPrint("Did not receive a JSON object");
-			}
-		}
-		catch(JSONException exception)
-		{
-			/* TODO: Implement this */
-			debugPrint("Error parsing the received JSON message: " ~ exception.toString());
-		}
-		skip_v1:
 	}
 
 	

@@ -10,8 +10,9 @@ def runTest():
         print(list(s.recv(130)))
         bys = json.dumps({
             "header" : {
-                "status" : 0,
-                "command" : "sendClient"
+                "status" : "0",
+                "command" : "sendClients",
+                "commandData" : ["usr1", "usr2"]
             } })
         print(s.send(bytes([len(bys),0,0,0])))
         print(s.send(bys.encode()))
