@@ -90,10 +90,11 @@ public class BesterServer
 		return true;
 	}
 
-	public static bool isBuiltInCommand(string payloadType)
+	public static bool isBuiltInCommand(string command)
 	{
 		/* Whether or not `payloadType` is a built-in command */
 		bool isBuiltIn = true;
+
 
 		return isBuiltIn;
 	}
@@ -450,7 +451,7 @@ private class BesterConnection : Thread
 		}
 
 		/* Check if the payload is a built-in command */
-		if(BesterServer.isBuiltInCommand(payloadType))
+		if(cmp(payloadType, "builtin") == 0)
 		{
 			/* TODO: Implement me */
 		}
