@@ -6,6 +6,7 @@ import std.socket : SocketOSException;
 import utils.debugging : debugPrint;
 import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
+import server.listeners;
 
 JSONValue getConfig(string configurationFilePath)
 {
@@ -43,6 +44,9 @@ BesterListener[] getListeners(JSONValue networkBlock)
 	debugPrint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
 	string inet4Address = inet4TCPBlock["address"].str();
 	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
+	TCP4Listener tcp4Listener = new TCP4Listener();
+	
+	
 	
 	/* Look for IPv6 TCP block */
 	JSONValue inet6TCPBlock = networkBlock["tcp6"];
