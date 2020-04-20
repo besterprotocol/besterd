@@ -17,4 +17,6 @@ void main()
 
 	/* TODO: Add usage check and arguments before this */
 	startServer("server.conf");
+
+	writeln("fdhjf he do be vibing though");
 }

@@ -46,7 +46,7 @@ BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
 	TCP4Listener tcp4Listener = new TCP4Listener(server, parseAddress(inet4Address, inet4Port));
 	listeners ~= tcp4Listener;
-	
+
 	/* Look for IPv6 TCP block */
 	JSONValue inet6TCPBlock = networkBlock["tcp6"];
 	debugPrint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
@@ -54,13 +54,13 @@ BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 	ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
 	TCP6Listener tcp6Listener = new TCP6Listener(server, parseAddress(inet6Address, inet6Port));
 	listeners ~= tcp6Listener;
-	
+
 	/* Look for UNIX Domain block */
 	JSONValue unixDomainBlock = networkBlock["unix"];
 	debugPrint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
 	string unixAddress = unixDomainBlock["address"].str();
-	UNIXListener unixListener = new UNIXListener(server, new UnixAddress(unixAddress));
-	listeners ~= unixListener;
+//	UNIXListener unixListener = new UNIXListener(server, new UnixAddress(unixAddress));
+//	listeners ~= unixListener;
 
 	return listeners;
 }
@@ -71,12 +71,11 @@ void startServer(string configurationFilePath)
 	JSONValue serverConfiguration = getConfig(configurationFilePath);
 	debugPrint("<<< Bester.d configuration >>>\n" ~ serverConfiguration.toPrettyString());
 
-
-	/* The server */
-	BesterServer server = null;
-
 	try
 	{
+		/* The server */
+		BesterServer server = null;
+
 		/* TODO: Bounds anc type checking */
 
 		/* Get the network block */

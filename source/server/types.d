@@ -138,6 +138,7 @@ public class BesterServer
 			debugPrint("Starting...");
 			listeners[i].start();
 		}
+		
 	}
 
 	/* Authenticate the user */
