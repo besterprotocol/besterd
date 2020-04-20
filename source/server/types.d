@@ -90,8 +90,8 @@ public class BesterServer
 	this(JSONValue config)
 	{
 		/* TODO: Bounds check and JSON type check */
-		debugPrint("Setting up socket...");
-		setupServerSocket(config["network"]);
+		//debugPrint("Setting up socket...");
+		//setupServerSocket(config["network"]);
 
 		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up message handlers...");
@@ -133,19 +133,10 @@ public class BesterServer
 	/* Start listen loop */
 	public void run()
 	{
-		serverSocket.listen(1); /* TODO: This value */
-		debugPrint("Server listen loop started");
-		while(true)
+		for(ulong i = 0; i < listeners.length; i++)
 		{
-			/* Wait for an incoming connection */
-			Socket clientConnection = serverSocket.accept();
-
-			/* Create a new client connection handler and start its thread */
-			BesterConnection besterConnection = new BesterConnection(clientConnection, this);
-			besterConnection.start();
-
-			/* Add this client to the list of connected clients */
-			clients ~= besterConnection;
+			debugPrint("Starting...");
+			listeners[i].start();
 		}
 	}
 

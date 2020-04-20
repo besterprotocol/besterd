@@ -59,8 +59,8 @@ BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 	JSONValue unixDomainBlock = networkBlock["unix"];
 	debugPrint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
 	string unixAddress = unixDomainBlock["address"].str();
-	UNIXListener unixListener = new UNIXListener(server, parseAddress(unixAddress));
-	listeners ~= unixListener;
+//	UNIXListener unixListener = new UNIXListener(server, parseAddress(unixAddress));
+//	listeners ~= unixListener;
 
 	return listeners;
 }
