@@ -2,7 +2,7 @@ module server.server;
 
 import server.types;
 import std.conv : to;
-import std.socket : SocketOSException;
+import std.socket : SocketOSException, parseAddress;
 import utils.debugging : debugPrint;
 import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
@@ -33,7 +33,7 @@ JSONValue getConfig(string configurationFilePath)
 	return config;	
 }
 
-BesterListener[] getListeners(JSONValue networkBlock)
+BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 {
 	BesterListener[] listeners;
 
@@ -44,21 +44,23 @@ BesterListener[] getListeners(JSONValue networkBlock)
 	debugPrint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
 	string inet4Address = inet4TCPBlock["address"].str();
 	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
-	TCP4Listener tcp4Listener = new TCP4Listener();
-	
-	
+	TCP4Listener tcp4Listener = new TCP4Listener(server, parseAddress(inet4Address, inet4Port));
+	listeners ~= tcp4Listener;
 	
 	/* Look for IPv6 TCP block */
 	JSONValue inet6TCPBlock = networkBlock["tcp6"];
 	debugPrint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
 	string inet6Address = inet6TCPBlock["address"].str();
 	ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
+	TCP6Listener tcp6Listener = new TCP6Listener(server, parseAddress(inet6Address, inet6Port));
+	listeners ~= tcp6Listener;
 	
 	/* Look for UNIX Domain block */
 	JSONValue unixDomainBlock = networkBlock["unix"];
 	debugPrint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
 	string unixAddress = unixDomainBlock["address"].str();
-	
+	UNIXListener unixListener = new UNIXListener(server, parseAddress(unixAddress));
+	listeners ~= unixListener;
 
 	return listeners;
 }
@@ -69,19 +71,30 @@ void startServer(string configurationFilePath)
 	JSONValue serverConfiguration = getConfig(configurationFilePath);
 	debugPrint("<<< Bester.d configuration >>>\n" ~ serverConfiguration.toPrettyString());
 
-	/* TODO: Bounds anc type checking */
-	/* Get the network block */
-	JSONValue networkBlock = serverConfiguration["network"];
-
-	/* TODO: Get keys */
-	BesterListener[] listeners = getListeners(networkBlock);
 
 	/* The server */
 	BesterServer server = null;
 
 	try
 	{
+		/* TODO: Bounds anc type checking */
+
+		/* Get the network block */
+		JSONValue networkBlock = serverConfiguration["network"];
+
+		/* Create the Bester server */
 		server = new BesterServer(serverConfiguration);
+
+		/* TODO: Get keys */
+		BesterListener[] listeners = getListeners(server, networkBlock);
+
+		for(ulong i = 0; i < listeners.length; i++)
+		{
+			/* Add listener */
+			server.addListener(listeners[i]);
+		}
+		
+		/* Start running the server (starts the listeners) */
 		server.run();
 	}
 	catch(SocketOSException exception)

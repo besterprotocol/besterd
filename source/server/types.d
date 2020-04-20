@@ -82,11 +82,9 @@ public class BesterServer
 	/* Connected clients */
 	public BesterConnection[] clients;
 
-	/* Construct a new BesterServer with the given listeners */
-	this(BesterListener[] listeners)
+	public void addListener(BesterListener listener)
 	{
-		/* Set the listeners */
-		this.listeners = listeners;
+		this.listeners ~= listener;
 	}
 
 	this(JSONValue config)
