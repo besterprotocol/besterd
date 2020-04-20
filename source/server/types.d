@@ -76,6 +76,7 @@ public class BesterServer
 	private Socket serverSocket;
 	/* TODO: The above to be replaced */
 
+	/* Socket listeners for incoming connections */
 	private BesterListener[] listeners;
 
 	/* Connected clients */
@@ -84,6 +85,7 @@ public class BesterServer
 	/* Construct a new BesterServer with the given listeners */
 	this(BesterListener[] listeners)
 	{
+		/* Set the listeners */
 		this.listeners = listeners;
 	}
 

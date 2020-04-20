@@ -32,11 +32,42 @@ JSONValue getConfig(string configurationFilePath)
 	return config;	
 }
 
+BesterListener[] getListeners(JSONValue networkBlock)
+{
+	BesterListener[] listeners;
+
+	/* TODO: Error handling */
+
+	/* Look for IPv4 TCP block */
+	JSONValue inet4TCPBlock = networkBlock["tcp4"];
+	string inet4Address = inet4TCPBlock["address"].str();
+	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
+	
+	/* Look for IPv6 TCP block */
+	JSONValue inet6TCPBlock = networkBlock["tcp6"];
+	string inet6Address = inet6TCPBlock["address"].str();
+	ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
+	
+	/* Look for UNIX Domain block */
+	JSONValue unixDomainBlock = networkBlock["unix"];
+
+	
+
+	return listeners;
+}
+
 void startServer(string configurationFilePath)
 {
 	/* The server configuration */
 	JSONValue serverConfiguration = getConfig(configurationFilePath);
-	writeln(serverConfiguration);
+	debugPrint("<<< Bester.d configuration >>>\n" ~ serverConfiguration.toPrettyString());
+
+	/* TODO: Bounds anc type checking */
+	/* Get the network block */
+	JSONValue networkBlock = serverConfiguration["network"];
+
+	/* TODO: Get keys */
+	BesterListener[] listeners = getListeners(networkBlock);
 
 	/* The server */
 	BesterServer server = null;
