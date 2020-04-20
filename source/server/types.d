@@ -27,7 +27,7 @@ public class BesterListener : Thread
 	this(BesterServer besterServer)
 	{
 		/* Set the function address to be called as the worker function */
-		super(run);
+		super(&run);
 
 		/* Set this listener's BesterServer */
 		this.server = besterServer;
@@ -74,6 +74,9 @@ public class BesterServer
 
 	/* The server's socket */
 	private Socket serverSocket;
+	/* TODO: The above to be replaced */
+
+	private BesterListener[] listeners;
 
 	/* Connected clients */
 	public BesterConnection[] clients;
