@@ -40,17 +40,20 @@ BesterListener[] getListeners(JSONValue networkBlock)
 
 	/* Look for IPv4 TCP block */
 	JSONValue inet4TCPBlock = networkBlock["tcp4"];
+	debugPrint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
 	string inet4Address = inet4TCPBlock["address"].str();
 	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
 	
 	/* Look for IPv6 TCP block */
 	JSONValue inet6TCPBlock = networkBlock["tcp6"];
+	debugPrint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
 	string inet6Address = inet6TCPBlock["address"].str();
 	ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
 	
 	/* Look for UNIX Domain block */
 	JSONValue unixDomainBlock = networkBlock["unix"];
-
+	debugPrint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
+	string unixAddress = unixDomainBlock["address"].str();
 	
 
 	return listeners;
