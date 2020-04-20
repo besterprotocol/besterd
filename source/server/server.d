@@ -2,7 +2,7 @@ module server.server;
 
 import server.types;
 import std.conv : to;
-import std.socket : SocketOSException, parseAddress;
+import std.socket : SocketOSException, parseAddress, UnixAddress;
 import utils.debugging : debugPrint;
 import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
@@ -37,7 +37,7 @@ BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 {
 	BesterListener[] listeners;
 
-	/* TODO: Error handling */
+	/* TODO: Error handling and get keys and clean up for formality */
 
 	/* Look for IPv4 TCP block */
 	JSONValue inet4TCPBlock = networkBlock["tcp4"];
@@ -59,8 +59,8 @@ BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 	JSONValue unixDomainBlock = networkBlock["unix"];
 	debugPrint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
 	string unixAddress = unixDomainBlock["address"].str();
-//	UNIXListener unixListener = new UNIXListener(server, parseAddress(unixAddress));
-//	listeners ~= unixListener;
+	UNIXListener unixListener = new UNIXListener(server, new UnixAddress(unixAddress));
+	listeners ~= unixListener;
 
 	return listeners;
 }
