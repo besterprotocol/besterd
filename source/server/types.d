@@ -81,9 +81,14 @@ public class BesterServer
 	/* Connected clients */
 	public BesterConnection[] clients;
 
+	/* Construct a new BesterServer with the given listeners */
+	this(BesterListener[] listeners)
+	{
+		this.listeners = listeners;
+	}
+
 	this(JSONValue config)
 	{
-
 		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up socket...");
 		setupServerSocket(config["network"]);
