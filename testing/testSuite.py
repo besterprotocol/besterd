@@ -50,8 +50,8 @@ def simpleTest():
 
 def runTests():
     #simpleTest()
-    basicTest()
     commandBuiltInClose()
     commandAuthTest()
+    basicTest()
 
 runTests()
