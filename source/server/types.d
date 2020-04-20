@@ -9,6 +9,17 @@ import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp;
 import server.handler;
 
+
+/* TODO: Implement me */
+/* All this will do is accept incoming connections
+ * but they will be pooled in the BesterServer.
+ */
+public class BesterListener
+{
+	
+}
+
+
 public class BesterServer
 {
 	/**
