@@ -10,7 +10,7 @@ import connection.connection;
 /* The type of the command the message handler wants us to run */
 private enum CommandType
 {
-	SEND_CLIENTS, SEND_SERVER, SEND_HANDLER
+	SEND_CLIENTS, SEND_SERVERS, SEND_HANDLER
 }
 
 public class HandlerResponse
@@ -19,7 +19,6 @@ public class HandlerResponse
 	private JSONValue messageResponse;
 
 	/* The command to be executed */
-	/* TODO: make an enum */
 	private CommandType commandType;
 
 	this(JSONValue messageResponse)
@@ -74,24 +73,15 @@ public class HandlerResponse
 						{
 							/* Set the command type to SEND_CLIENTS */
 							commandType = CommandType.SEND_CLIENTS;
-							
-							
+
+							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
 						}
 						else if(cmp(serverCommand, "sendServers") == 0)
 						{
 							/* Set the command type to SEND_SERVERS */
 							commandType = CommandType.SEND_SERVERS;
-							
-							/* Get the list of clients to send to */
-							string[] clients;
-							JSONValue[] clientList = commandBlock["data"].array();
-							for(ulong i = 0; i < clientList.length; i++)
-							{
-								clients ~= clientList[i].str();
-							}
-										
-							/* TODO: Implement me */
-							writeln("Users wanting to send to ", clients);
+
+							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
 						}
 						else
 						{
@@ -125,11 +115,11 @@ public class HandlerResponse
 		/* TODO: Implement me */
 
 		/* If the command is SEND_CLIENTS */
-		if(commandType == SEND_CLIENTS)
+		if(commandType == CommandType.SEND_CLIENTS)
 		{
 			/* Get the list of clients to send to */
 			string[] clients;
-			JSONValue[] clientList = commandBlock["data"].array();
+			JSONValue[] clientList = messageResponse["header"]["data"].array();
 			for(ulong i = 0; i < clientList.length; i++)
 			{
 				clients ~= clientList[i].str();
@@ -137,6 +127,19 @@ public class HandlerResponse
 									
 			/* TODO: Implement me */
 			writeln("Users wanting to send to ", clients);
+		}
+		else if (commandType == CommandType.SEND_SERVERS)
+		{
+			/* Get the list of servers to send to */
+			string[] servers;
+			JSONValue[] serverList = messageResponse["header"]["data"].array();
+			for(ulong i = 0; i < serverList.length; i++)
+			{
+				servers ~= serverList[i].str();
+			}
+													
+			/* TODO: Implement me */
+			writeln("Servers wanting to send to ", servers);
 		}
 		
 	}
