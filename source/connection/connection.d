@@ -13,7 +13,7 @@ import server.server;
 import handlers.response;
 
 
-public class BesterConnection : Thread
+public final class BesterConnection : Thread
 {
 
 	/* The socket to the client */

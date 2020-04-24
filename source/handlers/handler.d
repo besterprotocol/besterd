@@ -5,7 +5,7 @@ import std.socket : Socket, AddressFamily, parseAddress, SocketType, SocketOSExc
 import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
 
-public class MessageHandler
+public final class MessageHandler
 {
 	/* The path to the message handler executable */
 	private string executablePath;

@@ -11,7 +11,7 @@ import handlers.handler;
 import listeners.listener;
 import connection.connection;
 
-public class BesterServer
+public final class BesterServer
 {
 	/**
 	* Message handlers

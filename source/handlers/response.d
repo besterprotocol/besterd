@@ -13,7 +13,7 @@ private enum CommandType
 	SEND_CLIENTS, SEND_SERVERS, SEND_HANDLER
 }
 
-public class HandlerResponse
+public final class HandlerResponse
 {
 	/* The message-handler's response */
 	private JSONValue messageResponse;
@@ -141,7 +141,10 @@ public class HandlerResponse
 			/* TODO: Implement me */
 			writeln("Servers wanting to send to ", servers);
 		}
-		
+		else if (commandType == CommandType.SEND_HANDLER)
+		{
+			/* TODO: Add me */
+		}
 	}
 
 	override public string toString()

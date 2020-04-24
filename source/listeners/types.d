@@ -5,7 +5,7 @@ import server.server;
 
 import std.socket : Socket, Address, AddressFamily, SocketType;
 
-public class UNIXListener : BesterListener
+public final class UNIXListener : BesterListener
 {
 	this(BesterServer besterServer, Address address)
 	{
@@ -21,7 +21,7 @@ public class UNIXListener : BesterListener
 	}
 }
 
-public class TCP4Listener : BesterListener
+public final class TCP4Listener : BesterListener
 {
 	this(BesterServer besterServer, Address address)
 	{
@@ -37,7 +37,7 @@ public class TCP4Listener : BesterListener
 	}
 }
 
-public class TCP6Listener : BesterListener
+public final class TCP6Listener : BesterListener
 {
 	this(BesterServer besterServer, Address address)
 	{
