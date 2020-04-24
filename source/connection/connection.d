@@ -585,14 +585,24 @@ public class BesterConnection : Thread
 			/* TODO: Implement me */
 			debugPrint("Chosen handler for payload type \"" ~ payloadType ~ "\" is " ~ chosenHandler.getPluginName());
 
-			/* TODO: Collect return value */
-			HandlerResponse handlerResponse = new HandlerResponse(handlerRun(chosenHandler, payloadData));
+			try
+			{
+				/* TODO: Collect return value */
+				HandlerResponse handlerResponse = new HandlerResponse(handlerRun(chosenHandler, payloadData));	
 
+				/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
+				debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());
 
-			/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
-
-
-			debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());
+				/* Execute the message handler's command */
+				handlerResponse.execute(this);
+			}
+			catch(ResponseError e)
+			{
+				/* In the case of an error with the message handler, send an error to the client/server */
+				
+				/* TODO: Send error here */
+			}
+			
 
 			/* TODO: Handle response */
 		}

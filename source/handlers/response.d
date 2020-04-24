@@ -5,6 +5,7 @@ import std.conv : to;
 import utils.debugging : debugPrint;
 import std.string : cmp;
 import std.stdio : writeln;
+import connection.connection;
 
 public class HandlerResponse
 {
@@ -110,6 +111,11 @@ public class HandlerResponse
 		}
 			
 		
+	}
+
+	public void execute(BesterConnection originalRequester)
+	{
+		/* TODO: Implement me */
 	}
 
 	override public string toString()
