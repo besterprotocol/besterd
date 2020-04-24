@@ -8,11 +8,7 @@ import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp;
 import server.handler;
-import server.listeners;
-
-
-
-
+import server.types.listeners;
 
 public class BesterServer
 {

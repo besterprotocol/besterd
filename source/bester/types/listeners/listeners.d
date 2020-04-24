@@ -1,4 +1,4 @@
-module server.listeners;
+module server.types.listeners.listeners;
 
 import server.types;
 import std.socket : Socket, Address, AddressFamily, SocketType;
