@@ -679,52 +679,63 @@ private class BesterConnection : Thread
 			JSONValue headerBlock = handlerResponse["header"];
 
 			/* Get the status */
-			ulong statusCode = to!(ulong)(headerBlock["status"].str);
+			ulong statusCode = to!(ulong)(headerBlock["status"].str());
 			debugPrint("Status code: " ~ to!(string)(statusCode));
 
-			/* The command block */
-			JSONValue commandBlock = headerBlock["command"];
-
-			/**
-			 * Get the command that the message handler wants the
-			 * server to run.
-			 */
-			string serverCommand = commandBlock["type"].str;
-			debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
-
-			/* Check the command to be run */
-			if(cmp(serverCommand, "sendClients") == 0)
+			/* If the status is 0, then it is all fine */
+			if(statusCode == 0)
 			{
-				/* Get the list of clients to send to */
-				string[] clients;
-				JSONValue[] clientList = commandBlock["data"].array();
-				for(ulong i = 0; i < clientList.length; i++)
-				{
-					clients ~= clientList[i].str();
-				}
-
-				/* TODO: Implement me */
-				writeln("Users wanting to send to ", clients);
-			}
-			else if(cmp(serverCommand, "sendServers") == 0)
-			{
-				/* Get the list of clients to send to */
-				string[] clients;
-				JSONValue[] clientList = commandBlock["data"].array();
-				for(ulong i = 0; i < clientList.length; i++)
-				{
-					clients ~= clientList[i].str();
-				}
+				debugPrint("Status is fine, the handler ran correctly");
 				
-				/* TODO: Implement me */
-				writeln("Users wanting to send to ", clients);
+				/* The command block */
+				JSONValue commandBlock = headerBlock["command"];
+				
+				/**
+				 * Get the command that the message handler wants the
+				 * server to run.
+				 */
+				string serverCommand = commandBlock["type"].str;
+				debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
+				
+				/* Check the command to be run */
+				if(cmp(serverCommand, "sendClients") == 0)
+				{
+					/* Get the list of clients to send to */
+					string[] clients;
+					JSONValue[] clientList = commandBlock["data"].array();
+					for(ulong i = 0; i < clientList.length; i++)
+					{
+						clients ~= clientList[i].str();
+					}
+				
+					/* TODO: Implement me */
+					writeln("Users wanting to send to ", clients);
+				}
+				else if(cmp(serverCommand, "sendServers") == 0)
+				{
+					/* Get the list of clients to send to */
+					string[] clients;
+					JSONValue[] clientList = commandBlock["data"].array();
+					for(ulong i = 0; i < clientList.length; i++)
+					{
+						clients ~= clientList[i].str();
+					}
+								
+					/* TODO: Implement me */
+					writeln("Users wanting to send to ", clients);
+				}
+				else
+				{
+					/* TODO: Error handling */
+					debugPrint("The message handler is using an invalid command");
+				}
 			}
 			else
 			{
-				/* TODO: Error handling */
-				debugPrint("The message handler is using an invalid command");
+				/* If the message handler returned a response in error */
+				debugPrint("Message handler returned an error code: " ~ to!(string)(statusCode));
+				return false;
 			}
-			
 		}
 		catch(JSONException exception)
 		{
@@ -732,6 +743,7 @@ private class BesterConnection : Thread
 			return false;
 		}
 
+		/* If the handling went through fine */
 		return true;
 	}
 
@@ -832,7 +844,15 @@ private class BesterConnection : Thread
 			debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ response.toPrettyString());
 
 			/* TODO: Handle response */
-			handleResponse(response);
+			bool handleStatus = handleResponse(response);
+
+			/* Check if the response was handled unsuccessfully */
+			if(!handleStatus)
+			{
+				debugPrint("Response from message handler was erroneous, sending error to user...");
+
+				/* TODO: Implement this */
+			}
 		}
 		else
 		{
