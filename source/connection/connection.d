@@ -10,6 +10,7 @@ import std.string : cmp;
 import handlers.handler;
 import listeners.listener;
 import server.server;
+import handlers.response;
 
 
 public class BesterConnection : Thread
@@ -492,87 +493,6 @@ public class BesterConnection : Thread
 		return parseJSON(cast(string)fullMessage);
 	}
 
-	/**
-	 * Handles the response sent back to the server from the
-	 * message handler.
-	 */
-	private bool handleResponse(JSONValue handlerResponse)
-	{
-		/* TODO: Bounds checking, type checking */
-		try
-		{
-			/* Get the header block */
-			JSONValue headerBlock = handlerResponse["header"];
-
-			/* Get the status */
-			ulong statusCode = to!(ulong)(headerBlock["status"].str());
-			debugPrint("Status code: " ~ to!(string)(statusCode));
-
-			/* If the status is 0, then it is all fine */
-			if(statusCode == 0)
-			{
-				debugPrint("Status is fine, the handler ran correctly");
-				
-				/* The command block */
-				JSONValue commandBlock = headerBlock["command"];
-				
-				/**
-				 * Get the command that the message handler wants the
-				 * server to run.
-				 */
-				string serverCommand = commandBlock["type"].str;
-				debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
-				
-				/* Check the command to be run */
-				if(cmp(serverCommand, "sendClients") == 0)
-				{
-					/* Get the list of clients to send to */
-					string[] clients;
-					JSONValue[] clientList = commandBlock["data"].array();
-					for(ulong i = 0; i < clientList.length; i++)
-					{
-						clients ~= clientList[i].str();
-					}
-				
-					/* TODO: Implement me */
-					writeln("Users wanting to send to ", clients);
-				}
-				else if(cmp(serverCommand, "sendServers") == 0)
-				{
-					/* Get the list of clients to send to */
-					string[] clients;
-					JSONValue[] clientList = commandBlock["data"].array();
-					for(ulong i = 0; i < clientList.length; i++)
-					{
-						clients ~= clientList[i].str();
-					}
-								
-					/* TODO: Implement me */
-					writeln("Users wanting to send to ", clients);
-				}
-				else
-				{
-					/* TODO: Error handling */
-					debugPrint("The message handler is using an invalid command");
-				}
-			}
-			else
-			{
-				/* If the message handler returned a response in error */
-				debugPrint("Message handler returned an error code: " ~ to!(string)(statusCode));
-				return false;
-			}
-		}
-		catch(JSONException exception)
-		{
-			debugPrint("<<< There was an error handling the response message >>>\n\n" ~ exception.toString());
-			return false;
-		}
-
-		/* If the handling went through fine */
-		return true;
-	}
-
 	public enum Scope
 	{
 		CLIENT,
@@ -666,19 +586,15 @@ public class BesterConnection : Thread
 			debugPrint("Chosen handler for payload type \"" ~ payloadType ~ "\" is " ~ chosenHandler.getPluginName());
 
 			/* TODO: Collect return value */
-			JSONValue response = handlerRun(chosenHandler, payloadData);
-			debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ response.toPrettyString());
+			HandlerResponse handlerResponse = new HandlerResponse(handlerRun(chosenHandler, payloadData));
+
+
+			/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
+
+
+			debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());
 
 			/* TODO: Handle response */
-			bool handleStatus = handleResponse(response);
-
-			/* Check if the response was handled unsuccessfully */
-			if(!handleStatus)
-			{
-				debugPrint("Response from message handler was erroneous, sending error to user...");
-
-				/* TODO: Implement this */
-			}
 		}
 		else
 		{
