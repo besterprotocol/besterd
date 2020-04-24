@@ -1,4 +1,4 @@
-module server.handler;
+module handlers.handler;
 
 import std.stdio : writeln;
 import std.socket : Socket, AddressFamily, parseAddress, SocketType, SocketOSException, UnixAddress;
