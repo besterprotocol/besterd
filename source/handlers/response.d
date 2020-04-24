@@ -119,7 +119,7 @@ public class HandlerResponse
 		{
 			/* Get the list of clients to send to */
 			string[] clients;
-			JSONValue[] clientList = messageResponse["header"]["data"].array();
+			JSONValue[] clientList = messageResponse["header"]["command"]["data"].array();
 			for(ulong i = 0; i < clientList.length; i++)
 			{
 				clients ~= clientList[i].str();
@@ -132,7 +132,7 @@ public class HandlerResponse
 		{
 			/* Get the list of servers to send to */
 			string[] servers;
-			JSONValue[] serverList = messageResponse["header"]["data"].array();
+			JSONValue[] serverList = messageResponse["header"]["command"]["data"].array();
 			for(ulong i = 0; i < serverList.length; i++)
 			{
 				servers ~= serverList[i].str();
