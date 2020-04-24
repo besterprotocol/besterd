@@ -7,10 +7,20 @@ import std.string : cmp;
 import std.stdio : writeln;
 import connection.connection;
 
+/* The type of the command the message handler wants us to run */
+private enum CommandType
+{
+	SEND_CLIENTS, SEND_SERVER, SEND_HANDLER
+}
+
 public class HandlerResponse
 {
 	/* The message-handler's response */
 	private JSONValue messageResponse;
+
+	/* The command to be executed */
+	/* TODO: make an enum */
+	private CommandType commandType;
 
 	this(JSONValue messageResponse)
 	{
@@ -62,19 +72,16 @@ public class HandlerResponse
 						/* Check the command to be run */
 						if(cmp(serverCommand, "sendClients") == 0)
 						{
-							/* Get the list of clients to send to */
-							string[] clients;
-							JSONValue[] clientList = commandBlock["data"].array();
-							for(ulong i = 0; i < clientList.length; i++)
-							{
-								clients ~= clientList[i].str();
-							}
-						
-							/* TODO: Implement me */
-							writeln("Users wanting to send to ", clients);
+							/* Set the command type to SEND_CLIENTS */
+							commandType = CommandType.SEND_CLIENTS;
+							
+							
 						}
 						else if(cmp(serverCommand, "sendServers") == 0)
 						{
+							/* Set the command type to SEND_SERVERS */
+							commandType = CommandType.SEND_SERVERS;
+							
 							/* Get the list of clients to send to */
 							string[] clients;
 							JSONValue[] clientList = commandBlock["data"].array();
@@ -116,6 +123,22 @@ public class HandlerResponse
 	public void execute(BesterConnection originalRequester)
 	{
 		/* TODO: Implement me */
+
+		/* If the command is SEND_CLIENTS */
+		if(commandType == SEND_CLIENTS)
+		{
+			/* Get the list of clients to send to */
+			string[] clients;
+			JSONValue[] clientList = commandBlock["data"].array();
+			for(ulong i = 0; i < clientList.length; i++)
+			{
+				clients ~= clientList[i].str();
+			}
+									
+			/* TODO: Implement me */
+			writeln("Users wanting to send to ", clients);
+		}
+		
 	}
 
 	override public string toString()
