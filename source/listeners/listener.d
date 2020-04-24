@@ -1,4 +1,4 @@
-module server.types.listener;
+module listeners.listener;
 
 import utils.debugging : debugPrint;
 import std.conv : to;
@@ -8,6 +8,8 @@ import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp;
 import server.handler;
+import server.server;
+import connection.connection;
 
 
 /* TODO: Implement me */

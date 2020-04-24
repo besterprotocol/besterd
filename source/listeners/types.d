@@ -1,6 +1,8 @@
-module server.types.listeners.listeners;
+module listeners.types;
 
-import server.types;
+import listeners.listener;
+import server.server;
+
 import std.socket : Socket, Address, AddressFamily, SocketType;
 
 public class UNIXListener : BesterListener

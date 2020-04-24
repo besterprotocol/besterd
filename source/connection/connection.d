@@ -1,4 +1,4 @@
-module server.types.connection;
+module connection.connection;
 
 import utils.debugging : debugPrint;
 import std.conv : to;
@@ -8,10 +8,11 @@ import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp;
 import server.handler;
-import server.types.listeners;
+import listeners.listener;
+import server.server;
 
 
-private class BesterConnection : Thread
+public class BesterConnection : Thread
 {
 
 	/* The socket to the client */
