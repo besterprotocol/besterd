@@ -33,7 +33,15 @@ public final class BesterServer
 
 	public BesterConnection[] getClients(string[] usernames)
 	{
-		/* TODO: Implement me */
+		/* List of authenticated users matching `usernames` */
+		BesterConnection[] matchedUsers;
+		
+		for(ulong i = 0; i < clients.length; i++)
+		{
+			/* TODO: Implement me */	
+		}
+
+		return matchedUsers;
 	}
 
 	public void addListener(BesterListener listener)
