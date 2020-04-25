@@ -131,9 +131,15 @@ public final class HandlerResponse
 			{
 				clients ~= clientList[i].str();
 			}
-			
-			/* TODO: Implement me */
+
 			writeln("Users wanting to send to ", clients);
+
+			/* Find the users that are wanting to be sent to */
+			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
+			writeln(connectionList);
+
+			/* TODO: Implement me */
+			
 			writeln("sdafdfasd", originalRequester.server.clients[0].toString());
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
