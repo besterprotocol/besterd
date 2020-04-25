@@ -38,7 +38,22 @@ public final class BesterServer
 		
 		for(ulong i = 0; i < clients.length; i++)
 		{
-			/* TODO: Implement me */	
+			/* The potentially-matched user */
+			BesterConnection potentialMatch = clients[i];
+
+			/* Check if the user is authenticated */
+			if(potentialMatch.isUser())
+			{
+				for(ulong k = 0; k < usernames.length; k++)
+				{
+					/* TODO: Implement check here */
+				}
+			}
+			else
+			{
+				/* TODO: Debug print */
+				debugPrint("Skipping unauthenticated user \"" ~ potentialMatch.getCredentials()[0] ~ "\"");
+			}
 		}
 
 		return matchedUsers;
