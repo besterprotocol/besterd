@@ -20,7 +20,7 @@ public final class BesterConnection : Thread
 	private Socket clientConnection;
 
 	/* The server backend */
-	private BesterServer server;
+	public BesterServer server;
 
 	/* The client's credentials  */
 	private string authUsername;
@@ -34,6 +34,23 @@ public final class BesterConnection : Thread
 		this.server = server;
 
 		debugPrint("New client handler spawned for " ~ clientConnection.remoteAddress().toAddrString());
+	}
+
+	override public string toString()
+	{
+		writeln("oof", clientConnection.remoteAddress().toAddrString());
+		return clientConnection.remoteAddress().toAddrString();
+	}
+
+	public string[] getCredentials()
+	{
+		return [authUsername, authPassword];
+	}
+
+	/* Send a message to the user/server */
+	public void sendMessage(JSONValue replyMessage)
+	{
+		/* TODO: Implement me */
 	}
 
 	/* Read/send loop */

@@ -31,6 +31,11 @@ public final class BesterServer
 	/* Connected clients */
 	public BesterConnection[] clients;
 
+	public BesterConnection[] getClients(string[] usernames)
+	{
+		/* TODO: Implement me */
+	}
+
 	public void addListener(BesterListener listener)
 	{
 		this.listeners ~= listener;
