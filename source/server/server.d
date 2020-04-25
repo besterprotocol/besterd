@@ -35,24 +35,20 @@ public final class BesterServer
 	{
 		/* List of authenticated users matching `usernames` */
 		BesterConnection[] matchedUsers;
-		
-		for(ulong i = 0; i < clients.length; i++)
-		{
-			/* The potentially-matched user */
-			BesterConnection potentialMatch = clients[i];
 
-			/* Check if the user is authenticated */
-			if(potentialMatch.isUser())
+		/* Search through the provided usernames */
+		for(ulong i = 0; i < usernames.length; i++)
+		{
+			for(ulong k = 0; k < clients.lenght; k++)
 			{
-				for(ulong k = 0; k < usernames.length; k++)
+				/* The potentially-matched user */
+				BesterConnection potentialMatch = clients[k];
+				
+				/* Check if the user is authenticated */
+				if(potentialMatch.isUser() && cmp(potentialMatch.getCredentials()[0], usernames[i])
 				{
-					/* TODO: Implement check here */
-				}
-			}
-			else
-			{
-				/* TODO: Debug print */
-				debugPrint("Skipping unauthenticated user \"" ~ potentialMatch.getCredentials()[0] ~ "\"");
+					matchedUsers ~= potentialMatch;
+				}	
 			}
 		}
 
