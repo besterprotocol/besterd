@@ -26,6 +26,12 @@ public final class BesterConnection : Thread
 	private string authUsername;
 	private string authPassword;
 
+	/* Returns true if the client is a user (false if a server/unauthenticated user) */
+	public bool isUser()
+	{
+		return authUsername != null && authPassword != null;
+	}
+
 	this(Socket clientConnection, BesterServer server)
 	{
 		/* Save socket and set thread worker function pointer */
