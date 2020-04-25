@@ -16,6 +16,9 @@ public final class MessageHandler
 	/* The pluginName/type */
 	private string pluginName;
 
+	/* The UNIX domain socket path */
+	private string socketPath;
+
 	public Socket getSocket()
 	{
 		return domainSocket;
@@ -28,11 +31,25 @@ public final class MessageHandler
 
 		/* Initialize the socket */
 		initializeUNIXSocket(socketPath);
+
+		/* Set the socket path */
+		this.socketPath = socketPath;
 	}
 
 	public string getPluginName()
 	{
 		return pluginName;
+	}
+
+	public Socket getNewSocket()
+	{
+		/* Create the UNIX domain socket */
+		Socket domainSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
+		
+		/* Connect to the socket at the socket path */
+		domainSocket.connect(new UnixAddress(socketPath));
+
+		return domainSocket;
 	}
 
 	private void initializeUNIXSocket(string socketPath)
