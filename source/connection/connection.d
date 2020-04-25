@@ -205,7 +205,8 @@ public final class BesterConnection : Thread
 			/* TODO: Send and receive data here */
 
 			/* Handler's UNIX domain socket */
-			Socket handlerSocket = chosenHandler.getSocket();
+			/* TODO: Change this call here below (also remove startup connection) */
+			Socket handlerSocket = chosenHandler.getNewSocket();
 
 
 			/* Get the payload as a string */
