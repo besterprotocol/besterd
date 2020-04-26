@@ -31,6 +31,30 @@ public final class BesterServer
 	/* Connected clients */
 	public BesterConnection[] clients;
 
+	public BesterConnection[] getClients(string[] usernames)
+	{
+		/* List of authenticated users matching `usernames` */
+		BesterConnection[] matchedUsers;
+
+		/* Search through the provided usernames */
+		for(ulong i = 0; i < usernames.length; i++)
+		{
+			for(ulong k = 0; k < clients.length; k++)
+			{
+				/* The potentially-matched user */
+				BesterConnection potentialMatch = clients[k];
+				
+				/* Check if the user is authenticated */
+				if(potentialMatch.isUser() && cmp(potentialMatch.getCredentials()[0], usernames[i]))
+				{
+					matchedUsers ~= potentialMatch;
+				}	
+			}
+		}
+
+		return matchedUsers;
+	}
+
 	public void addListener(BesterListener listener)
 	{
 		this.listeners ~= listener;

@@ -83,6 +83,13 @@ public final class HandlerResponse
 
 							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
 						}
+						else if(cmp(serverCommand, "sendHandler") == 0)
+						{
+							/* Set the command type to SEND_HAANDLER */
+							commandType = CommandType.SEND_HANDLER;
+
+							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
+						}
 						else
 						{
 							/* TODO: Error handling */
@@ -124,9 +131,16 @@ public final class HandlerResponse
 			{
 				clients ~= clientList[i].str();
 			}
-									
-			/* TODO: Implement me */
+
 			writeln("Users wanting to send to ", clients);
+
+			/* Find the users that are wanting to be sent to */
+			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
+			writeln(connectionList);
+
+			/* TODO: Implement me */
+			
+			writeln("sdafdfasd", originalRequester.server.clients[0].toString());
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
 		{
@@ -143,6 +157,10 @@ public final class HandlerResponse
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
+			/* Name of the handler to send the message to */
+			string handler = messageResponse["header"]["command"]["data"]["handler"].str();
+			debugPrint("Handler to forward to: " ~ handler);
+
 			/* TODO: Add me */
 		}
 	}
