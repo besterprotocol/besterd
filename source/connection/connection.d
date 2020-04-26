@@ -368,15 +368,12 @@ public final class BesterConnection : Thread
 
 	private JSONValue handlerRun(MessageHandler chosenHandler, JSONValue payload)
 	{
-		/* TODO: Send and receive data here */
-		
 		/* Handler's UNIX domain socket */
 		Socket handlerSocket = chosenHandler.getNewSocket();
-		
-		
+
+
 		/* Get the payload as a string */
 		string payloadString = toJSON(payload);
-					
 		
 		/* Construct the data to send */
 		byte[] sendBuffer;
