@@ -23,18 +23,17 @@ public final class BesterConnection : Thread
 	public BesterServer server;
 
 	/* The client's credentials  */
-	private string authUsername;
-	private string authPassword;
+	private string username;
+	private string password;
 
 	/* TODO: Use this */
 
 	/* The type of this connection */
 	private Scope connectionType = Scope.UNKNOWN;
 
-	/* Returns true if the client is a user (false if a server/unauthenticated user) */
-	public bool isUser()
+	public Scope getType()
 	{
-		return authUsername != null && authPassword != null;
+		return connectionType;
 	}
 
 	this(Socket clientConnection, BesterServer server)
@@ -55,7 +54,7 @@ public final class BesterConnection : Thread
 
 	public string[] getCredentials()
 	{
-		return [authUsername, authPassword];
+		return [username, password];
 	}
 
 	/* Send a message to the user/server */
@@ -527,11 +526,6 @@ public final class BesterConnection : Thread
 		UNKNOWN
 	}
 
-	private bool isAuthenticated()
-	{
-		return authUsername != null && authPassword != null;
-	}
-
 	/* TODO: Version 2 of message dispatcher */
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
 	{
@@ -707,6 +701,51 @@ public final class BesterConnection : Thread
 					debugPrint("Host provided scope was UNKNOWN");
 
 					/* TODO: Send message back about an invalid scope */
+
+					/* Close the connection */
+					clientConnection.close();
+				}
+				else if(scopeField == Scope.CLIENT)
+				{
+					/**
+					 * If the host-provided `scope` field is `Scope.CLIENT`
+					 * then we must attempt authentication, if it fails
+					 * send the client a message back and then close the
+					 * connection.
+					 */
+
+					/* Get the authentication block */
+					JSONValue authenticationBlock = headerBlock["authentication"];
+
+					/* Get the username and password */
+					string username = authenticationBlock["username"].str(), password = authenticationBlock["password"].str();
+
+					/* Attempt authentication */
+					bool authenticationStatus = server.authenticate(username, password);
+
+					/* Check if the authentication was successful or not */
+					if(authenticationStatus)
+					{
+						/**
+						 * If the authentication was successful then store the 
+						 * client's credentials.
+						 */
+						 this.username = username;
+						 this.password = password;
+					}
+					else
+					{
+						/**
+						 * If the authentication was unsuccessful then send a
+						 * message to the client stating so and close the connection.
+						 */
+						debugPrint("Authenticating the user failed, sending error and closing connection.");
+
+						 /* TODO : Send error message to client */
+
+						 /* Close the connection */
+						 clientConnection.close();
+					}
 				}
 
 
@@ -718,38 +757,11 @@ public final class BesterConnection : Thread
 				/* TODO: Implement worker here */
 			}
 
-			/* Check if this connection is a client connection */
-			if(scopeField == Scope.CLIENT)
-			{
-				/* Check if the user if currently authenticated */
-				
-			}
-
 
 			/* Get the payload block */
 			JSONValue payloadBlock = jsonMessage["payload"];
 			debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
 
-			/* If the communication is client->server */
-			if(scopeField == Scope.CLIENT)
-			{
-				debugPrint("Client to server selected");
-
-			}
-			/* If the communication is server->server */
-			else if(scopeField == Scope.SERVER)
-			{
-				debugPrint("Server to server selected");
-
-				/* TODO: Implement me */	
-					
-			}
-			else
-			{
-				/* TODO: Error handling */
-				debugPrint("Unknown scope selected \"" ~ to!(string)(cast(uint)scopeField) ~ "\"");
-				return;
-			}
 
 			/* Dispatch the message */
 			bool dispatchStatus = dispatchMessage(scopeField, payloadBlock);
