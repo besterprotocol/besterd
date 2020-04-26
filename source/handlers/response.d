@@ -6,6 +6,7 @@ import utils.debugging : debugPrint;
 import std.string : cmp;
 import std.stdio : writeln;
 import connection.connection;
+import base.types;
 
 /* The type of the command the message handler wants us to run */
 private enum CommandType
@@ -171,11 +172,11 @@ public final class HandlerResponse
 	}
 }
 
-public final class ResponseError : Exception
+public final class ResponseError : BesterException
 {
 	this(JSONValue messageResponse, ulong statusCode)
 	{
 		/* TODO: Set message afterwards again */
-		super("");
+		super();
 	}
 }
