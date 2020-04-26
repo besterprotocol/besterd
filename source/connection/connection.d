@@ -370,6 +370,10 @@ public final class BesterConnection : Thread
 
 			/* Get the payload as a string */
 			string payloadString = toJSON(payload);
+
+
+			/* Send the payload to the message handler */
+			sendMessage(handlerSocket, payload);
 			
 
 			/* Construct the data to send */
