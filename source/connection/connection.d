@@ -207,7 +207,8 @@ public final class BesterConnection : Thread
 			/* Handler's UNIX domain socket */
 			/* TODO: Change this call here below (also remove startup connection) */
 			Socket handlerSocket = chosenHandler.getNewSocket();
-
+			//writeln(handlerSocket == null);
+			debugPrint("chosenHandler.socketPath: " ~ chosenHandler.socketPath);
 
 			/* Get the payload as a string */
 			string payloadString = toJSON(payload);
@@ -370,7 +371,7 @@ public final class BesterConnection : Thread
 		/* TODO: Send and receive data here */
 		
 		/* Handler's UNIX domain socket */
-		Socket handlerSocket = chosenHandler.getSocket();
+		Socket handlerSocket = chosenHandler.getNewSocket();
 		
 		
 		/* Get the payload as a string */

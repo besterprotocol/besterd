@@ -17,7 +17,7 @@ public final class MessageHandler
 	private string pluginName;
 
 	/* The UNIX domain socket path */
-	private string socketPath;
+	public string socketPath;
 
 	public Socket getSocket()
 	{
@@ -30,7 +30,7 @@ public final class MessageHandler
 		this.pluginName = pluginName;
 
 		/* Initialize the socket */
-		initializeUNIXSocket(socketPath);
+		//initializeUNIXSocket(socketPath);
 
 		/* Set the socket path */
 		this.socketPath = socketPath;
