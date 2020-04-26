@@ -26,6 +26,11 @@ public final class BesterConnection : Thread
 	private string authUsername;
 	private string authPassword;
 
+	/* TODO: Use this */
+
+	/* The type of this connection */
+	private Scope connectionType = Scope.UNKNOWN;
+
 	/* Returns true if the client is a user (false if a server/unauthenticated user) */
 	public bool isUser()
 	{
@@ -638,6 +643,10 @@ public final class BesterConnection : Thread
 	}
 
 
+	/**
+	 * Given the headerBlock, this returns the requested scope
+	 * of the connection.
+	 */
 	private Scope getConnectionScope(JSONValue headerBlock)
 	{
 		/* TODO: Type checking and bounds checking */
@@ -677,8 +686,36 @@ public final class BesterConnection : Thread
 			/* Get the header */
 			JSONValue headerBlock = jsonMessage["header"];
 
-			/* Get the scope of the message */
-			Scope scopeField = getConnectionScope(headerBlock);
+			
+
+			/**
+			 * Check to see if this connection is currently "untyped".
+			 *
+			 * If it is then we set the type.
+			 */
+			if(connectionType == Scope.UNKNOWN)
+			{
+				/* Get the scope of the message */
+				Scope scopeField = getConnectionScope(headerBlock);
+
+				/* TODO: Authenticate if client, else do ntohing for server */
+
+
+
+				/* Set the connection type to `scopeField` */
+				connectionType = scopeField;
+			}
+			else
+			{
+				/* TODO: Implement worker here */
+			}
+
+			/* Check if this connection is a client connection */
+			if(scopeField == Scope.CLIENT)
+			{
+				/* Check if the user if currently authenticated */
+				
+			}
 
 
 			/* Get the payload block */
