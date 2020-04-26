@@ -48,7 +48,6 @@ public final class BesterConnection : Thread
 
 	override public string toString()
 	{
-		writeln("oof", clientConnection.remoteAddress().toAddrString());
 		return clientConnection.remoteAddress().toAddrString();
 	}
 
@@ -66,11 +65,11 @@ public final class BesterConnection : Thread
 	/* Read/send loop */
 	private void run()
 	{
-		/* Receive buffer */
-		byte[] buffer;
-
 		while(true)
 		{
+			/* Receive buffer */
+			byte[] buffer;
+		
 			/* Byte counter for loop-consumer */
 			uint currentByte = 0;
 
