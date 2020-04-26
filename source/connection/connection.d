@@ -26,7 +26,13 @@ public final class BesterConnection : Thread
 	private string username;
 	private string password;
 
-	/* TODO: Use this */
+	/* The connection scope */
+	public enum Scope
+	{
+		CLIENT,
+		SERVER,
+		UNKNOWN
+	}
 
 	/* The type of this connection */
 	private Scope connectionType = Scope.UNKNOWN;
@@ -201,10 +207,11 @@ public final class BesterConnection : Thread
 			}
 		}
 
-		
-
+		/* Check if a handler was found */
 		if(chosenHandler)
 		{
+			/* If a handler for the message type was found */
+
 			/* TODO: Send and receive data here */
 
 			/* Handler's UNIX domain socket */
@@ -448,9 +455,7 @@ public final class BesterConnection : Thread
 		currentByte = 0;
 		
 		while(currentByte < messageLength)
-		{
-			debugPrint("dhjkh");
-		
+		{	
 			/**
 			 * Receive 20 bytes (at most) at a time and don't dequeue from
 			 * the kernel's TCP stack's buffer.
@@ -518,12 +523,7 @@ public final class BesterConnection : Thread
 		return parseJSON(cast(string)fullMessage);
 	}
 
-	public enum Scope
-	{
-		CLIENT,
-		SERVER,
-		UNKNOWN
-	}
+	
 
 	/* TODO: Version 2 of message dispatcher */
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
