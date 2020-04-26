@@ -700,6 +700,14 @@ public final class BesterConnection : Thread
 
 				/* TODO: Authenticate if client, else do ntohing for server */
 
+				/* Decide what action to take depending on the scope */
+				if(scopeField == Scope.UNKNOWN)
+				{
+					/* If the host-provided `scope` field was invalid */
+					debugPrint("Host provided scope was UNKNOWN");
+
+					/* TODO: Send message back about an invalid scope */
+				}
 
 
 				/* Set the connection type to `scopeField` */
