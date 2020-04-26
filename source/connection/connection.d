@@ -200,7 +200,7 @@ public final class BesterConnection : Thread
 		byte[] messageBuffer;
 
 		/* Get the JSON as a string */
-		string message = toJSON(josnMessage);
+		string message = toJSON(jsonMessage);
 
 		/* Encode the 4 byte message length header (little endian) */
 		int payloadLength = cast(int)message.length;
@@ -243,7 +243,7 @@ public final class BesterConnection : Thread
 			byte[4] tempBuffer;
 
 			/* Read at-most 4 bytes */
-			bytesReceived = handlerSocket.receive(tempBuffer);
+			bytesReceived = originator.receive(tempBuffer);
 
 			/* If there was an error reading from the socket */
 			if(!(bytesReceived > 0))
@@ -281,7 +281,7 @@ public final class BesterConnection : Thread
 			 * the kernel's TCP stack's buffer.
 			 */
 			byte[20] tempBuffer;
-			bytesReceived = handlerSocket.receive(tempBuffer, SocketFlags.PEEK);
+			bytesReceived = originator.receive(tempBuffer, SocketFlags.PEEK);
 
 			/* Check for an error whilst receiving */
 			if(!(bytesReceived > 0))
@@ -297,7 +297,7 @@ public final class BesterConnection : Thread
 					byte[] remainingBytes;
 					remainingBytes.length = messageLength-currentByte;
 
-					handlerSocket.receive(remainingBytes);
+					originator.receive(remainingBytes);
 
 					/* Increment counter of received bytes */
 					currentByte += remainingBytes.length;
@@ -321,7 +321,7 @@ public final class BesterConnection : Thread
 						
 					writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
 
-					handlerSocket.receive(tempBuffer);
+					originator.receive(tempBuffer);
 				}
 			}
 		}
@@ -337,7 +337,7 @@ public final class BesterConnection : Thread
 		
 
 		/* Set the message in `receiveMessage */
-		receiveMessage = parseJSON(cast(string)messageBuffer);
+		receiveMessage = parseJSON(cast(string)fullMessage);
 	}
 
 
