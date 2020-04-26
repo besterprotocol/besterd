@@ -185,6 +185,40 @@ public final class BesterConnection : Thread
 		}
 	}
 
+	/**
+	 * Generalized socket send function which will send the JSON
+	 * encoded message, `jsonMessage`, over to the client at the
+	 * other end of the socket, `recipient`.
+	 *
+	 * It gets the length of `jsonMessage` and encodes a 4 byte
+	 * message header in little-endian containing the message's
+	 * length.
+	 */
+	
+	public static void sendMessage(Socket recipient, JSONValue jsonMessage)
+	{
+		/* The message buffer */
+		byte[] messageBuffer;
+
+		/* Get the JSON as a string */
+		string message = toJSON(josnMessage);
+
+		/* Encode the 4 byte message length header (little endian) */
+		int payloadLength = cast(int)message.length;
+		byte* lengthBytes = cast(byte*)&payloadLength;
+		messageBuffer ~= *(lengthBytes+0);
+		messageBuffer ~= *(lengthBytes+1);
+		messageBuffer ~= *(lengthBytes+2);
+		messageBuffer ~= *(lengthBytes+3);
+
+		/* Add the message to the buffer */
+		messageBuffer ~= cast(byte[])message;
+
+		/* Send the message */
+		recipient.send(messageBuffer);
+	}
+
+
 	/* TODO: Pass in type and just payload or what */
 	private bool dispatch(string payloadType, JSONValue payload)
 	{
