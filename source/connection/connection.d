@@ -334,6 +334,10 @@ public final class BesterConnection : Thread
 
 
 
+	/**
+	 * Sends the payload to the designated message handler and gets
+	 * the response message from the handler and returns it.
+	 */
 	private JSONValue handlerRun(MessageHandler chosenHandler, JSONValue payload)
 	{
 		/* Handler's UNIX domain socket */
@@ -343,13 +347,11 @@ public final class BesterConnection : Thread
 		debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 		sendMessage(handlerSocket, payload);
 					
-		/* TODO: Get response */
+		/* Get the payload sent from the message handler in response */
 		debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 		JSONValue response;
 		receiveMessage(handlerSocket, response);
 		
-		
-		/* TODO: Set dispatchStatus */
 		return response;
 	}
 
