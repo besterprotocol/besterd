@@ -284,9 +284,14 @@ public final class BesterConnection : Thread
 
 						 /* Close the connection */
 						 clientConnection.close();
+
+						 /* TODO: Throw exception here */
 					}
 				}
-
+				else if(scopeField == Scope.SERVER)
+				{
+					debugPrint("Server scope enabled");
+				}
 
 				/* Set the connection type to `scopeField` */
 				connectionType = scopeField;
