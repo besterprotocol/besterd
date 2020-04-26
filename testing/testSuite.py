@@ -6,17 +6,18 @@ def basicTest():
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     d.connect(("127.0.0.1",2223))
 
-    # First do it and authenticate
-    bys=json.dumps({"header":{"authentication":{"username":"tbk", "password":"passwd"}, "scope":"client"},"payload":{"data":"ABBA","type":"type1"}})
-    print(len(bys), bys)
-    d.send(len(bys).to_bytes(4, "little"))
-    d.send(bys.encode())
+    while True:
+        # First do it and authenticate
+        bys=json.dumps({"header":{"authentication":{"username":"tbk", "password":"passwd"}, "scope":"client"},"payload":{"data":"ABBA","type":"type1"}})
+        print(len(bys), bys)
+        d.send(len(bys).to_bytes(4, "little"))
+        d.send(bys.encode())
 
-    # Now we can do it again (without authentication)
-    bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
-    print(len(bys), bys)
-    d.send(len(bys).to_bytes(4, "little"))
-    d.send(bys.encode())
+        # Now we can do it again (without authentication)
+        bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
+        print(len(bys), bys)
+        d.send(len(bys).to_bytes(4, "little"))
+        d.send(bys.encode())
 
     while True: pass
     d.close()
