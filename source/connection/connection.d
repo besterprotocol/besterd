@@ -99,9 +99,7 @@ public final class BesterConnection : Thread
 		return response;
 	}
 
-	
-
-	/* TODO: Version 2 of message dispatcher */
+	/* TODO: Comment [], rename [] */
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
 	{
 		/* Status of dispatch */
@@ -322,10 +320,5 @@ public final class BesterConnection : Thread
 		{
 			debugPrint("<<< There was an error whilst parsing the JSON message >>>\n\n"~exception.toString());
 		}
-
-		/* TODO: Return value */
-
 	}
-
-	
 }
