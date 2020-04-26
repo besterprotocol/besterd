@@ -7,7 +7,7 @@ def basicTest():
     d.connect(("127.0.0.1",2221))
     bys=json.dumps({"header":{"authentication":{"username":"tbk", "password":"passwd"}, "scope":"client"},"payload":{"data":"ABBA","type":"type1"}})
     print(bys)
-    d.send(bytes([len(bys),0,0,0]))
+    d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())
     d.close()
 
@@ -19,7 +19,7 @@ def commandBuiltInClose():
         "command" : {"type" : "close", "args" : None}
     },"type":"builtin"}})
     print(bys)
-    d.send(bytes([len(bys),0,0,0]))
+    d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())
     d.close()
 
@@ -31,7 +31,7 @@ def commandAuthTest():
         "command" : {"type" : "login", "args" : {"username" :"1", "password":"2"}}
     },"type":"builtin"}})
     print(bys)
-    d.send(bytes([len(bys),0,0,0]))
+    d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())
     d.close()
 
@@ -42,7 +42,7 @@ def simpleTest():
     d.connect(("127.0.0.1",2224))
     bys=json.dumps({"name":1})
     print(bys)
-    d.send(bytes([len(bys),0,0,0]))
+    d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())
     while True: pass
     d.close()
