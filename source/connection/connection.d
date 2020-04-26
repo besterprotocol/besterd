@@ -558,38 +558,8 @@ public final class BesterConnection : Thread
 			string commandType = commandBlock["type"].str;
 			JSONValue command = commandBlock["args"];
 
-			/* Check if the command is the `login` */
-			if(cmp(commandType, "login") == 0)
-			{
-				debugPrint("User wants to login");
-
-				/* Get the username and password fields */
-				string username = command["username"].str(), password = command["password"].str();
-				debugPrint("Username: \"" ~ username ~ "\" Password: \"" ~ password ~ "\"");
-
-				/* Authenticate the user and get the status */
-				bool authenticationStatus = server.authenticate(username, password);
-				debugPrint("Authentication status: " ~ to!(string)(authenticationStatus));
-
-				/* If the authentication succeeded */
-				if(authenticationStatus)
-				{
-					/* Update this client's authentication status */
-					authUsername = username, authPassword = password;
-					debugPrint("User authenticated!");
-
-					/* TODO: Implement response */
-				}
-				else
-				{
-					debugPrint("User authentication FAILED!");
-					/* TODO: Implement response */
-				}
-
-				/* TODO: Implement me */
-			}
 			/* If the command is `close` */
-			else if(cmp(commandType, "close") == 0)
+			if(cmp(commandType, "close") == 0)
 			{
 				debugPrint("Closing socket...");
 				this.clientConnection.close();
@@ -764,7 +734,7 @@ public final class BesterConnection : Thread
 
 
 			/* Dispatch the message */
-			bool dispatchStatus = dispatchMessage(scopeField, payloadBlock);
+			bool dispatchStatus = dispatchMessage(connectionType, payloadBlock);
 								
 			if(dispatchStatus)
 			{

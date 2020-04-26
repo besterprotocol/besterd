@@ -45,7 +45,7 @@ public final class BesterServer
 				BesterConnection potentialMatch = clients[k];
 				
 				/* Check if the user is authenticated */
-				if(potentialMatch.isUser() && cmp(potentialMatch.getCredentials()[0], usernames[i]))
+				if(potentialMatch.getType() == BesterConnection.Scope.CLIENT && cmp(potentialMatch.getCredentials()[0], usernames[i]))
 				{
 					matchedUsers ~= potentialMatch;
 				}	
