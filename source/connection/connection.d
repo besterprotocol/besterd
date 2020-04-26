@@ -638,6 +638,26 @@ public final class BesterConnection : Thread
 	}
 	
 
+	private Scope getConnectionScope(JSONValue headerBlock)
+	{
+		/* TODO: Type checking and bounds checking */
+
+		/* Get the identification block */
+		JSONValue identifyBlock = headerBlock["identify"];
+
+		/* Check what type of connection this is */
+		if(cmp(headerBlock["identify"]["type"].str(), "client") == 0)
+		{
+			return Scope.CLIENT;
+		}
+		else if(cmp(headerBlock["identify"]["type"].str(), "server") == 0)
+		{
+			return Scope.SERVER;
+		}
+
+		return Scope.UNKNOWN;
+	}
+
 	/* Process the received message */
 	private void processMessage(byte[] messageBuffer)
 	{
@@ -653,9 +673,11 @@ public final class BesterConnection : Thread
 			debugPrint("<<< Received JSON >>>\n\n" ~ jsonMessage.toPrettyString());
 
 			/* TODO: Bounds checking, type checking */
-
+			
 			/* Get the header */
 			JSONValue headerBlock = jsonMessage["header"];
+
+			/* Get the scope of this connection */
 
 			/* Get the scope of the message */
 			Scope scopeField;
