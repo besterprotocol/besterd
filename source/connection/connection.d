@@ -249,7 +249,7 @@ public final class BesterConnection : Thread
 			if(!(bytesReceived > 0))
 			{
 				/* TODO: Error handling */
-				debugPrint("Error receiving from UNIX domain socket");
+				debugPrint("Error receiving from socket");
 			}
 			/* If there is no error reading from the socket */
 			else
@@ -287,7 +287,7 @@ public final class BesterConnection : Thread
 			if(!(bytesReceived > 0))
 			{
 				/* TODO: Error handling */
-				debugPrint("Error whilst receiving from unix domain socket");
+				debugPrint("Error whilst receiving from socket");
 			}
 			else
 			{
@@ -326,15 +326,7 @@ public final class BesterConnection : Thread
 			}
 		}
 
-
-		writeln("MEssage ", fullMessage);
-
-
-
-
-
-
-		
+		writeln("Message ", fullMessage);
 
 		/* Set the message in `receiveMessage */
 		receiveMessage = parseJSON(cast(string)fullMessage);
