@@ -6,6 +6,8 @@ import utils.debugging : debugPrint;
 import std.stdio : writeln;
 
 /* TODO: Use exception handling here */
+public void receiveMessage();
+public void sendMessage();
 
 /**
  * Generalized socket receive function which will read into the
