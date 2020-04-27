@@ -44,78 +44,80 @@ public final class HandlerResponse
 		 /* Error? */
 		 bool error;
 		
-				/* TODO: Bounds checking, type checking */
-				try
+		/* TODO: Bounds checking, type checking */
+		try
+		{
+			/* Get the header block */
+			JSONValue headerBlock = handlerResponse["header"];
+		
+			/* Get the status */
+			statusCode = to!(ulong)(headerBlock["status"].str());
+			debugPrint("Status code: " ~ to!(string)(statusCode));
+		
+			/* If the status is 0, then it is all fine */
+			if(statusCode == 0)
+			{
+				debugPrint("Status is fine, the handler ran correctly");
+						
+				/* The command block */
+				JSONValue commandBlock = headerBlock["command"];
+						
+				/**
+				 * Get the command that the message handler wants the
+				 * server to run.
+				 */
+				string serverCommand = commandBlock["type"].str;
+				debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
+						
+				/* Check the command to be run */
+				if(cmp(serverCommand, "sendClients") == 0)
 				{
-					/* Get the header block */
-					JSONValue headerBlock = handlerResponse["header"];
-		
-					/* Get the status */
-					statusCode = to!(ulong)(headerBlock["status"].str());
-					debugPrint("Status code: " ~ to!(string)(statusCode));
-		
-					/* If the status is 0, then it is all fine */
-					if(statusCode == 0)
-					{
-						debugPrint("Status is fine, the handler ran correctly");
-						
-						/* The command block */
-						JSONValue commandBlock = headerBlock["command"];
-						
-						/**
-						 * Get the command that the message handler wants the
-						 * server to run.
-						 */
-						string serverCommand = commandBlock["type"].str;
-						debugPrint("Handler->Server command: \"" ~ serverCommand ~ "\"");
-						
-						/* Check the command to be run */
-						if(cmp(serverCommand, "sendClients") == 0)
-						{
-							/* Set the command type to SEND_CLIENTS */
-							commandType = CommandType.SEND_CLIENTS;
+					/* Set the command type to SEND_CLIENTS */
+					commandType = CommandType.SEND_CLIENTS;
 
-							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
-						}
-						else if(cmp(serverCommand, "sendServers") == 0)
-						{
-							/* Set the command type to SEND_SERVERS */
-							commandType = CommandType.SEND_SERVERS;
-
-							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
-						}
-						else if(cmp(serverCommand, "sendHandler") == 0)
-						{
-							/* Set the command type to SEND_HAANDLER */
-							commandType = CommandType.SEND_HANDLER;
-
-							/* TODO: Error check and do accesses JSON that would be done in `.execute` */
-						}
-						else
-						{
-							/* TODO: Error handling */
-							debugPrint("The message handler is using an invalid command");
-						}
-					}
-					else
-					{
-						/* If the message handler returned a response in error */
-						debugPrint("Message handler returned an error code: " ~ to!(string)(statusCode));
-						error = true;
-					}
+					/* TODO: Error check and do accesses JSON that would be done in `.execute` */
 				}
-				catch(JSONException exception)
+				else if(cmp(serverCommand, "sendServers") == 0)
 				{
-					debugPrint("<<< There was an error handling the response message >>>\n\n" ~ exception.toString());
-					error = true;
+					/* Set the command type to SEND_SERVERS */
+					commandType = CommandType.SEND_SERVERS;
+
+					/* TODO: Error check and do accesses JSON that would be done in `.execute` */
 				}
-		
+				else if(cmp(serverCommand, "sendHandler") == 0)
+				{
+					/* Set the command type to SEND_HAANDLER */
+					commandType = CommandType.SEND_HANDLER;
+
+					/* TODO: Error check and do accesses JSON that would be done in `.execute` */
+				}
+				else
+				{
+					/* TODO: Error handling */
+					debugPrint("The message handler is using an invalid command");
+				}
+			}
+			else
+			{
+				/* If the message handler returned a response in error */
+				debugPrint("Message handler returned an error code: " ~ to!(string)(statusCode));
+				error = true;
+			}
+		}
+		catch(JSONException exception)
+		{
+			debugPrint("<<< There was an error handling the response message >>>\n\n" ~ exception.toString());
+			error = true;
+		}
+
+		/**
+		 * If an error was envountered anyway down the processing of the
+		 * message-handler then raise a `ResponseError` exception.
+		 */
 		if(error)
 		{
 			throw new ResponseError(messageResponse, statusCode);
 		}
-			
-		
 	}
 
 	public void execute(BesterConnection originalRequester)
@@ -174,6 +176,12 @@ public final class HandlerResponse
 
 public final class ResponseError : BesterException
 {
+
+	/* */
+
+	/* The status code that resulted in the response handling error */
+	private ulong statusCode;
+
 	this(JSONValue messageResponse, ulong statusCode)
 	{
 		/* TODO: Set message afterwards again */
