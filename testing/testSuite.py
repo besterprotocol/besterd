@@ -2,12 +2,14 @@
 import socket
 import json
 
+usernameSelect = input("Enter username: ")
+
 def basicTest():
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     d.connect(("127.0.0.1",2223))
 
     # First do it and authenticate
-    bys=json.dumps({"header":{"authentication":{"username":"tbk", "password":"passwd"}, "scope":"client"},"payload":{"data":"ABBA","type":"type1"}})
+    bys=json.dumps({"header":{"authentication":{"username":usernameSelect, "password":"passwd"}, "scope":"client"},"payload":{"data":"ABBA","type":"type1"}})
     print(len(bys), bys)
     d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())

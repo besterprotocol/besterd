@@ -11,7 +11,7 @@ def runTest():
         bys = json.dumps({
             "header" : {
                 "status" : "0",
-                "command" : {"type" : "sendClients", "data": ["usr1", "usr2"]}
+                "command" : {"type" : "sendClients", "data": ["tbk", "tbk"]}
             } })
         print(s.send(bytes([len(bys),0,0,0])))
         print(s.send(bys.encode()))
