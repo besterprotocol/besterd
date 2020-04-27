@@ -12,6 +12,11 @@ def basicTest():
     d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())
 
+    length=int.from_bytes(list(d.recv(4)), "little")
+    print(length)
+    receivedData = list(d.recv(length))
+    print(receivedData)
+
     # Now we can do it again (without authentication)
     bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
     print(len(bys), bys)

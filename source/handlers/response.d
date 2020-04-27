@@ -1,12 +1,14 @@
 module handlers.response;
 
-import std.json : JSONValue, JSONException;
+import std.json : JSONValue, JSONException, parseJSON;
 import std.conv : to;
 import utils.debugging : debugPrint;
 import std.string : cmp;
 import std.stdio : writeln;
 import connection.connection;
 import base.types;
+import std.socket : Socket;
+import connection.message;
 
 /* The type of the command the message handler wants us to run */
 private enum CommandType
@@ -142,8 +144,26 @@ public final class HandlerResponse
 			writeln(connectionList);
 
 			/* TODO: Implement me */
+
+			/* TODO: Construct a payload for the receiving clients */
+			JSONValue clientPayload = parseJSON("\"HELLO\"");
 			
 			writeln("sdafdfasd", originalRequester.server.clients[0].toString());
+
+
+			/**
+			 * Loop through each BesterConnection in connectionList and
+			 * send the message-handler payload response message to each
+			 * of them.
+			 */
+			for(ulong i = 0; i < connectionList.length; i++)
+			{
+				/* Send the message to the client */
+				debugPrint("Sending handler's response to client \"" ~ connectionList[i].toString() ~ "\"...");
+				Socket clientSocket = connectionList[i].getSocket();
+				sendMessage(clientSocket, clientPayload);
+				debugPrint("Sending handler's response to client \"" ~ connectionList[i].toString() ~ "\"... [sent]");
+			}
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
 		{

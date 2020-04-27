@@ -42,6 +42,11 @@ public final class BesterConnection : Thread
 		return connectionType;
 	}
 
+	public Socket getSocket()
+	{
+		return clientConnection;
+	}
+
 	this(Socket clientConnection, BesterServer server)
 	{
 		/* Save socket and set thread worker function pointer */
@@ -54,7 +59,7 @@ public final class BesterConnection : Thread
 
 	override public string toString()
 	{
-		return clientConnection.remoteAddress().toAddrString();
+		return username ~ "@" ~ clientConnection.remoteAddress().toAddrString();
 	}
 
 	public string[] getCredentials()
