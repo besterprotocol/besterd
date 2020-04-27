@@ -12,6 +12,7 @@ import listeners.listener;
 import server.server;
 import handlers.response;
 import connection.message;
+import base.net;
 
 public final class BesterConnection : Thread
 {
@@ -85,12 +86,19 @@ public final class BesterConnection : Thread
 				/**
 			 	* If the message was received successfully then
 			 	* process the message. */
-				processMessage(receivedMessage);	
+				processMessage(receivedMessage);
+
+				/* TODO: Check socket status here, the client might have issued a command to close the connection */
+				if(!clientConnection.isAlive())
+				{
+					debugPrint("Socket is dead.");
+					break;
+				}
 			}
 			else
 			{
 				debugPrint("[ReadSendLoop] Error with receiving from socket, ending...");
-				break;
+				throw new NetworkException(clientConnection);
 			}
 		}
 		debugPrint("<<< End read/send loop >>>");
@@ -115,6 +123,11 @@ public final class BesterConnection : Thread
 		bool receiveStatus = receiveMessage(handlerSocket, response);
 
 		/* TODO: Use `receiveStatus` */
+		if(!receiveStatus)
+		{
+			/* TODO: Add throw here */
+			throw new NetworkException(handlerSocket);
+		}
 		
 		return response;
 	}

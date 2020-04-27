@@ -202,6 +202,6 @@ public final class ResponseError : BesterException
 	this(JSONValue messageResponse, ulong statusCode)
 	{
 		/* TODO: Set message afterwards again */
-		super();
+		super("");
 	}
 }

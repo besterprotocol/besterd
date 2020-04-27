@@ -2,9 +2,9 @@ module base.types;
 
 public class BesterException : Exception
 {
-	this()
+	this(string message)
 	{
-		/* TODO: Implement me */
-		super("");
+		/* TODO: Implement me */ 
+		super(message);
 	}
 }
