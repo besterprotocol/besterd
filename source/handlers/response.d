@@ -137,19 +137,16 @@ public final class HandlerResponse
 				clients ~= clientList[i].str();
 			}
 
-			writeln("Users wanting to send to ", clients);
+			debugPrint("Users wanting to send to: " ~ to!(string)(clients));
 
 			/* Find the users that are wanting to be sent to */
 			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
-			writeln(connectionList);
+			debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
 
 			/* TODO: Implement me */
 
 			/* TODO: Construct a payload for the receiving clients */
 			JSONValue clientPayload = parseJSON("\"HELLO\"");
-			
-			writeln("sdafdfasd", originalRequester.server.clients[0].toString());
-
 
 			/**
 			 * Loop through each BesterConnection in connectionList and

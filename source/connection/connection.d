@@ -76,7 +76,8 @@ public final class BesterConnection : Thread
 			JSONValue receivedMessage;
 			
 			/* Receive a message */
-			receiveMessage(clientConnection, receivedMessage);
+			bool receiveStatus = receiveMessage(clientConnection, receivedMessage);
+			/* TODO: Use `receiveStatus` */
 			
 			/* Process the message */
 			processMessage(receivedMessage);
@@ -99,7 +100,9 @@ public final class BesterConnection : Thread
 		/* Get the payload sent from the message handler in response */
 		debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 		JSONValue response;
-		receiveMessage(handlerSocket, response);
+		bool receiveStatus = receiveMessage(handlerSocket, response);
+
+		/* TODO: Use `receiveStatus` */
 		
 		return response;
 	}

@@ -10,7 +10,7 @@ import std.stdio : writeln;
  * variable pointed to by `receiveMessage` by reading from the
  * socket `originator`.
  */
-public static void receiveMessage(Socket originator, ref JSONValue receiveMessage)
+public static bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
 {
 	/* TODO: Implement me */
 
@@ -37,6 +37,7 @@ public static void receiveMessage(Socket originator, ref JSONValue receiveMessag
 		{
 			/* TODO: Error handling */
 			debugPrint("Error receiving from socket");
+			return false;
 		}
 		/* If there is no error reading from the socket */
 		else
@@ -75,6 +76,7 @@ public static void receiveMessage(Socket originator, ref JSONValue receiveMessag
 		{
 			/* TODO: Error handling */
 			debugPrint("Error whilst receiving from socket");
+			return false;
 		}
 		else
 		{
@@ -117,6 +119,8 @@ public static void receiveMessage(Socket originator, ref JSONValue receiveMessag
 
 	/* Set the message in `receiveMessage */
 	receiveMessage = parseJSON(cast(string)fullMessage);
+
+	return true;
 }
 
 /**
@@ -149,4 +153,6 @@ public static void sendMessage(Socket recipient, JSONValue jsonMessage)
 
 	/* Send the message */
 	recipient.send(messageBuffer);
+
+	/* TODO: Error handlign for return */
 }
