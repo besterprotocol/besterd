@@ -12,7 +12,7 @@ import std.stdio : writeln;
  * variable pointed to by `receiveMessage` by reading from the
  * socket `originator`.
  */
-public static bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
+public bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
 {
 	/* TODO: Implement me */
 
@@ -134,7 +134,7 @@ public static bool receiveMessage(Socket originator, ref JSONValue receiveMessag
  * message header in little-endian containing the message's
  * length.
  */
-public static void sendMessage(Socket recipient, JSONValue jsonMessage)
+public void sendMessage(Socket recipient, JSONValue jsonMessage)
 {
 	/* The message buffer */
 	byte[] messageBuffer;
