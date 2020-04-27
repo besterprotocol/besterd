@@ -70,6 +70,7 @@ public final class BesterConnection : Thread
 	/* Read/send loop */
 	private void run()
 	{
+		debugPrint("<<< Begin read/send loop >>>");
 		while(true)
 		{
 			/* Received JSON message */
@@ -77,11 +78,22 @@ public final class BesterConnection : Thread
 			
 			/* Receive a message */
 			bool receiveStatus = receiveMessage(clientConnection, receivedMessage);
-			/* TODO: Use `receiveStatus` */
-			
-			/* Process the message */
-			processMessage(receivedMessage);
+
+			/* Check what the receive status is */
+			if(receiveStatus)
+			{
+				/**
+			 	* If the message was received successfully then
+			 	* process the message. */
+				processMessage(receivedMessage);	
+			}
+			else
+			{
+				debugPrint("[ReadSendLoop] Error with receiving from socket, ending...");
+				break;
+			}
 		}
+		debugPrint("<<< End read/send loop >>>");
 	}
 
 	/**
