@@ -5,6 +5,8 @@ import std.json : JSONValue, parseJSON, toJSON;
 import utils.debugging : debugPrint;
 import std.stdio : writeln;
 
+/* TODO: Use exception handling here */
+
 /**
  * Generalized socket receive function which will read into the
  * variable pointed to by `receiveMessage` by reading from the
