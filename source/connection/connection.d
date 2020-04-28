@@ -99,6 +99,7 @@ public final class BesterConnection : Thread
 			catch(BesterException exception)
 			{
 				debugPrint("Error in read/write loop: " ~ exception.toString());
+				break;
 			}
 		}
 		debugPrint("<<< End read/send loop >>>");
