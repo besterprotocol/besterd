@@ -98,42 +98,7 @@ public final class BesterConnection : Thread
 		debugPrint("<<< End read/send loop >>>");
 	}
 
-	/**
-	 * Sends the payload to the designated message handler and gets
-	 * the response message from the handler and returns it.
-	 */
-	private JSONValue handlerRun(MessageHandler chosenHandler, JSONValue payload)
-	{
-		/* TODO: If unix sock is down, this just hangs, we should see if the socket file exists first */
-		/* Handler's UNIX domain socket */
-		Socket handlerSocket = chosenHandler.getNewSocket();
-
-		/* Send the payload to the message handler */
-		debugPrint("Sending payload over to handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
-		sendMessage(handlerSocket, payload);
-					
-		/* Get the payload sent from the message handler in response */
-		debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
-		JSONValue response;
-
-		try
-		{
-			receiveMessage(handlerSocket, response);
-		}
-		catch(NetworkException exception)
-		{
-			/* TODO: Implement error handling here and send a repsonse back (Issue: https://github.com/besterprotocol/besterd/issues/10) */
-			debugPrint("Error communicating with message handler");
-		}
-		finally
-		{
-			/* Always close the socket */
-			handlerSocket.close();
-			debugPrint("Closed UNIX domain socket to handler");
-		}
-		
-		return response;
-	}
+	
 
 	/* TODO: Comment [], rename [] */
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
