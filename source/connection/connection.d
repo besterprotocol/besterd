@@ -195,6 +195,9 @@ public final class BesterConnection : Thread
 				/* In the case of an error with the message handler, send an error to the client/server */
 				
 				/* TODO: Send error here */
+				//JSONValue errorResponse;
+				//errorResponse["dd"] = 2;
+				//debugPrint("Response error");
 			}
 			catch(Exception e)
 			{

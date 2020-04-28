@@ -20,10 +20,10 @@ def basicTest():
     print(receivedData)
 
     # Now we can do it again (without authentication)
-    bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
-    print(len(bys), bys)
-    d.send(len(bys).to_bytes(4, "little"))
-    d.send(bys.encode())
+    #bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
+    #print(len(bys), bys)
+    #d.send(len(bys).to_bytes(4, "little"))
+    #d.send(bys.encode())
 
     while True: pass
     d.close()

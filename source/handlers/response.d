@@ -146,7 +146,11 @@ public final class HandlerResponse
 			/* TODO: Implement me */
 
 			/* TODO: Construct a payload for the receiving clients */
-			JSONValue clientPayload = parseJSON("\"HELLO\"");
+			JSONValue clientPayload;
+
+			JSONValue headerBlock;
+			//headerBlock["handlerName"] = 
+			clientPayload["header"] = 2;
 
 			/**
 			 * Loop through each BesterConnection in connectionList and
