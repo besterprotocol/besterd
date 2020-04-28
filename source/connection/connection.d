@@ -125,6 +125,12 @@ public final class BesterConnection : Thread
 			/* TODO: Implement error handling here and send a repsonse back (Issue: https://github.com/besterprotocol/besterd/issues/10) */
 			debugPrint("Error communicating with message handler");
 		}
+		finally
+		{
+			/* Always close the socket */
+			handlerSocket.close();
+			debugPrint("Closed UNIX domain socket to handler");
+		}
 		
 		return response;
 	}
