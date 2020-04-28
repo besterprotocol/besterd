@@ -3,7 +3,7 @@ import json
 
 def runTest():
     d=socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    d.bind("../aSock")
+    d.bind("../bSock")
     d.listen()
     while True:
         print("Waiting for connection to (this) handler...")

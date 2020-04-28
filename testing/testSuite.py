@@ -8,16 +8,20 @@ def basicTest():
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     d.connect(("127.0.0.1",2223))
 
-    # First do it and authenticate
-    bys=json.dumps({"header":{"authentication":{"username":usernameSelect, "password":"passwd"}, "scope":"client"},"payload":{"data":"ABBA","type":"type1"}})
-    print(len(bys), bys)
-    d.send(len(bys).to_bytes(4, "little"))
-    d.send(bys.encode())
 
-    length=int.from_bytes(list(d.recv(4)), "little")
-    print(length)
-    receivedData = list(d.recv(length))
-    print(receivedData)
+    while True:
+        # First do it and authenticate
+        bys=json.dumps({"header":{"authentication":{"username":usernameSelect, "password":"passwd"}, "scope":"client"},"payload":{"data":{"bruhMsg":input("Enter message naaier: ")},"type":"type2"}})
+        print(len(bys), bys)
+        d.send(len(bys).to_bytes(4, "little"))
+        d.send(bys.encode())
+
+
+       # length=int.from_bytes(list(d.recv(4)), "little")
+       # print(length)
+       # receivedDataBytes = d.recv(length)
+       # receivedData = list(receivedDataBytes)
+       # print(receivedDataBytes.decode())
 
     # Now we can do it again (without authentication)
     #bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
