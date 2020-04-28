@@ -4,17 +4,31 @@ import std.socket : Socket, SocketFlags;
 import std.json : JSONValue, parseJSON, toJSON;
 import utils.debugging : debugPrint;
 import std.stdio : writeln;
+import base.net : NetworkException;
 
 /* TODO: Use exception handling here */
-public void receiveMessage();
-public void sendMessage();
+public void receiveMessage(Socket originator, ref JSONValue receiveMessage)
+{
+	if(!receiveMessage_internal(originator, receiveMessage))
+	{
+		throw new NetworkException(originator);
+	}
+}
+
+public void sendMessage(Socket recipient, JSONValue jsonMessage)
+{
+	if(!sendMessage_internal(recipient, jsonMessage))
+	{
+		throw new NetworkException(recipient);
+	}
+}
 
 /**
  * Generalized socket receive function which will read into the
  * variable pointed to by `receiveMessage` by reading from the
  * socket `originator`.
  */
-public bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
+private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMessage)
 {
 	/* TODO: Implement me */
 
@@ -136,7 +150,7 @@ public bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
  * message header in little-endian containing the message's
  * length.
  */
-public void sendMessage(Socket recipient, JSONValue jsonMessage)
+private bool sendMessage_internal(Socket recipient, JSONValue jsonMessage)
 {
 	/* The message buffer */
 	byte[] messageBuffer;
@@ -156,7 +170,13 @@ public void sendMessage(Socket recipient, JSONValue jsonMessage)
 	messageBuffer ~= cast(byte[])message;
 
 	/* Send the message */
-	recipient.send(messageBuffer);
+	long bytesSent = recipient.send(messageBuffer);
+
+	if(!(bytesSent > 0))
+	{
+		return false;
+	}
 
 	/* TODO: Error handlign for return */
+	return true;
 }

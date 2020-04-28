@@ -13,6 +13,7 @@ import server.server;
 import handlers.response;
 import connection.message;
 import base.net;
+import base.types;
 
 public final class BesterConnection : Thread
 {
@@ -76,16 +77,16 @@ public final class BesterConnection : Thread
 		{
 			/* Received JSON message */
 			JSONValue receivedMessage;
-			
-			/* Receive a message */
-			bool receiveStatus = receiveMessage(clientConnection, receivedMessage);
 
-			/* Check what the receive status is */
-			if(receiveStatus)
+			/* Attempt to receive a message */
+			try
 			{
+				/* Receive a message */
+				receiveMessage(clientConnection, receivedMessage);
+
 				/**
-			 	* If the message was received successfully then
-			 	* process the message. */
+				* If the message was received successfully then
+				* process the message. */
 				processMessage(receivedMessage);
 
 				/* TODO: Check socket status here, the client might have issued a command to close the connection */
@@ -95,10 +96,9 @@ public final class BesterConnection : Thread
 					break;
 				}
 			}
-			else
+			catch(BesterException exception)
 			{
-				debugPrint("[ReadSendLoop] Error with receiving from socket, ending...");
-				throw new NetworkException(clientConnection);
+				debugPrint("Error in read/write loop: " ~ exception.toString());
 			}
 		}
 		debugPrint("<<< End read/send loop >>>");
@@ -110,6 +110,7 @@ public final class BesterConnection : Thread
 	 */
 	private JSONValue handlerRun(MessageHandler chosenHandler, JSONValue payload)
 	{
+		/* TODO: If unix sock is down, this just hangs, we should see if the socket file exists first */
 		/* Handler's UNIX domain socket */
 		Socket handlerSocket = chosenHandler.getNewSocket();
 
@@ -120,13 +121,15 @@ public final class BesterConnection : Thread
 		/* Get the payload sent from the message handler in response */
 		debugPrint("Waiting for response from handler for \"" ~ chosenHandler.getPluginName() ~ "\".");
 		JSONValue response;
-		bool receiveStatus = receiveMessage(handlerSocket, response);
 
-		/* TODO: Use `receiveStatus` */
-		if(!receiveStatus)
+		try
 		{
-			/* TODO: Add throw here */
-			throw new NetworkException(handlerSocket);
+			receiveMessage(handlerSocket, response);
+		}
+		catch(NetworkException exception)
+		{
+			/* TODO: Implement error handling here and send a repsonse back (Issue: https://github.com/besterprotocol/besterd/issues/10) */
+			debugPrint("Error communicating with message handler");
 		}
 		
 		return response;
@@ -200,7 +203,7 @@ public final class BesterConnection : Thread
 				/* TODO: Send error here */
 			}
 			
-
+			debugPrint("Handler section done (for client)");
 			/* TODO: Handle response */
 		}
 		else
