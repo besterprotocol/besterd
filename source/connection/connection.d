@@ -182,7 +182,7 @@ public final class BesterConnection : Thread
 			try
 			{
 				/* TODO: Collect return value */
-				HandlerResponse handlerResponse = new HandlerResponse(handlerRun(chosenHandler, payloadData));	
+				HandlerResponse handlerResponse = chosenHandler.handleMessage(payloadData);
 
 				/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
 				debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());

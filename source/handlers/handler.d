@@ -4,6 +4,9 @@ import std.stdio : writeln;
 import std.socket : Socket, AddressFamily, parseAddress, SocketType, SocketOSException, UnixAddress;
 import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
+import handlers.response;
+import base.net;
+import connection.message;
 
 public final class MessageHandler
 {
@@ -166,5 +169,36 @@ public final class MessageHandler
 		}
 
 		return handlers;
+	}
+
+	/**
+	 * Sends the payload to the designated message handler and gets
+	 * the response message from the handler and returns it.
+	 */
+	public HandlerResponse handleMessage(JSONValue payload)
+	{
+		/* TODO: If unix sock is down, this just hangs, we should see if the socket file exists first */
+		/* Handler's UNIX domain socket */
+		Socket handlerSocket = getNewSocket();
+	
+		/* Send the payload to the message handler */
+		debugPrint("Sending payload over to handler for \"" ~ getPluginName() ~ "\".");
+		sendMessage(handlerSocket, payload);
+						
+		/* Get the payload sent from the message handler in response */
+		debugPrint("Waiting for response from handler for \"" ~ getPluginName() ~ "\".");
+		JSONValue response;
+	
+		try
+		{
+			receiveMessage(handlerSocket, response);
+		}
+		catch(NetworkException exception)
+		{
+			/* TODO: Implement error handling here and send a repsonse back (Issue: https://github.com/besterprotocol/besterd/issues/10) */
+			debugPrint("Error communicating with message handler");
+		}
+			
+		return new HandlerResponse(response);
 	}
 }
