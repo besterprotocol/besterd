@@ -29,10 +29,7 @@ void main()
 	writeln("fdhjf he do be vibing though");
 }
 
-
-
-
-JSONValue getConfig(string configurationFilePath)
+private JSONValue getConfig(string configurationFilePath)
 {
 	/* TODO: Open the file here */
 	File configFile;
@@ -57,7 +54,7 @@ JSONValue getConfig(string configurationFilePath)
 	return config;	
 }
 
-BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
+private BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 {
 	BesterListener[] listeners;
 
@@ -89,7 +86,7 @@ BesterListener[] getListeners(BesterServer server, JSONValue networkBlock)
 	return listeners;
 }
 
-void startServer(string configurationFilePath)
+private void startServer(string configurationFilePath)
 {
 	/* The server configuration */
 	JSONValue serverConfiguration = getConfig(configurationFilePath);
