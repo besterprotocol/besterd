@@ -206,6 +206,6 @@ public final class MessageHandler
 		}
 				
 			
-		return new HandlerResponse(response);
+		return new HandlerResponse(this, response);
 	}
 }

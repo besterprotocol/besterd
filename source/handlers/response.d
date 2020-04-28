@@ -9,6 +9,7 @@ import connection.connection;
 import base.types;
 import std.socket : Socket,SocketOSException;
 import connection.message;
+import handlers.handler;
 
 /* The type of the command the message handler wants us to run */
 private enum CommandType
@@ -24,10 +25,16 @@ public final class HandlerResponse
 	/* The command to be executed */
 	private CommandType commandType;
 
-	this(JSONValue messageResponse)
+	/* The handler that caused such a response to be illicited */
+	private MessageHandler handler;
+
+	this(MessageHandler handler, JSONValue messageResponse)
 	{
 		/* Set the message-handler's response message */
 		this.messageResponse = messageResponse;
+
+		/* Set the handler who caused this reponse to occur */
+		this.handler = handler;
 
 		/* Attempt parsing the message and error checking it */
 		parse(messageResponse);
@@ -141,16 +148,21 @@ public final class HandlerResponse
 
 			/* Find the users that are wanting to be sent to */
 			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
-		//	debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
+			//debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
 
-			/* TODO: Implement me */
-
-			/* TODO: Construct a payload for the receiving clients */
+			/* The fully response message to send back */
 			JSONValue clientPayload;
 
+			/* Set the `handlerName` field of the header block */
+			JSONValue handlerName;
+			handlerName["handlerName"] = handler.getPluginName();
+
+			/* Set the header of the response */
 			JSONValue headerBlock;
-			//headerBlock["handlerName"] = 
-			clientPayload["header"] = 2;
+			clientPayload["header"] = handlerName;
+
+			/* Set the payload of the response */
+			clientPayload["data"] = messageResponse["data"];
 
 			/**
 			 * Loop through each BesterConnection in connectionList and
