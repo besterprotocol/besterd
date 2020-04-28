@@ -6,6 +6,7 @@ def runTest():
     d.bind("../aSock")
     d.listen()
     while True:
+        print("Waiting for connection to (this) handler...")
         s = d.accept()[0]
         print(list(s.recv(130)))
         bys = json.dumps({
@@ -15,6 +16,7 @@ def runTest():
             } })
         print(s.send(bytes([len(bys),0,0,0])))
         print(s.send(bys.encode()))
+        print("Connection to (this) handler finished")
 
     while True: pass
 

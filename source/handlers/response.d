@@ -7,7 +7,7 @@ import std.string : cmp;
 import std.stdio : writeln;
 import connection.connection;
 import base.types;
-import std.socket : Socket;
+import std.socket : Socket,SocketOSException;
 import connection.message;
 
 /* The type of the command the message handler wants us to run */
@@ -141,7 +141,7 @@ public final class HandlerResponse
 
 			/* Find the users that are wanting to be sent to */
 			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
-			debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
+		//	debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
 
 			/* TODO: Implement me */
 
@@ -155,12 +155,36 @@ public final class HandlerResponse
 			 */
 			for(ulong i = 0; i < connectionList.length; i++)
 			{
-				/* Send the message to the client */
-				debugPrint("Sending handler's response to client \"" ~ connectionList[i].toString() ~ "\"...");
-				Socket clientSocket = connectionList[i].getSocket();
-				sendMessage(clientSocket, clientPayload);
-				debugPrint("Sending handler's response to client \"" ~ connectionList[i].toString() ~ "\"... [sent]");
+				/* Get the conneciton */
+				BesterConnection clientConnection = connectionList[i];
+
+				try
+				{
+					/* Get the client's socket */
+					Socket clientSocket = clientConnection.getSocket();
+					//debugPrint("IsAlive?: " ~ to!(string)(clientSocket.isAlive()));
+					
+					/* Send the message to the client */
+					debugPrint("Sending handler's response to client \"" ~ clientConnection.toString() ~ "\"...");
+					
+					sendMessage(clientSocket, clientPayload);
+					debugPrint("Sending handler's response to client \"" ~ clientConnection.toString() ~ "\"... [sent]");
+				}
+				catch(SocketOSException exception)
+				{
+					/**
+					 * If there was an error sending to the client, this can happen
+					 * if the client has disconnected but hasn't yet been removed from
+					 * the connections array and hence we try to send on a dead socket
+					 * or get the remoteAddress on a dead socket, which causes a
+					 * SocketOSException to be called.
+					 */
+					 debugPrint("Attempted interacting with dead socket");
+				}
 			}
+
+
+			debugPrint("SEND_CLIENTS: Completed run");
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
 		{

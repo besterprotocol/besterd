@@ -73,7 +73,7 @@ public final class BesterConnection : Thread
 	private void run()
 	{
 		debugPrint("<<< Begin read/send loop >>>");
-		while(true)
+		while(clientConnection.isAlive())
 		{
 			/* Received JSON message */
 			JSONValue receivedMessage;
@@ -88,13 +88,6 @@ public final class BesterConnection : Thread
 				* If the message was received successfully then
 				* process the message. */
 				processMessage(receivedMessage);
-
-				/* TODO: Check socket status here, the client might have issued a command to close the connection */
-				if(!clientConnection.isAlive())
-				{
-					debugPrint("Socket is dead.");
-					break;
-				}
 			}
 			catch(BesterException exception)
 			{
@@ -202,6 +195,10 @@ public final class BesterConnection : Thread
 				/* In the case of an error with the message handler, send an error to the client/server */
 				
 				/* TODO: Send error here */
+			}
+			catch(Exception e)
+			{
+				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
 			}
 			
 			debugPrint("Handler section done (for client)");

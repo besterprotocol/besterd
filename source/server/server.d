@@ -36,6 +36,8 @@ public final class BesterServer
 		/* List of authenticated users matching `usernames` */
 		BesterConnection[] matchedUsers;
 
+		//debugPrint("All clients (ever connected): " ~ to!(string)(clients));
+
 		/* Search through the provided usernames */
 		for(ulong i = 0; i < usernames.length; i++)
 		{
