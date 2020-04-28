@@ -172,6 +172,7 @@ public final class BesterConnection : Thread
 			}
 			catch(Exception e)
 			{
+				/* TODO: Remove me */
 				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
 			}
 			
