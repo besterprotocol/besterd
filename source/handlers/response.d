@@ -10,6 +10,7 @@ import base.types;
 import std.socket : Socket, SocketOSException, AddressFamily, SocketType, ProtocolType, parseAddress;
 import connection.message;
 import handlers.handler;
+import std.string : split;
 
 /* The type of the command the message handler wants us to run */
 private enum CommandType
@@ -219,12 +220,14 @@ public final class HandlerResponse
 			for(ulong i = 0; i < servers.length; i++)
 			{
 				/* Get the current server address and port */
-				string server = servers[i];
+				string serverString = servers[i];
+				string host = serverString.split(":")[0];
+				ushort port = to!(ushort)(serverString.split(":")[1]);
 
 				try
 				{
 					Socket serverConnection = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
-					serverConnection.connect(parseAddress(server));
+					serverConnection.connect(parseAddress(host, port));
 
 					sendMessage(serverConnection, messageResponse["data"]);
 				}
