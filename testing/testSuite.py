@@ -2,26 +2,25 @@
 import socket
 import json
 
-usernameSelect = input("Enter username: ")
-
-def basicTest():
+def sendAs(username):
+    # Connect to the bester daemon
     d=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     d.connect(("127.0.0.1",2223))
 
+    # First do it and authenticate
+    bys=json.dumps({"header":{"authentication":{"username":username, "password":"passwd"}, "scope":"client"},"payload":{"data":{"bruhMsg":input("Enter message naaier: ")},"type":"type1"}})
+    print(len(bys), bys)
+    d.send(len(bys).to_bytes(4, "little"))
+    d.send(bys.encode())
 
+    # Loop prompt and sending of message to tbk
     while True:
-        # First do it and authenticate
-        bys=json.dumps({"header":{"authentication":{"username":usernameSelect, "password":"passwd"}, "scope":"client"},"payload":{"data":{"bruhMsg":input("Enter message naaier: ")},"type":"type2"}})
+        bys=json.dumps({"header":{"authentication":{"username":"ddd", "password":"passwd"}, "scope":"client"},"payload":{"data":{"bruhMsg":input("Enter message naaier: ")},"type":"type1"}})
         print(len(bys), bys)
         d.send(len(bys).to_bytes(4, "little"))
         d.send(bys.encode())
 
 
-       # length=int.from_bytes(list(d.recv(4)), "little")
-       # print(length)
-       # receivedDataBytes = d.recv(length)
-       # receivedData = list(receivedDataBytes)
-       # print(receivedDataBytes.decode())
 
     # Now we can do it again (without authentication)
     #bys=json.dumps({"header":{},"payload":{"data":"POES","type":"type1"}})
@@ -70,9 +69,11 @@ def simpleTest():
 
 
 def runTests():
+    # Get the username to send as
+    sendAs(input("Enter username to send as: "))
     #simpleTest()
     #commandBuiltInClose()
     #commandAuthTest()
-    basicTest()
+    #basicTest()
 
 runTests()
