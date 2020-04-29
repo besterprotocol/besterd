@@ -159,8 +159,8 @@ public final class HandlerResponse
 			handlerName["handlerName"] = handler.getPluginName();
 
 			/* Set the header of the response */
-			JSONValue headerBlock;
-			clientPayload["header"] = handlerName;
+			JSONValue headerBlock = handlerName;
+			clientPayload["header"] = headerBlock;
 
 			/* Set the payload of the response */
 			clientPayload["data"] = messageResponse["data"];
@@ -216,6 +216,26 @@ public final class HandlerResponse
 			/* TODO: Implement me */
 			writeln("Servers wanting to send to ", servers);
 
+			/* The fully response message to send back */
+			JSONValue serverPayload;
+
+			/* Set the `scope` field of the header block */
+			JSONValue scopeField = "server";
+
+			/* Set the header of the response */
+			JSONValue headerBlock;
+			headerBlock["handlerName"] = handler.getPluginName();
+			headerBlock["scope"] = "server";
+			serverPayload["header"] = headerBlock;
+
+			/* Set the payload of the response */
+			JSONValue payloadBlock;
+			payloadBlock["data"] = messageResponse["data"];
+			payloadBlock["type"] = handler.getPluginName();
+			serverPayload["payload"] = payloadBlock;
+
+			
+
 			/* Attempt connecting to each server and sending the payload */
 			for(ulong i = 0; i < servers.length; i++)
 			{
@@ -229,7 +249,7 @@ public final class HandlerResponse
 					Socket serverConnection = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
 					serverConnection.connect(parseAddress(host, port));
 
-					sendMessage(serverConnection, messageResponse["data"]);
+					sendMessage(serverConnection, serverPayload);
 				}
 				catch(Exception e)
 				{
