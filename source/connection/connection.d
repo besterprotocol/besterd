@@ -73,7 +73,7 @@ public final class BesterConnection : Thread
 	private void run()
 	{
 		debugPrint("<<< Begin read/send loop >>>");
-		while(clientConnection.isAlive())
+		while(clientConnection.isAlive()) /*TODO: Remove and also make the stting of this kak not be closing socket */
 		{
 			/* Received JSON message */
 			JSONValue receivedMessage;
@@ -96,6 +96,33 @@ public final class BesterConnection : Thread
 			}
 		}
 		debugPrint("<<< End read/send loop >>>");
+
+		/* TODO: Remove myself from the connections array */
+	}
+
+	/**
+	 * Destructor for BesterConnection
+	 *
+	 * Upon the client disconnecting, the only reference to
+	 * this object should be through the `connections` array
+	 * in the instance of BesterServer but because that will
+	 * be removed in the end of the `run` function call.
+	 *
+	 * And because the thread ends thereafter, there will be
+	 * no reference there either.
+	 *
+	 * Only then will this function be called by the garbage-
+	 * collector, this will provide the remaining clean ups.
+	 */
+	~this()
+	{
+		debugPrint("Destructor for \"" ~ this.toString() ~ "\" running...");
+
+		/* Close the socket to the client */
+		clientConnection.close();
+		debugPrint("Closed socket to client");
+
+		debugPrint("Destructor finished");
 	}
 
 	
