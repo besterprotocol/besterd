@@ -7,7 +7,7 @@ import std.string : cmp;
 import std.stdio : writeln;
 import connection.connection;
 import base.types;
-import std.socket : Socket,SocketOSException;
+import std.socket : Socket, SocketOSException, AddressFamily, SocketType, ProtocolType, parseAddress;
 import connection.message;
 import handlers.handler;
 
@@ -214,6 +214,26 @@ public final class HandlerResponse
 													
 			/* TODO: Implement me */
 			writeln("Servers wanting to send to ", servers);
+
+			/* Attempt connecting to each server and sending the payload */
+			for(ulong i = 0; i < servers.length; i++)
+			{
+				/* Get the current server address and port */
+				string server = servers[i];
+
+				try
+				{
+					Socket serverConnection = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
+					serverConnection.connect(parseAddress(server));
+
+					sendMessage(serverConnection, messageResponse["data"]);
+				}
+				catch(Exception e)
+				{
+					/* TODO: Be more specific with the above exception type */
+					debugPrint("Error whilst sending payload to server: " ~ e.toString());
+				}
+			}
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{

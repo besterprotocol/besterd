@@ -5,7 +5,7 @@ module besterd;
 import server.server;
 import std.conv : to;
 import std.socket : SocketOSException, parseAddress, UnixAddress;
-import utils.debugging : debugPrint;
+import utils.debugging : dprint, debugPrint;
 import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
 import listeners.listener;
@@ -26,7 +26,7 @@ void main()
 	/* TODO: Add usage check and arguments before this */
 	startServer("server.conf");
 
-	writeln("fdhjf he do be vibing though");
+	dprint("Main finished, remaining threads are keeping this open if it hangs");
 }
 
 private JSONValue getConfig(string configurationFilePath)
