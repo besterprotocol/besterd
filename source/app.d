@@ -1,7 +1,5 @@
 module besterd;
 
-
-
 import server.server;
 import std.conv : to;
 import std.socket : SocketOSException, parseAddress, UnixAddress;
@@ -19,6 +17,7 @@ unittest d
 
 void main()
 {
+
 	/* TODO: Change this */
 	string address = "0.0.0.0";
 	ushort port = 2222;
