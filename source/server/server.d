@@ -78,6 +78,7 @@ public final class BesterServer
 		 * to be this server.
 		 */
 		HandlerResponse.server = this;
+		writeln("jdfjfdhhjfh", HandlerResponse.server);
 	}
 
 	private void setupHandlers(JSONValue handlerBlock)

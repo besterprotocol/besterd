@@ -41,8 +41,12 @@ public final class HandlerResponse
 		/* Set the handler who caused this reponse to occur */
 		this.handler = handler;
 
+		writeln("Heyo ", server);
+
 		/* Attempt parsing the message and error checking it */
 		parse(messageResponse);
+
+		
 	}
 
 	private void parse(JSONValue handlerResponse)
@@ -279,14 +283,21 @@ public final class HandlerResponse
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
+			debugPrint(messageResponse.toPrettyString());
 			/* Name of the handler to send the message to */
-			string handler = messageResponse["header"]["command"]["data"]["type"].str();
+			string handler = messageResponse["header"]["command"]["data"].str();
 			debugPrint("Handler to forward to: " ~ handler);
 
 			/* TODO: Add me, shit is going to get recursive here */
 
+			writeln("jdfjfdhhjfh", HandlerResponse.server);
+			writeln("jdfjfdhhjfh", server);
+			writeln(server is null);
+
 			/* Lookup the payloadType handler */
 			MessageHandler chosenHandler = server.findHandler(handler);
+
+			writeln(chosenHandler is null);
 			
 			HandlerResponse handlerResponse = chosenHandler.handleMessage(messageResponse["data"]);
 
