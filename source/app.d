@@ -8,6 +8,7 @@ import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
 import listeners.listener;
 import listeners.types;
+import std.file : exists;
 
 unittest d
 {
@@ -15,15 +16,26 @@ unittest d
 	main();
 }
 
-void main()
+void main(string[] args)
 {
+	/* Make sure we have atleast two arguments */
+	if(args.length >= 2)
+	{
+		/* Get the second argument for configuration file path */
+		string configFilePath = args[1];
 
-	/* TODO: Change this */
-	string address = "0.0.0.0";
-	ushort port = 2222;
+		/* Start thhe server if the file exists, else show an error */
+		if(exists(configFilePath))
+		{
+			startServer(args[1]);
+		}
+		else
+		{
+			writeln("Provided server configuration file \"" ~ configFilePath ~ "\" does not exist");
+		}
+	}
 
 	/* TODO: Add usage check and arguments before this */
-	startServer("server.conf");
 
 	dprint("Main finished, remaining threads are keeping this open if it hangs");
 }
