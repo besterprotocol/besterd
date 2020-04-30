@@ -74,7 +74,7 @@ to `"client"`).
 be a JSON object and *MUST* contain two fields, `type` and `data`, where
 `type` *MUST* be a JSON string and `data` can be any JSON type.
 
-*TODO*
+**Note on authentication**: It should be noted that the `authentication` block need only be transmitted the as the first message sent to the server (as to authenticate the user's self), after this it is never checked and can contain bogus data or be omitted entirely.
 
 <hr>
 
@@ -115,14 +115,31 @@ follows:
 *SHOULD* be inetrpreted as such. Within it there is a field
 called `status` which is a JSON string and *SHOULD* be interpreted
 as such.
-* There is a field called `data` which is of a JSON type up to
+* There is a field  called `payload` which *MUST* contain two fields, `data` and `type`.
+* The `data` field is of a JSON type up to
 the _message handler_ and *SHOULD* be interpreted in accordance to
 its (the _message handler_'s) rules.
+* The `type` field *MUST* be a string an will contain the name of the _message handler_ that generated this response.
 
-
-#### Server and Message Handler
+### Server and Message Handler
 
 Describes server-to-message-handler and message-handler-to-server communications.
+
+<hr>
+
+#### Server -> Message Handler
+
+If the server receives a message from the client and then checks the `type` field of the message as to determine what handler should run it, then the server will send the payload to the handler in the following format:
+
+````
+[4 bytes (size - little endian)][JSON message]
+````
+
+The `[JSON message]` contains the following information:
+
+* The `data` field which indicates the payload to be sent to the handler.
+
+There is not format really. The server get's a JSON payload as described in the [Client -> Server] section and all it does it extracts the JSON object at the field `data`, this then becomes the `[JSON message]` here and is then sent to the message handler as is.
 
 <hr>
 
