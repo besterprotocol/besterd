@@ -8,6 +8,7 @@ import handlers.response;
 import base.net;
 import connection.message;
 import server.server : BesterServer;
+import std.process : spawnProcess, Pid;
 
 public final class MessageHandler
 {
@@ -26,6 +27,9 @@ public final class MessageHandler
 	/* The BesterServer being used */
 	public BesterServer server;
 
+	/* The PID of the process */
+	private Pid pid;
+
 	public Socket getSocket()
 	{
 		return domainSocket;
@@ -36,14 +40,19 @@ public final class MessageHandler
 		/* Set the plugin name */
 		this.pluginName = pluginName;
 
-		/* Initialize the socket */
-		//initializeUNIXSocket(socketPath);
-
 		/* Set the socket path */
 		this.socketPath = socketPath;
 
 		/* Set the server this handler is associated with */
 		this.server = server;
+
+		/* Start the message handler */
+		startHandlerExecutable();
+	}
+
+	private void startHandlerExecutable()
+	{
+		// pid = spawnProcess(executablePath);
 	}
 
 	public string getPluginName()
