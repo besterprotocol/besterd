@@ -163,7 +163,10 @@ public final class HandlerResponse
 			clientPayload["header"] = headerBlock;
 
 			/* Set the payload of the response */
-			clientPayload["data"] = messageResponse["data"];
+			JSONValue payloadBlock;
+			payloadBlock["data"] = messageResponse["data"];
+			payloadBlock["type"] = handler.getPluginName();
+			clientPayload["data"] = payloadBlock;
 
 			/**
 			 * Loop through each BesterConnection in connectionList and
