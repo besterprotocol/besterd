@@ -80,8 +80,6 @@ private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMes
 
 	while(currentByte < messageLength)
 	{
-		debugPrint("dhjkh");
-
 		/**
 		 * Receive 20 bytes (at most) at a time and don't dequeue from
 		 * the kernel's TCP stack's buffer.
@@ -172,11 +170,6 @@ private bool sendMessage_internal(Socket recipient, JSONValue jsonMessage)
 	/* Send the message */
 	long bytesSent = recipient.send(messageBuffer);
 
-	if(!(bytesSent > 0))
-	{
-		return false;
-	}
-
-	/* TODO: Error handlign for return */
-	return true;
+	/* TODO: Compact this */
+	return bytesSent > 0;
 }
