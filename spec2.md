@@ -100,7 +100,10 @@ The structure of the `[JSON message]` is as follows:
 	"header" : {
 		"status" : "status"
 	},
-	"data" : ...
+	"payload" : {
+		"data" : ...,
+		"type" : "<type/handlerName>"
+	}
 }
 ````
 
