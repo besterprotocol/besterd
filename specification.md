@@ -1,6 +1,9 @@
 Bester protocol - Specification
 ===============================
 
+
+This document aims to provide a detailed description of the Bester protocol. It provides information on the terminology used as well as the flow of data.
+
 ## What does it entail?
 
 1. The *client*
@@ -38,6 +41,7 @@ then the following bytes must be sent:
 
 The `[JSON message]` contains information that the server will
 use to gain the following information:
+
 	* *Authentication*: Is the user allowed to use this server?
 	* *Scope*: Is this a client-to-server of server-to-server
 		communication?
@@ -93,6 +97,7 @@ the following bytes must be sent to the client:
 
 The `[JSON message]` contains information that the client will
 use to gain the following information:
+
 	* *Status*: Did the command sent prior to this response
 		run successfully?
 	* *Payload*: The data to be processed by the _client_.
@@ -158,6 +163,7 @@ bytes should be sent to the server:
 
 The `[JSON message]` contains information that the server will
 use to gain the following information:
+
 	* *Status*: Did the command sent prior to this response
 		run successfully?
 	* *Command*: To tell the server what to do with the response.
@@ -180,6 +186,7 @@ The structure of the `[JSON message]` is as follows:
 ````
 
 Allowed values for `command` are:
+
 	1. `"sendClients"`: The generated response must be sent to a client(s)
 		attached to the local server.
 	2. `"sendServers"`: The generated response must be sent to a remote
