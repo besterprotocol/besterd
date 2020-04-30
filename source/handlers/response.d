@@ -34,6 +34,7 @@ public final class HandlerResponse
 	/* The handler that caused such a response to be illicited */
 	private MessageHandler handler;
 
+	/* The associated server */
 	private BesterServer server;	
 
 	this(BesterServer server, MessageHandler handler, JSONValue messageResponse)
@@ -44,13 +45,11 @@ public final class HandlerResponse
 		/* Set the handler who caused this reponse to occur */
 		this.handler = handler;
 
-		writeln("Heyo ", server);
-		this.server= server;
+		/* Set the server associated with this message handler */
+		this.server = server;
 
 		/* Attempt parsing the message and error checking it */
 		parse(messageResponse);
-
-		
 	}
 
 	private void parse(JSONValue handlerResponse)

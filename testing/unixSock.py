@@ -21,13 +21,13 @@ def runTest():
         print(s.send(len(bys).to_bytes(4, "little")))
         print(s.send(bys.encode()))
 
-  #      bys = json.dumps({
-   #         "header" : {
-    #            "status" : "0",
-     #           "command" : {"type" : "sendServers", "data": ["10.0.0.4:2223"]}
-      #      }, "data" : receivedBys["bruhMsg"] })
-        #print(s.send(len(bys).to_bytes(4, "little")))
-        #print(s.send(bys.encode()))
+ #       bys = json.dumps({
+ #           "header" : {
+  #              "status" : "0",
+   #             "command" : {"type" : "sendServers", "data": ["10.0.0.4:2223"]}
+    #        }, "data" : receivedBys["bruhMsg"] })
+     #   print(s.send(len(bys).to_bytes(4, "little")))
+      #  print(s.send(bys.encode()))
 
         
         print("Connection to (this) handler finished")
