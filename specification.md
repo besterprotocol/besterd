@@ -1,5 +1,5 @@
 Bester protocol - Specification
-=========================
+===============================
 
 ## What does it entail?
 
@@ -74,7 +74,11 @@ to `"client"`).
 be a JSON object and *MUST* contain two fields, `type` and `data`, where
 `type` *MUST* be a JSON string and `data` can be any JSON type.
 
-**Note on authentication**: It should be noted that the `authentication` block need only be transmitted the as the first message sent to the server (as to authenticate the user's self), after this it is never checked and can contain bogus data or be omitted entirely.
+##### Note on authentication
+
+It should be noted that the `authentication` block need only be transmitted the as the first message sent to the server (as to authenticate the user's self), after this it is never checked and can contain bogus data or be omitted entirely.
+
+Authentication is not required when the `scope` field is set to `"server"` as then the communication is server-to-server and not client-to-server.
 
 <hr>
 
