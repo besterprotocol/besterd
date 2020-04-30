@@ -16,7 +16,11 @@ import server.server : BesterServer;
 /* The type of the command the message handler wants us to run */
 private enum CommandType
 {
-	SEND_CLIENTS, SEND_SERVERS, SEND_HANDLER
+	/* Simple message flow (always end point) */
+	SEND_CLIENTS, SEND_SERVERS, SEND_HANDLER,
+
+	/* Others */
+	GET_CLIENTS, IS_CLIENT
 }
 
 public final class HandlerResponse
@@ -283,25 +287,26 @@ public final class HandlerResponse
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
-			debugPrint(messageResponse.toPrettyString());
 			/* Name of the handler to send the message to */
 			string handler = messageResponse["header"]["command"]["data"].str();
 			debugPrint("Handler to forward to: " ~ handler);
 
 			/* TODO: Add me, shit is going to get recursive here */
 
-			writeln("jdfjfdhhjfh", HandlerResponse.server);
-			writeln("jdfjfdhhjfh", server);
-			writeln(server is null);
 
 			/* Lookup the payloadType handler */
 			MessageHandler chosenHandler = server.findHandler(handler);
 
-			writeln(chosenHandler is null);
-			
+			/* Send the data to the message handler */
 			HandlerResponse handlerResponse = chosenHandler.handleMessage(messageResponse["data"]);
 
+			/* Execute the code (this here, recursive) */
 			handlerResponse.execute(originalRequester);
+		}
+		else if (commandType == CommandType.GET_CLIENTS)
+		{
+			/* */
+
 		}
 	}
 

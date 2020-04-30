@@ -88,6 +88,14 @@ public final class BesterConnection : Thread
 				* If the message was received successfully then
 				* process the message. */
 				processMessage(receivedMessage);
+
+				/* Check if this is a server connection, if so, end the connection */
+				if(connectionType == Scope.SERVER)
+				{
+					debugPrint("Server connection done, closing BesterConnection.");
+					clientConnection.close();
+					break;
+				}
 			}
 			catch(BesterException exception)
 			{
