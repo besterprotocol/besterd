@@ -30,10 +30,9 @@ public final class HandlerResponse
 	/* The handler that caused such a response to be illicited */
 	private MessageHandler handler;
 
-	/* The BesterServer being used */
-	public static BesterServer server;
+	private BesterServer server;	
 
-	this(MessageHandler handler, JSONValue messageResponse)
+	this(BesterServer server, MessageHandler handler, JSONValue messageResponse)
 	{
 		/* Set the message-handler's response message */
 		this.messageResponse = messageResponse;
@@ -42,6 +41,7 @@ public final class HandlerResponse
 		this.handler = handler;
 
 		writeln("Heyo ", server);
+		this.server= server;
 
 		/* Attempt parsing the message and error checking it */
 		parse(messageResponse);

@@ -3,7 +3,7 @@ import json
 
 def runTest():
     d=socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    d.bind("../aSock")
+    d.bind("../bSock")
     d.listen()
     while True:
         print("Waiting for connection to (this) handler...")
@@ -16,16 +16,16 @@ def runTest():
         bys = json.dumps({
             "header" : {
                 "status" : "0",
-                "command" : {"type" : "sendClients", "data": ["tbk", "skippy"]}
-            }, "data" : receivedBys })
+                "command" : {"type" : "sendHandler", "data": "type1"}
+            }, "data" : receivedBys["bruhMsg"] })
         print(s.send(len(bys).to_bytes(4, "little")))
         print(s.send(bys.encode()))
 
-  #      bys = json.dumps({
-   #         "header" : {
-    #            "status" : "0",
-     #           "command" : {"type" : "sendServers", "data": ["10.0.0.4:2223"]}
-      #      }, "data" : receivedBys["bruhMsg"] })
+        bys = json.dumps({
+            "header" : {
+                "status" : "0",
+                "command" : {"type" : "sendServers", "data": ["10.0.0.4:2223"]}
+            }, "data" : receivedBys["bruhMsg"] })
         #print(s.send(len(bys).to_bytes(4, "little")))
         #print(s.send(bys.encode()))
 

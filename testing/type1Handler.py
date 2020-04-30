@@ -13,19 +13,29 @@ def runTest():
         receivedBys = json.loads(s.recv(size).decode())
         print(receivedBys)
         
+        #bys = json.dumps({
+        #    "header" : {
+        #        "status" : "0",
+        #        "command" : {"type" : "sendClients", "data": ["tbk", "skippy"]}
+        #    }, "data" : receivedBys })
+        #print(s.send(len(bys).to_bytes(4, "little")))
+        #print(s.send(bys.encode()))
+
         bys = json.dumps({
             "header" : {
                 "status" : "0",
-                "command" : {"type" : "sendClients", "data": ["tbk", "skippy"]}
+                "command" : {"type" : "sendServers", "data": ["10.1.0.7:2223"]}
             }, "data" : receivedBys })
         print(s.send(len(bys).to_bytes(4, "little")))
         print(s.send(bys.encode()))
 
-  #      bys = json.dumps({
-   #         "header" : {
-    #            "status" : "0",
-     #           "command" : {"type" : "sendServers", "data": ["10.0.0.4:2223"]}
-      #      }, "data" : receivedBys["bruhMsg"] })
+                
+
+        #bys = json.dumps({
+        #    "header" : {
+        #        "status" : "0",
+        #        "command" : {"type" : "sendServers", "data": ["10.0.0.4:2223"]}
+        #    }, "data" : receivedBys["bruhMsg"] })
         #print(s.send(len(bys).to_bytes(4, "little")))
         #print(s.send(bys.encode()))
 

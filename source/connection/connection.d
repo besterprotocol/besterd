@@ -179,6 +179,8 @@ public final class BesterConnection : Thread
 
 			try
 			{
+				
+			
 				/* TODO: Collect return value */
 				HandlerResponse handlerResponse = chosenHandler.handleMessage(payloadData);
 

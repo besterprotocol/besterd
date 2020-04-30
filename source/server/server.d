@@ -72,20 +72,13 @@ public final class BesterServer
 		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up message handlers...");
 		setupHandlers(config["handlers"]);
-
-		/**
-		 * Set the `server` field in the HandlerResponse class
-		 * to be this server.
-		 */
-		HandlerResponse.server = this;
-		writeln("jdfjfdhhjfh", HandlerResponse.server);
 	}
 
 	private void setupHandlers(JSONValue handlerBlock)
 	{
 		/* TODO: Implement me */
 		debugPrint("Constructing message handlers...");
-		handlers = MessageHandler.constructHandlers(handlerBlock);
+		handlers = MessageHandler.constructHandlers(this, handlerBlock);
 		writeln(handlers[0].getPluginName());
 	}
 

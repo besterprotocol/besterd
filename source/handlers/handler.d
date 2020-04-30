@@ -7,6 +7,7 @@ import utils.debugging : debugPrint;
 import handlers.response;
 import base.net;
 import connection.message;
+import server.server : BesterServer;
 
 public final class MessageHandler
 {
@@ -22,12 +23,15 @@ public final class MessageHandler
 	/* The UNIX domain socket path */
 	public string socketPath;
 
+	/* The BesterServer being used */
+	public BesterServer server;
+
 	public Socket getSocket()
 	{
 		return domainSocket;
 	}
 
-	this(string executablePath, string socketPath, string pluginName)
+	this(BesterServer server, string executablePath, string socketPath, string pluginName)
 	{
 		/* Set the plugin name */
 		this.pluginName = pluginName;
@@ -37,6 +41,9 @@ public final class MessageHandler
 
 		/* Set the socket path */
 		this.socketPath = socketPath;
+
+		/* Set the server this handler is associated with */
+		this.server = server;
 	}
 
 	public string getPluginName()
@@ -134,7 +141,7 @@ public final class MessageHandler
 	}
 
 	/* TODO: Implement me */
-	public static MessageHandler[] constructHandlers(JSONValue handlerBlock)
+	public static MessageHandler[] constructHandlers(BesterServer server, JSONValue handlerBlock)
 	{
 		/* List of loaded message handlers */
 		MessageHandler[] handlers;
@@ -158,7 +165,7 @@ public final class MessageHandler
 				string[2] configuration = getConfigurationArray(pluginName, typeMap);
 				debugPrint("Module executable at: \"" ~ configuration[0] ~ "\"");
 				debugPrint("Module socket path at: \"" ~ configuration[1] ~ "\"");
-				MessageHandler constructedMessageHandler = new MessageHandler(configuration[0], configuration[1], pluginName);
+				MessageHandler constructedMessageHandler = new MessageHandler(server, configuration[0], configuration[1], pluginName);
 				handlers ~= constructedMessageHandler;
 				debugPrint("Module \"" ~ pluginName ~ "\" loaded");
 			}
@@ -206,6 +213,6 @@ public final class MessageHandler
 		}
 				
 			
-		return new HandlerResponse(this, response);
+		return new HandlerResponse(server, this, response);
 	}
 }
