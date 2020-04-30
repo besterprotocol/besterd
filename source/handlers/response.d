@@ -11,6 +11,7 @@ import std.socket : Socket, SocketOSException, AddressFamily, SocketType, Protoc
 import connection.message;
 import handlers.handler;
 import std.string : split;
+import server.server : BesterServer;
 
 /* The type of the command the message handler wants us to run */
 private enum CommandType
@@ -28,6 +29,9 @@ public final class HandlerResponse
 
 	/* The handler that caused such a response to be illicited */
 	private MessageHandler handler;
+
+	/* The BesterServer being used */
+	public static BesterServer server;
 
 	this(MessageHandler handler, JSONValue messageResponse)
 	{
@@ -151,6 +155,7 @@ public final class HandlerResponse
 			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
 			//debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
 
+
 			/* The fully response message to send back */
 			JSONValue clientPayload;
 
@@ -167,6 +172,7 @@ public final class HandlerResponse
 			payloadBlock["data"] = messageResponse["data"];
 			payloadBlock["type"] = handler.getPluginName();
 			clientPayload["data"] = payloadBlock;
+
 
 			/**
 			 * Loop through each BesterConnection in connectionList and
@@ -186,7 +192,6 @@ public final class HandlerResponse
 					
 					/* Send the message to the client */
 					debugPrint("Sending handler's response to client \"" ~ clientConnection.toString() ~ "\"...");
-					
 					sendMessage(clientSocket, clientPayload);
 					debugPrint("Sending handler's response to client \"" ~ clientConnection.toString() ~ "\"... [sent]");
 				}
@@ -219,6 +224,7 @@ public final class HandlerResponse
 			/* TODO: Implement me */
 			writeln("Servers wanting to send to ", servers);
 
+
 			/* The fully response message to send back */
 			JSONValue serverPayload;
 
@@ -237,7 +243,6 @@ public final class HandlerResponse
 			payloadBlock["type"] = handler.getPluginName();
 			serverPayload["payload"] = payloadBlock;
 
-			
 
 			/* Attempt connecting to each server and sending the payload */
 			for(ulong i = 0; i < servers.length; i++)
@@ -250,9 +255,20 @@ public final class HandlerResponse
 				try
 				{
 					Socket serverConnection = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
-					serverConnection.connect(parseAddress(host, port));
 
+					/* Connect to the server */
+					debugPrint("Connecting to server \"" ~ serverConnection.toString() ~ "\"...");
+					serverConnection.connect(parseAddress(host, port));
+					debugPrint("Connecting to server \"" ~ serverConnection.toString() ~ "\"... [connected]");
+
+					/* Send the payload */
+					debugPrint("Sending handler's response to server \"" ~ serverConnection.toString() ~ "\"...");
 					sendMessage(serverConnection, serverPayload);
+					debugPrint("Sending handler's response to server \"" ~ serverConnection.toString() ~ "\"... [sent]");
+
+					/* Close the connection to the server */
+					serverConnection.close();
+					debugPrint("Closed connection to server \"" ~ serverConnection.toString() ~ "\"");
 				}
 				catch(Exception e)
 				{
@@ -264,10 +280,17 @@ public final class HandlerResponse
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
 			/* Name of the handler to send the message to */
-			string handler = messageResponse["header"]["command"]["data"]["handler"].str();
+			string handler = messageResponse["header"]["command"]["data"]["type"].str();
 			debugPrint("Handler to forward to: " ~ handler);
 
-			/* TODO: Add me */
+			/* TODO: Add me, shit is going to get recursive here */
+
+			/* Lookup the payloadType handler */
+			MessageHandler chosenHandler = server.findHandler(handler);
+			
+			HandlerResponse handlerResponse = chosenHandler.handleMessage(messageResponse["data"]);
+
+			handlerResponse.execute(originalRequester);
 		}
 	}
 

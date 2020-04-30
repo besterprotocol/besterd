@@ -10,6 +10,7 @@ import std.string : cmp;
 import handlers.handler;
 import listeners.listener;
 import connection.connection;
+import handlers.response;
 
 public final class BesterServer
 {
@@ -71,6 +72,12 @@ public final class BesterServer
 		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up message handlers...");
 		setupHandlers(config["handlers"]);
+
+		/**
+		 * Set the `server` field in the HandlerResponse class
+		 * to be this server.
+		 */
+		HandlerResponse.server = this;
 	}
 
 	private void setupHandlers(JSONValue handlerBlock)
