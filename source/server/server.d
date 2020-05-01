@@ -89,7 +89,7 @@ public final class BesterServer
 		
 		JSONValue jsonAddress, jsonPort;
 
-		writeln(networkBlock);
+		debugPrint(networkBlock);
 
 		/* TODO: Bounds check */
 		jsonAddress = networkBlock["address"];
