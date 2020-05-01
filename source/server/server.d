@@ -79,7 +79,6 @@ public final class BesterServer
 		/* TODO: Implement me */
 		debugPrint("Constructing message handlers...");
 		handlers = MessageHandler.constructHandlers(this, handlerBlock);
-		writeln(handlers[0].getPluginName());
 	}
 
 	/* Setup the server socket */
