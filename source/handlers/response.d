@@ -295,17 +295,55 @@ public final class HandlerResponse
 			string handler = messageResponse["header"]["command"]["data"].str();
 			debugPrint("Handler to forward to: " ~ handler);
 
+			/* Is built-in handler? */
+			bool isBuiltInHandler; /* TODO: Set value of this */
+
+			if(isBuiltInHandler)
+			{
+				/**
+				 * If it is a built-in handler then look in the `payloadBlock`
+				 * for a field named ``*/
+
+				/* The command to be run */
+				Command command;
+
+				/* Depending on the built-in handler we do specifics */
+				if(cmp(handler, "GET_CLIENTS") == 0)
+				{
+					/* TODO: set `command` in here */
+				}
+
+				/* Run the built-in command */
+				JSONValue commandData = command.execute();
+
+				/**
+				 * Construct the payload as a combination of the previous payload
+				 * and the server's additions.
+				 */
+				JSONValue dataArray;
+				dataArray[0] = messageResponse["data"];
+				dataArray[1] = commandData;
+
+				/* Send the data to the message handler */
+				HandlerResponse handlerResponse = this.handler.handleMessage(dataArray);
+
+				/* Execute the code (this here, recursive) */
+				handlerResponse.execute(originalRequester);
+			}
+			else
+			{
+				/* Lookup the payloadType handler */
+				MessageHandler chosenHandler = server.findHandler(handler);
+
+				/* Send the data to the message handler */
+				HandlerResponse handlerResponse = chosenHandler.handleMessage(messageResponse["data"]);
+
+				/* Execute the code (this here, recursive) */
+				handlerResponse.execute(originalRequester);
+			}
+
 			/* TODO: Add me, shit is going to get recursive here */
 
-
-			/* Lookup the payloadType handler */
-			MessageHandler chosenHandler = server.findHandler(handler);
-
-			/* Send the data to the message handler */
-			HandlerResponse handlerResponse = chosenHandler.handleMessage(messageResponse["data"]);
-
-			/* Execute the code (this here, recursive) */
-			handlerResponse.execute(originalRequester);
 
 			debugPrint("SEND_HANDLER: Completed run");
 		}
@@ -318,21 +356,7 @@ public final class HandlerResponse
 			 * then wait for another response from the handler */
 			
 
-			/* The command to be run */
-			Command command;
-
-			/* TODO: Choose command here */
-
-			/* Run the command */
-			JSONValue commandResponse = command.execute();
-
-			/* Construct the payload */
-			JSONValue payload;
-			payload["data"] = messageResponse["data"];
-			payload["primitiveAppended"] = commandResponse;
-
-			/* Get a new socket to the same handler */
-			Socket handlerSocket = handler.getNewSocket();
+			
 
 			/* Now send the command txt to the handler */
 			sendMessage(handlerSocket, payload);
