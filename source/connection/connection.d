@@ -1,19 +1,18 @@
 module connection.connection;
 
-import utils.debugging : debugPrint;
+import utils.debugging : debugPrint; /* TODO: Stephen */
 import std.conv : to;
 import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddress, SocketFlags, Address;
 import core.thread : Thread;
 import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp;
-import handlers.handler;
-import listeners.listener;
-import server.server;
-import handlers.response;
-import connection.message;
-import base.net;
-import base.types;
+import handlers.handler : MessageHandler;
+import server.server : BesterServer;
+import handlers.response : ResponseError, HandlerResponse;
+import utils.message : receiveMessage;
+import base.net : NetworkException;
+import base.types : BesterException;
 
 public final class BesterConnection : Thread
 {
@@ -42,11 +41,13 @@ public final class BesterConnection : Thread
 	/* The type of this connection */
 	private Scope connectionType = Scope.UNKNOWN;
 
+	/* Get the type of the connection */
 	public Scope getType()
 	{
 		return connectionType;
 	}
 
+	/* Get the socket */
 	public Socket getSocket()
 	{
 		return clientConnection;
@@ -107,7 +108,9 @@ public final class BesterConnection : Thread
 		}
 		debugPrint("<<< End read/send loop >>>");
 
+		/* Close the socket */
 		clientConnection.close();
+
 		/* TODO: Remove myself from the connections array */
 	}
 

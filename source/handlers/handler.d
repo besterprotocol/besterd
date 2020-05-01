@@ -6,7 +6,7 @@ import std.json : JSONValue, JSONType;
 import utils.debugging : debugPrint;
 import handlers.response;
 import base.net;
-import connection.message;
+import utils.message : sendMessage, receiveMessage;
 import server.server : BesterServer;
 import std.process : spawnProcess, Pid;
 

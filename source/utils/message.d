@@ -1,4 +1,4 @@
-module connection.message;
+module utils.message;
 
 import std.socket : Socket, SocketFlags;
 import std.json : JSONValue, parseJSON, toJSON;

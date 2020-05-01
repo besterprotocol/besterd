@@ -8,7 +8,7 @@ import std.stdio : writeln;
 import connection.connection;
 import base.types;
 import std.socket : Socket, SocketOSException, AddressFamily, SocketType, ProtocolType, parseAddress;
-import connection.message;
+import utils.message : receiveMessage, sendMessage;
 import handlers.handler;
 import std.string : split;
 import server.server : BesterServer;
