@@ -20,9 +20,6 @@ private enum CommandType : ubyte
 	/* Simple message flow (always end point) */
 	SEND_CLIENTS, SEND_SERVERS, SEND_HANDLER,
 
-	/* Others */
-	GET_CLIENTS, IS_CLIENT,
-
 	/* Unknown command */
 	UNKNOWN
 }
@@ -347,32 +344,9 @@ public final class HandlerResponse
 
 			debugPrint("SEND_HANDLER: Completed run");
 		}
-		/* Handle non primitive functions */
-		else if (commandType > 2 && commandType != CommandType.UNKNOWN)
+		else
 		{
-			/**
-			 * For these functions we should get the payload, do internal
-			 * magic and then return a value to the payload, but we must
-			 * then wait for another response from the handler */
-			
-
-			
-
-			/* Now send the command txt to the handler */
-			sendMessage(handlerSocket, payload);
-
-			/* Await a response */
-			JSONValue responseSecond;
-			receiveMessage(handlerSocket, responseSecond);
-
-			/* Construct a HandlerResponse object out of this and execute it */
-			HandlerResponse response = handler.handleMessage(responseSecond);
-			response.execute(originalRequester);
-		}
-		/* CommandType.UNKNOWN */
-		else if (commandType == CommandType.GET_CLIENTS)
-		{
-			/* TODO: WIP */
+			/* TODO: */
 		}
 	}
 
