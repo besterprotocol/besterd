@@ -111,7 +111,7 @@ public final class BesterServer
 	{
 		for(ulong i = 0; i < listeners.length; i++)
 		{
-			debugPrint("Starting...");
+			debugPrint("Starting listener \"" ~ listeners[i].toString() ~ "\"...");
 			listeners[i].start();
 		}
 		
