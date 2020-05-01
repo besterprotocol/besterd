@@ -215,7 +215,6 @@ public final class HandlerResponse
 				}
 			}
 
-
 			debugPrint("SEND_CLIENTS: Completed run");
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
@@ -283,6 +282,8 @@ public final class HandlerResponse
 					debugPrint("Error whilst sending payload to server: " ~ e.toString());
 				}
 			}
+
+			debugPrint("SEND_SERVERS: Completed run");
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
@@ -301,11 +302,12 @@ public final class HandlerResponse
 
 			/* Execute the code (this here, recursive) */
 			handlerResponse.execute(originalRequester);
+
+			debugPrint("SEND_HANDLER: Completed run");
 		}
 		else if (commandType == CommandType.GET_CLIENTS)
 		{
-			/* */
-
+			/* TODO: WIP */
 		}
 	}
 

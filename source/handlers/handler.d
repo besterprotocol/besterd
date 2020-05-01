@@ -211,8 +211,7 @@ public final class MessageHandler
 			handlerSocket.close();
 			debugPrint("Closed UNIX domain socket to handler");
 		}
-				
-			
+
 		return new HandlerResponse(server, this, response);
 	}
 }
