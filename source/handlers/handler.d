@@ -71,15 +71,6 @@ public final class MessageHandler
 		return domainSocket;
 	}
 
-	private void initializeUNIXSocket(string socketPath)
-	{
-		/* Create the UNIX domain socket */
-		domainSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
-
-		/* Bind it to the socket path */
-		domainSocket.connect(new UnixAddress(socketPath));
-	}
-
 	private static string[] getAvailableTypes(JSONValue handlerBlock)
 	{
 		/* Available types as strings */
