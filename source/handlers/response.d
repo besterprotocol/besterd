@@ -12,15 +12,19 @@ import utils.message : receiveMessage, sendMessage;
 import handlers.handler;
 import std.string : split;
 import server.server : BesterServer;
+import handlers.commands : Command;
 
 /* The type of the command the message handler wants us to run */
-private enum CommandType
+private enum CommandType : ubyte
 {
 	/* Simple message flow (always end point) */
 	SEND_CLIENTS, SEND_SERVERS, SEND_HANDLER,
 
 	/* Others */
-	GET_CLIENTS, IS_CLIENT
+	GET_CLIENTS, IS_CLIENT,
+
+	/* Unknown command */
+	UNKNOWN
 }
 
 public final class HandlerResponse
@@ -305,6 +309,39 @@ public final class HandlerResponse
 
 			debugPrint("SEND_HANDLER: Completed run");
 		}
+		/* Handle non primitive functions */
+		else if (commandType > 2 && commandType != CommandType.UNKNOWN)
+		{
+			/**
+			 * For these functions we should get the payload, do internal
+			 * magic and then return a value to the payload, but we must
+			 * then wait for another response from the handler */
+			
+
+			/* The command to be run */
+			Command command;
+
+			/* TODO: Choose command here */
+
+			/* Run the command */
+			JSONValue commandResponse = command.execute();
+
+
+
+			/* Now send the command txt to the handler */
+			//sendMessage(handler, commandResponse);
+
+			/* Await a response */
+			JSONValue responseSecond;
+			//receiveMessage(handler, responseSecond);
+
+			/* Construct a HandlerResponse object out of this and execute it */
+			HandlerResponse response = handler.handleMessage(responseSecond);
+			response.execute(originalRequester);
+
+			/* TODO: Need previous socket */
+		}
+		/* CommandType.UNKNOWN */
 		else if (commandType == CommandType.GET_CLIENTS)
 		{
 			/* TODO: WIP */
