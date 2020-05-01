@@ -326,20 +326,24 @@ public final class HandlerResponse
 			/* Run the command */
 			JSONValue commandResponse = command.execute();
 
+			/* Construct the payload */
+			JSONValue payload;
+			payload["data"] = messageResponse["data"];
+			payload["primitiveAppended"] = commandResponse;
 
+			/* Get a new socket to the same handler */
+			Socket handlerSocket = handler.getNewSocket();
 
 			/* Now send the command txt to the handler */
-			//sendMessage(handler, commandResponse);
+			sendMessage(handlerSocket, payload);
 
 			/* Await a response */
 			JSONValue responseSecond;
-			//receiveMessage(handler, responseSecond);
+			receiveMessage(handlerSocket, responseSecond);
 
 			/* Construct a HandlerResponse object out of this and execute it */
 			HandlerResponse response = handler.handleMessage(responseSecond);
 			response.execute(originalRequester);
-
-			/* TODO: Need previous socket */
 		}
 		/* CommandType.UNKNOWN */
 		else if (commandType == CommandType.GET_CLIENTS)
