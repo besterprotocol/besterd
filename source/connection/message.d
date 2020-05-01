@@ -6,7 +6,11 @@ import utils.debugging : debugPrint;
 import std.stdio : writeln;
 import base.net : NetworkException;
 
-/* TODO: Use exception handling here */
+/**
+ * Generalized socket receive function which will read into the
+ * variable pointed to by `receiveMessage` by reading from the
+ * socket `originator`.
+ */
 public void receiveMessage(Socket originator, ref JSONValue receiveMessage)
 {
 	if(!receiveMessage_internal(originator, receiveMessage))
@@ -15,6 +19,15 @@ public void receiveMessage(Socket originator, ref JSONValue receiveMessage)
 	}
 }
 
+/**
+ * Generalized socket send function which will send the JSON
+ * encoded message, `jsonMessage`, over to the client at the
+ * other end of the socket, `recipient`.
+ *
+ * It gets the length of `jsonMessage` and encodes a 4 byte
+ * message header in little-endian containing the message's
+ * length.
+ */
 public void sendMessage(Socket recipient, JSONValue jsonMessage)
 {
 	if(!sendMessage_internal(recipient, jsonMessage))
@@ -23,11 +36,6 @@ public void sendMessage(Socket recipient, JSONValue jsonMessage)
 	}
 }
 
-/**
- * Generalized socket receive function which will read into the
- * variable pointed to by `receiveMessage` by reading from the
- * socket `originator`.
- */
 private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMessage)
 {
 	/* TODO: Implement me */
@@ -138,15 +146,6 @@ private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMes
 	return true;
 }
 
-/**
- * Generalized socket send function which will send the JSON
- * encoded message, `jsonMessage`, over to the client at the
- * other end of the socket, `recipient`.
- *
- * It gets the length of `jsonMessage` and encodes a 4 byte
- * message header in little-endian containing the message's
- * length.
- */
 private bool sendMessage_internal(Socket recipient, JSONValue jsonMessage)
 {
 	/* The message buffer */

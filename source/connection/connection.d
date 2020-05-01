@@ -28,6 +28,9 @@ public final class BesterConnection : Thread
 	private string username;
 	private string password;
 
+	/* If the connection is active */
+	private bool isActive = true;
+
 	/* The connection scope */
 	public enum Scope
 	{
@@ -73,7 +76,7 @@ public final class BesterConnection : Thread
 	private void run()
 	{
 		debugPrint("<<< Begin read/send loop >>>");
-		while(clientConnection.isAlive()) /*TODO: Remove and also make the stting of this kak not be closing socket */
+		while(isActive) /*TODO: Remove and also make the stting of this kak not be closing socket */
 		{
 			/* Received JSON message */
 			JSONValue receivedMessage;
@@ -93,8 +96,7 @@ public final class BesterConnection : Thread
 				if(connectionType == Scope.SERVER)
 				{
 					debugPrint("Server connection done, closing BesterConnection.");
-					clientConnection.close();
-					break;
+					isActive = false;
 				}
 			}
 			catch(BesterException exception)
@@ -105,6 +107,7 @@ public final class BesterConnection : Thread
 		}
 		debugPrint("<<< End read/send loop >>>");
 
+		clientConnection.close();
 		/* TODO: Remove myself from the connections array */
 	}
 
@@ -132,8 +135,6 @@ public final class BesterConnection : Thread
 
 		debugPrint("Destructor finished");
 	}
-
-	
 
 	/* TODO: Comment [], rename [] */
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
@@ -171,7 +172,7 @@ public final class BesterConnection : Thread
 			if(cmp(commandType, "close") == 0)
 			{
 				debugPrint("Closing socket...");
-				this.clientConnection.close();
+				isActive = false;
 			}
 			else
 			{
@@ -187,15 +188,13 @@ public final class BesterConnection : Thread
 
 			try
 			{
-				
-			
-				/* TODO: Collect return value */
+				/* Provide the handler the message and let it process it and send us a reply */
 				HandlerResponse handlerResponse = chosenHandler.handleMessage(payloadData);
 
 				/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
 				debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());
 
-				/* Execute the message handler's command */
+				/* Execute the message handler's command (as per its reply) */
 				handlerResponse.execute(this);
 			}
 			catch(ResponseError e)
@@ -224,7 +223,6 @@ public final class BesterConnection : Thread
 
 		return dispatchStatus;
 	}
-
 
 	/**
 	 * Given the headerBlock, this returns the requested scope
@@ -287,8 +285,8 @@ public final class BesterConnection : Thread
 
 					/* TODO: Send message back about an invalid scope */
 
-					/* Close the connection */
-					clientConnection.close();
+					/* TODO: End this here */
+					isActive = false;
 				}
 				else if(scopeField == Scope.CLIENT)
 				{
@@ -298,6 +296,7 @@ public final class BesterConnection : Thread
 					 * send the client a message back and then close the
 					 * connection.
 					 */
+					debugPrint("Client scope enabled");
 
 					/* Get the authentication block */
 					JSONValue authenticationBlock = headerBlock["authentication"];
@@ -329,9 +328,7 @@ public final class BesterConnection : Thread
 						 /* TODO : Send error message to client */
 
 						 /* Close the connection */
-						 clientConnection.close();
-
-						 /* TODO: Throw exception here */
+						isActive = false;
 					}
 				}
 				else if(scopeField == Scope.SERVER)
@@ -355,7 +352,8 @@ public final class BesterConnection : Thread
 
 			/* Dispatch the message */
 			bool dispatchStatus = dispatchMessage(connectionType, payloadBlock);
-								
+
+			/* TODO: Catch error here and not inside dispatchMessage, gets rid of the need for this if statement */	
 			if(dispatchStatus)
 			{
 				debugPrint("Dispatch succeeded");
@@ -366,7 +364,7 @@ public final class BesterConnection : Thread
 				debugPrint("Dispatching failed...");
 			}	
 		}
-		/* If thr attempt to convert the message to JSON fails */
+		/* If the attempt to convert the message to JSON fails */
 		catch(JSONException exception)
 		{
 			debugPrint("<<< There was an error whilst parsing the JSON message >>>\n\n"~exception.toString());
