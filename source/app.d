@@ -1,20 +1,14 @@
 module besterd;
 
-import server.server;
+import server.server : BesterServer;
 import std.conv : to;
 import std.socket : SocketOSException, parseAddress, UnixAddress;
-import utils.debugging : dprint, debugPrint;
+import utils.debugging : dprint;
 import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
-import listeners.listener;
-import listeners.types;
+import listeners.listener : BesterListener;
+import listeners.types : TCP4Listener, TCP6Listener, UNIXListener;
 import std.file : exists;
-
-unittest d
-{
-	writeln("Hello");
-	main();
-}
 
 void main(string[] args)
 {
@@ -73,7 +67,7 @@ private BesterListener[] getListeners(BesterServer server, JSONValue networkBloc
 
 	/* Look for IPv4 TCP block */
 	JSONValue inet4TCPBlock = networkBlock["tcp4"];
-	debugPrint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
+	dprint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
 	string inet4Address = inet4TCPBlock["address"].str();
 	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
 	TCP4Listener tcp4Listener = new TCP4Listener(server, parseAddress(inet4Address, inet4Port));
@@ -81,7 +75,7 @@ private BesterListener[] getListeners(BesterServer server, JSONValue networkBloc
 
 	/* Look for IPv6 TCP block */
 	JSONValue inet6TCPBlock = networkBlock["tcp6"];
-	debugPrint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
+	dprint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
 	string inet6Address = inet6TCPBlock["address"].str();
 	ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
 	TCP6Listener tcp6Listener = new TCP6Listener(server, parseAddress(inet6Address, inet6Port));
@@ -89,7 +83,7 @@ private BesterListener[] getListeners(BesterServer server, JSONValue networkBloc
 
 	/* Look for UNIX Domain block */
 	JSONValue unixDomainBlock = networkBlock["unix"];
-	debugPrint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
+	dprint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
 	string unixAddress = unixDomainBlock["address"].str();
 //	UNIXListener unixListener = new UNIXListener(server, new UnixAddress(unixAddress));
 //	listeners ~= unixListener;
@@ -101,7 +95,7 @@ private void startServer(string configurationFilePath)
 {
 	/* The server configuration */
 	JSONValue serverConfiguration = getConfig(configurationFilePath);
-	debugPrint("<<< Bester.d configuration >>>\n" ~ serverConfiguration.toPrettyString());
+	dprint("<<< Bester.d configuration >>>\n" ~ serverConfiguration.toPrettyString());
 
 	try
 	{
@@ -130,7 +124,7 @@ private void startServer(string configurationFilePath)
 	}
 	catch(SocketOSException exception)
 	{
-		debugPrint("Error binding: " ~ exception.toString());
+		dprint("Error binding: " ~ exception.toString());
 	}
 	
 }
