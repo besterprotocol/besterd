@@ -102,6 +102,7 @@ private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMes
 				byte[] remainingBytes;
 				remainingBytes.length = messageLength-currentByte;
 
+				/* Receive the remaining bytes */
 				originator.receive(remainingBytes);
 
 				/* Increment counter of received bytes */
@@ -116,16 +117,14 @@ private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMes
 			{
 				/* Increment counter of received bytes */
 				currentByte += bytesReceived;
-
-						
+	
 				/* Append the received bytes to the FULL message buffer */
 				fullMessage ~= tempBuffer[0..bytesReceived];
 
 				/* TODO: Bug when over send, we must not allow this */
-
-						
 				writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
 
+				/* Dequeue the received bytes */
 				originator.receive(tempBuffer);
 			}
 		}
