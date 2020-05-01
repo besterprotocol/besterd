@@ -6,7 +6,7 @@ import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddres
 import core.thread : Thread;
 import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
-import std.string : cmp;
+import std.string : cmp, strip;
 import handlers.handler;
 import listeners.listener;
 import connection.connection;
@@ -126,13 +126,20 @@ public final class BesterServer
 		/* If the authentication went through */
 		bool authed = true;
 
-		/* If the authentication succeeded */
-		if(authed)
+		/* Strip the username of whitespace (TODO: Should we?) */
+		username = strip(username);
+
+		/* Make sure username and password are not empty */
+		if(cmp(username, "") != 0 && cmp(password, "") != 0)
 		{
-			/* Add the user to the list of authenticated clients */
+
 		}
-		
-		return true;
+		else
+		{
+			authed = false;
+		}
+
+		return authed;
 	}
 
 	/* Returns the MessageHandler object of the requested type */
