@@ -32,10 +32,8 @@ def testAuthentication():
 
     # Get a response
     length=int.from_bytes(list(clientSock.recv(4)), "little")
-    print(length)
     receivedDataBytes = clientSock.recv(length)
-    receivedData = list(receivedDataBytes)
-    print(receivedDataBytes.decode())
+    print("Received", receivedDataBytes.decode())
     
 
 
