@@ -89,11 +89,39 @@ def testAuthentication():
     receivedDataBytes = clientSock.recv(length)
     print("Received", receivedDataBytes.decode())
     
+def testSingleHandler():
+    # Connect to the bester daemon
+    clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    clientSock.connect((serverAddress, serverPort))
 
+    # Attempt a built-in command even though we are not logged in
+    jsonData = json.dumps({
+                            "header": {
+                                "scope" : "client",
+                                "authentication": {
+                                    "username" : username,
+                                    "password" : "passwd"
+                                }
+                            },
+                            
+                            "payload": {
+                                "data": "Hello",
+                                "type" : "type1"
+                            }
+    })
+    print("Sending: ", jsonData)
+    clientSock.send(len(jsonData).to_bytes(4, "little"))
+    clientSock.send(jsonData.encode())
+
+    # Get a response
+    length=int.from_bytes(list(clientSock.recv(4)), "little")
+    receivedDataBytes = clientSock.recv(length)
+    print("Received", receivedDataBytes.decode())
 
 def runTests():
     testAuthentication()
     testBuiltInCommandClose()
+    testSingleHandler()
 
 initialize()
 runTests()
