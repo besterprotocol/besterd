@@ -93,8 +93,6 @@ public final class BesterConnection : Thread
 				* process the message. */
 				processMessage(receivedMessage);
 
-				debugPrint(isActive);
-
 				/* Check if this is a server connection, if so, end the connection */
 				if(connectionType == Scope.SERVER)
 				{
