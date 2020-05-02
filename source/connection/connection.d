@@ -350,18 +350,16 @@ public final class BesterConnection : Thread
 						/* Send error message to client */
 
 						/* Construct an error message */
-						JSONValue payloadBlock;
-						headerBlock = JSONValue();
+						JSONValue errorMessage;
 						JSONValue errorBlock;
 						errorBlock["code"] = 0;
 						errorBlock["message"] = "Authentication failed";
-						headerBlock["error"] = errorBlock;
-						payloadBlock["header"] = headerBlock;
+						errorMessage["error"] = errorBlock;
 
 						try
 						{
 							/* Send the message */
-							sendMessage(clientConnection, payloadBlock);
+							sendMessage(clientConnection, errorMessage);
 						}
 						catch(NetworkException e)
 						{
