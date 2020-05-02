@@ -9,5 +9,6 @@
 	},
 	"description": "Bester protocol daemon. ",
 	"license": "AGPL v3",
-	"name": "besterd"
+	"name": "besterd",
+	"targetType": "executable"
 }

@@ -243,7 +243,7 @@ public final class BesterConnection : Thread
 		/* Construct a status message */
 		JSONValue statusMessage;
 		JSONValue statusBlock;
-		statusBlock["code"] = code;
+		statusBlock["code"] = to!(string)(code);
 		statusBlock["data"] = data;
 		statusMessage["status"] = statusBlock;
 
@@ -354,10 +354,12 @@ public final class BesterConnection : Thread
 						*/
 						this.username = username;
 						this.password = password;
+
+						/* Send error message to client */
+						sendStatus(5, JSONValue());
 					}
-					
 					/* If authentication failed due to malformed message or incorrect details */
-					if(!authenticationStatus)
+					else
 					{
 						/**
 						* If the authentication was unsuccessful then send a
