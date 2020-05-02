@@ -169,7 +169,7 @@ public final class BesterConnection : Thread
 			 */
 			JSONValue commandBlock = payloadData["command"];
 			string commandType = commandBlock["type"].str;
-			JSONValue command = commandBlock["args"];
+			//JSONValue command = commandBlock["args"];
 
 			/* If the command is `close` */
 			if(cmp(commandType, "close") == 0)
