@@ -183,6 +183,7 @@ public final class BesterConnection : Thread
 			{
 				debugPrint("Invalid built-in command type");
 				/* TODO: Generate error response */
+				dispatchStatus = false;
 			}
 		}
 		/* If an external handler is found (i.e. not a built-in command) */
@@ -210,11 +211,13 @@ public final class BesterConnection : Thread
 				//JSONValue errorResponse;
 				//errorResponse["dd"] = 2;
 				//debugPrint("Response error");
+				dispatchStatus = false;
 			}
 			catch(Exception e)
 			{
 				/* TODO: Remove me */
 				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
+				dispatchStatus = false;
 			}
 			
 			debugPrint("Handler section done (for client)");
@@ -228,6 +231,7 @@ public final class BesterConnection : Thread
 			/* Send error message to client */
 			JSONValue handlerName = payloadType;
 			sendStatus(1, handlerName);
+			dispatchStatus = false;
 		}
 
 		return dispatchStatus;
@@ -332,36 +336,24 @@ public final class BesterConnection : Thread
 
 					bool authenticationStatus;
 
-					/* Attempt to get the `authentication` block */
-					try
+					/* The `authentication` block */
+					JSONValue authenticationBlock = headerBlock["authentication"];
+
+					/* Get the username and password */
+					string username = authenticationBlock["username"].str(), password = authenticationBlock["password"].str();
+
+					/* Attempt authentication */
+					authenticationStatus = server.authenticate(username, password);
+
+					/* Check if the authentication was successful or not */
+					if(authenticationStatus)
 					{
-						/* The `authentication` block */
-						JSONValue authenticationBlock = headerBlock["authentication"];
-
-						/* Get the username and password */
-						string username = authenticationBlock["username"].str(), password = authenticationBlock["password"].str();
-
-						/* Attempt authentication */
-						authenticationStatus = server.authenticate(username, password);
-
-						/* Check if the authentication was successful or not */
-						if(authenticationStatus)
-						{
-							/**
-							* If the authentication was successful then store the 
-							* client's credentials.
-							*/
-							this.username = username;
-							this.password = password;
-						}
-						else
-						{
-							authenticationStatus = false;
-						}
-					}
-					catch(JSONException e)
-					{
-						authenticationStatus = false;
+						/**
+						* If the authentication was successful then store the 
+						* client's credentials.
+						*/
+						this.username = username;
+						this.password = password;
 					}
 					
 					/* If authentication failed due to malformed message or incorrect details */
@@ -393,21 +385,13 @@ public final class BesterConnection : Thread
 			/* Attempt to get the payload block and dispatch the message */
 			bool dispatchStatus;
 
-			try
-			{
-				/* Get the `payload` block */
-				JSONValue payloadBlock = jsonMessage["payload"];
-				debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
+			
+			/* Get the `payload` block */
+			JSONValue payloadBlock = jsonMessage["payload"];
+			debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
 
-				/* Dispatch the message */
-				dispatchStatus = dispatchMessage(connectionType, payloadBlock);
-			}
-			catch(JSONException e)
-			{
-				/* If the `payload` block is not found */
-				sendStatus(3, JSONValue());
-				debugPrint("Missing `payload` block");
-			}
+			/* Dispatch the message */
+			dispatchStatus = dispatchMessage(connectionType, payloadBlock);
 
 			/* TODO: Catch error here and not inside dispatchMessage, gets rid of the need for this if statement */	
 			if(dispatchStatus)
@@ -423,7 +407,8 @@ public final class BesterConnection : Thread
 		/* If the attempt to convert the message to JSON fails */
 		catch(JSONException exception)
 		{
-			debugPrint("<<< There was an error whilst parsing the JSON message >>>\n\n"~exception.toString());
+			debugPrint("General format error");
+			sendStatus(3, JSONValue());
 		}
 	}
 }
