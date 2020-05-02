@@ -31,6 +31,12 @@ public final class BesterServer
 	/* Connected clients */
 	public BesterConnection[] clients;
 
+	/**
+	 * Returns a list of BesterConnection objects that
+	 * match the usernames provided.
+	 *
+	 * @param usernames Array of strings of usernames to match to
+	 */
 	public BesterConnection[] getClients(string[] usernames)
 	{
 		/* List of authenticated users matching `usernames` */
