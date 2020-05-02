@@ -176,6 +176,8 @@ public final class BesterConnection : Thread
 			{
 				debugPrint("Closing socket...");
 				isActive = false;
+
+				sendStatus(0, JSONValue());
 			}
 			else
 			{
@@ -227,7 +229,7 @@ public final class BesterConnection : Thread
 			try
 			{
 				JSONValue handlerName = payloadType;
-				sendError(2, handlerName);
+				sendStatus(1, handlerName);
 			}
 			catch(NetworkException e)
 			{
@@ -238,18 +240,18 @@ public final class BesterConnection : Thread
 		return dispatchStatus;
 	}
 
-	/* Send an error message to the client */
-	public void sendError(uint code, JSONValue data)
+	/* Send a status message to the client */
+	public void sendStatus(uint code, JSONValue data)
 	{
-		/* Construct an error message */
-		JSONValue errorMessage;
-		JSONValue errorBlock;
-		errorBlock["code"] = code;
-		errorBlock["data"] = data;
-		errorMessage["error"] = errorBlock;
+		/* Construct a status message */
+		JSONValue statusMessage;
+		JSONValue statusBlock;
+		statusBlock["code"] = code;
+		statusBlock["data"] = data;
+		statusMessage["status"] = statusBlock;
 
 		/* Send the message */
-		sendMessage(clientConnection, errorMessage);
+		sendMessage(clientConnection, statusMessage);
 	}
 
 	/**
@@ -373,7 +375,7 @@ public final class BesterConnection : Thread
 						/* Send error message to client */
 						try
 						{
-							sendError(0, JSONValue());
+							sendStatus(2, JSONValue());
 						}
 						catch(NetworkException e)
 						{
