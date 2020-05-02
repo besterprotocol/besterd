@@ -4,6 +4,9 @@
 		"Stephen Cochrane"
 	],
 	"copyright": "Copyright © 2020, Tristan B. Kildaire",
+	"dependencies": {
+		"bformat": "~>1.0.4"
+	},
 	"description": "Bester protocol daemon. ",
 	"license": "AGPL v3",
 	"name": "besterd"
