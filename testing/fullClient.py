@@ -68,6 +68,33 @@ def testBuiltInCommandClose():
 # Test whether the server responds with an error message
 # due to a message being sent without being authenticated
 # (as a client).
+def testAuthenticationEmpty():
+    # Connect to the bester daemon
+    clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    clientSock.connect((serverAddress, serverPort))
+    
+    # Attempt a built-in command even though we are not logged in
+    jsonData = json.dumps({"header": {"scope" : "client", "authentication": {
+                                    "username" : "",
+                                    "password" : ""
+                                }},"payload": {
+    "data": {
+        "command" : {"type" : "close", "args" : None}
+    },"type":"builtin"}})
+    print("Sending: ", jsonData)
+
+    # Send the data
+    clientSock.send(len(jsonData).to_bytes(4, "little"))
+    clientSock.send(jsonData.encode())
+
+    # Get a response
+    length=int.from_bytes(list(clientSock.recv(4)), "little")
+    receivedDataBytes = clientSock.recv(length)
+    print("Received", receivedDataBytes.decode())
+
+# Test whether the server responds with an error message
+# due to a message being sent without being authenticated
+# (as a client).
 def testAuthentication():
     # Connect to the bester daemon
     clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -121,7 +148,9 @@ def testSingleHandler():
 def runTests():
     testAuthentication()
     testBuiltInCommandClose()
+    testAuthenticationEmpty()
     testSingleHandler()
+    
 
 initialize()
 runTests()
