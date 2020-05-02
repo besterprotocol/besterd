@@ -10,7 +10,7 @@ import std.string : cmp;
 import handlers.handler : MessageHandler;
 import server.server : BesterServer;
 import handlers.response : ResponseError, HandlerResponse;
-import utils.message : receiveMessage;
+import utils.message : receiveMessage, sendMessage;
 import base.net : NetworkException;
 import base.types : BesterException;
 
@@ -92,6 +92,8 @@ public final class BesterConnection : Thread
 				* If the message was received successfully then
 				* process the message. */
 				processMessage(receivedMessage);
+
+				debugPrint(isActive);
 
 				/* Check if this is a server connection, if so, end the connection */
 				if(connectionType == Scope.SERVER)
@@ -301,37 +303,72 @@ public final class BesterConnection : Thread
 					 */
 					debugPrint("Client scope enabled");
 
-					/* Get the authentication block */
-					JSONValue authenticationBlock = headerBlock["authentication"];
 
-					/* Get the username and password */
-					string username = authenticationBlock["username"].str(), password = authenticationBlock["password"].str();
+					bool authenticationStatus;
 
-					/* Attempt authentication */
-					bool authenticationStatus = server.authenticate(username, password);
-
-					/* Check if the authentication was successful or not */
-					if(authenticationStatus)
+					/* Attempt to get the `authentication` block */
+					try
 					{
-						/**
-						 * If the authentication was successful then store the 
-						 * client's credentials.
-						 */
-						 this.username = username;
-						 this.password = password;
+						/* The `authentication` block */
+						JSONValue authenticationBlock = headerBlock["authentication"];
+
+						/* Get the username and password */
+						string username = authenticationBlock["username"].str(), password = authenticationBlock["password"].str();
+
+						/* Attempt authentication */
+						authenticationStatus = server.authenticate(username, password);
+
+						/* Check if the authentication was successful or not */
+						if(authenticationStatus)
+						{
+							/**
+							* If the authentication was successful then store the 
+							* client's credentials.
+							*/
+							this.username = username;
+							this.password = password;
+						}
+						else
+						{
+							authenticationStatus = false;
+						}
 					}
-					else
+					catch(JSONException e)
+					{
+						authenticationStatus = false;
+					}
+					
+					/* If authentication failed due to malformed message or incorrect details */
+					if(!authenticationStatus)
 					{
 						/**
-						 * If the authentication was unsuccessful then send a
-						 * message to the client stating so and close the connection.
-						 */
+						* If the authentication was unsuccessful then send a
+						* message to the client stating so and close the connection.
+						*/
 						debugPrint("Authenticating the user failed, sending error and closing connection.");
 
-						 /* TODO : Send error message to client */
+						/* Send error message to client */
 
-						 /* Close the connection */
+						/* Construct an error message */
+						headerBlock = JSONValue();
+						JSONValue errorBlock;
+						errorBlock["code"] = 0;
+						errorBlock["message"] = "Authentication failed";
+						headerBlock["error"] = errorBlock;
+
+						try
+						{
+							/* Send the message */
+							sendMessage(clientConnection, headerBlock);
+						}
+						catch(NetworkException e)
+						{
+							debugPrint("Error saying goodbye to client who failed authentication");
+						}
+
+						/* Stop the read/write loop */
 						isActive = false;
+						return;
 					}
 				}
 				else if(scopeField == Scope.SERVER)
