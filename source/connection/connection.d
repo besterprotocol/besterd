@@ -224,9 +224,34 @@ public final class BesterConnection : Thread
 		{
 			/* TODO: Implement error handling */
 			debugPrint("No handler available for payload type \"" ~ payloadType ~ "\"");
+
+			/* Send error message to client */
+			try
+			{
+				JSONValue handlerName = payloadType;
+				sendError(2, handlerName);
+			}
+			catch(NetworkException e)
+			{
+				debugPrint("Error sending client error message about handler lookup failure");
+			}
 		}
 
 		return dispatchStatus;
+	}
+
+	/* Send an error message to the client */
+	private void sendError(uint code, JSONValue data)
+	{
+		/* Construct an error message */
+		JSONValue errorMessage;
+		JSONValue errorBlock;
+		errorBlock["code"] = code;
+		errorBlock["data"] = data;
+		errorMessage["error"] = errorBlock;
+
+		/* Send the message */
+		sendMessage(clientConnection, errorMessage);
 	}
 
 	/**
@@ -348,18 +373,9 @@ public final class BesterConnection : Thread
 						debugPrint("Authenticating the user failed, sending error and closing connection.");
 
 						/* Send error message to client */
-
-						/* Construct an error message */
-						JSONValue errorMessage;
-						JSONValue errorBlock;
-						errorBlock["code"] = 0;
-						errorBlock["message"] = "Authentication failed";
-						errorMessage["error"] = errorBlock;
-
 						try
 						{
-							/* Send the message */
-							sendMessage(clientConnection, errorMessage);
+							sendError(0, JSONValue());
 						}
 						catch(NetworkException e)
 						{
