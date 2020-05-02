@@ -38,8 +38,6 @@ public void sendMessage(Socket recipient, JSONValue jsonMessage)
 
 private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMessage)
 {
-	/* TODO: Implement me */
-
 	/* Construct a buffer to receive into */
 	byte[] receiveBuffer;
 
