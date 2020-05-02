@@ -226,15 +226,8 @@ public final class BesterConnection : Thread
 			debugPrint("No handler available for payload type \"" ~ payloadType ~ "\"");
 
 			/* Send error message to client */
-			try
-			{
-				JSONValue handlerName = payloadType;
-				sendStatus(1, handlerName);
-			}
-			catch(NetworkException e)
-			{
-				debugPrint("Error sending client error message about handler lookup failure");
-			}
+			JSONValue handlerName = payloadType;
+			sendStatus(1, handlerName);
 		}
 
 		return dispatchStatus;
@@ -250,8 +243,15 @@ public final class BesterConnection : Thread
 		statusBlock["data"] = data;
 		statusMessage["status"] = statusBlock;
 
-		/* Send the message */
-		sendMessage(clientConnection, statusMessage);
+		try
+		{
+			/* Send the message */
+			sendMessage(clientConnection, statusMessage);
+		}
+		catch(NetworkException e)
+		{
+			debugPrint("Error sending status message");
+		}
 	}
 
 	/**
@@ -317,6 +317,7 @@ public final class BesterConnection : Thread
 
 					/* TODO: End this here */
 					isActive = false;
+					return;
 				}
 				else if(scopeField == Scope.CLIENT)
 				{
@@ -373,14 +374,7 @@ public final class BesterConnection : Thread
 						debugPrint("Authenticating the user failed, sending error and closing connection.");
 
 						/* Send error message to client */
-						try
-						{
-							sendStatus(2, JSONValue());
-						}
-						catch(NetworkException e)
-						{
-							debugPrint("Error saying goodbye to client who failed authentication");
-						}
+						sendStatus(2, JSONValue());
 
 						/* Stop the read/write loop */
 						isActive = false;
@@ -395,19 +389,25 @@ public final class BesterConnection : Thread
 				/* Set the connection type to `scopeField` */
 				connectionType = scopeField;
 			}
-			else
+			
+			/* Attempt to get the payload block and dispatch the message */
+			bool dispatchStatus;
+
+			try
 			{
-				/* TODO: Implement worker here */
+				/* Get the `payload` block */
+				JSONValue payloadBlock = jsonMessage["payload"];
+				debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
+
+				/* Dispatch the message */
+				dispatchStatus = dispatchMessage(connectionType, payloadBlock);
 			}
-
-
-			/* Get the payload block */
-			JSONValue payloadBlock = jsonMessage["payload"];
-			debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
-
-
-			/* Dispatch the message */
-			bool dispatchStatus = dispatchMessage(connectionType, payloadBlock);
+			catch(JSONException e)
+			{
+				/* If the `payload` block is not found */
+				sendStatus(3, JSONValue());
+				debugPrint("Missing `payload` block");
+			}
 
 			/* TODO: Catch error here and not inside dispatchMessage, gets rid of the need for this if statement */	
 			if(dispatchStatus)
