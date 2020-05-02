@@ -241,7 +241,7 @@ public final class BesterConnection : Thread
 	}
 
 	/* Send an error message to the client */
-	private void sendError(uint code, JSONValue data)
+	public void sendError(uint code, JSONValue data)
 	{
 		/* Construct an error message */
 		JSONValue errorMessage;
