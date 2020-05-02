@@ -12,6 +12,13 @@ def initialize():
     username = input("Enter your username to authenticate as: ")
 
 
+# TODO: Implement a test of `close`
+def testBuiltInCommands():
+    pass
+
+# Test whether the server responds with an error message
+# due to a message being sent without being authenticated
+# (as a client).
 def testAuthentication():
     # Connect to the bester daemon
     clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,6 +46,7 @@ def testAuthentication():
 
 def runTests():
     testAuthentication()
+    testBuiltInCommands()
 
 initialize()
 runTests()
