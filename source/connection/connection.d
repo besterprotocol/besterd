@@ -157,8 +157,13 @@ public final class BesterConnection : Thread
 		/* Lookup the payloadType handler */
 		MessageHandler chosenHandler = server.findHandler(payloadType);
 
+		/* Check if it is a dummy type */
+		if(cmp(payloadType, "dummy") == 0)
+		{
+			
+		}
 		/* Check if the payload is a built-in command */
-		if(cmp(payloadType, "builtin") == 0)
+		else if(cmp(payloadType, "builtin") == 0)
 		{
 			/* TODO: Implement me */
 			debugPrint("Built-in payload type");
