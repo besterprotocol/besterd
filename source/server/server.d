@@ -10,6 +10,7 @@ import std.string : cmp, strip;
 import handlers.handler : MessageHandler;
 import listeners.listener : BesterListener;
 import connection.connection : BesterConnection;
+import server.informer : BesterInformer;
 
 public final class BesterServer
 {
@@ -30,6 +31,9 @@ public final class BesterServer
 
 	/* Connected clients */
 	public BesterConnection[] clients;
+
+	/* The informer server */
+	private BesterInformer informer;
 
 	/**
 	 * Returns a list of BesterConnection objects that
@@ -110,15 +114,38 @@ public final class BesterServer
 		serverSocket.bind(parseAddress(bindAddress, listenPort));
 	}
 
-	/* Start listen loop */
-	public void run()
+	private void startListeners()
 	{
 		for(ulong i = 0; i < listeners.length; i++)
 		{
 			debugPrint("Starting listener \"" ~ listeners[i].toString() ~ "\"...");
 			listeners[i].start();
 		}
-		
+	}
+
+	/**
+	* Starts the BesterInformer.
+	*
+	* The `BesterInformer` allows handlers to query (out-of-band)
+	* information regarding this bester server.
+	*
+	* This is useful when the message handler requires additional
+	* information before it sends its final message response.
+	*/
+	private void startInformer()
+	{
+		informer = new BesterInformer();
+		informer.start();
+	}
+
+	/* Start listen loop */
+	public void run()
+	{
+		/* Start the listeners */
+		startListeners();
+
+		/* Start the informer */
+		startInformer();
 	}
 
 	/* Authenticate the user */
