@@ -46,7 +46,12 @@ public class BesterInformerClient : Thread
                 string username = commandBlock["data"].str();
                 result = isClient(server, username);
             }
-
+            /* TODO: Add any more new command here */
+            else
+            {
+                result = null;
+                return false;
+            }
 
             debugPrint(result.toPrettyString());
             return true;
