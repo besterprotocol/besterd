@@ -199,13 +199,8 @@ public final class BesterConnection : Thread
 
 			try
 			{
-				/* Provide the following "data" : ..., "from" : username */
-				JSONValue handlerInput;
-				handlerInput["data"] = payloadData;
-				handlerInput["from"] = username;
-
 				/* Provide the handler the message and let it process it and send us a reply */
-				HandlerResponse handlerResponse = chosenHandler.handleMessage(handlerInput);
+				HandlerResponse handlerResponse = chosenHandler.handleMessage(payloadData);
 
 				/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
 				debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());

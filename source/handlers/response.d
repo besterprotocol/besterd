@@ -167,19 +167,19 @@ public final class HandlerResponse
 			/* The fully response message to send back */
 			JSONValue clientPayload;
 
-			/* Set the `handlerName` field of the header block */
-			JSONValue handlerName;
-			handlerName["handlerName"] = handler.getPluginName();
+			// /* Set the `handlerName` field of the header block */
+			// JSONValue handlerName;
+			// handlerName["handlerName"] = handler.getPluginName();
 
 			/* Set the header of the response */
-			JSONValue headerBlock = handlerName;
+			JSONValue headerBlock;
 			clientPayload["header"] = headerBlock;
 
 			/* Set the payload of the response */
 			JSONValue payloadBlock;
 			payloadBlock["data"] = messageResponse["data"];
 			payloadBlock["type"] = handler.getPluginName();
-			clientPayload["data"] = payloadBlock;
+			clientPayload["payload"] = payloadBlock;
 
 
 			/**
@@ -240,7 +240,7 @@ public final class HandlerResponse
 
 			/* Set the header of the response */
 			JSONValue headerBlock;
-			headerBlock["handlerName"] = handler.getPluginName();
+			// headerBlock["handlerName"] = handler.getPluginName();
 			headerBlock["scope"] = "server";
 			serverPayload["header"] = headerBlock;
 
