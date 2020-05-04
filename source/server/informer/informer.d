@@ -29,6 +29,8 @@ public final class BesterInformer : Thread
         informerSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
         informerSocket.bind(new UnixAddress("bInformer"));
         informerSocket.listen(1); /* TODO: Value */
+
+        this.server = server;
     }
 
     private void worker()
