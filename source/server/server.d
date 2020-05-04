@@ -128,7 +128,7 @@ public final class BesterServer
 	*/
 	private void startInformer()
 	{
-		informer = new BesterInformer();
+		informer = new BesterInformer(this);
 		informer.start();
 	}
 
