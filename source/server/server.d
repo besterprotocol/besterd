@@ -10,7 +10,7 @@ import std.string : cmp, strip;
 import handlers.handler : MessageHandler;
 import listeners.listener : BesterListener;
 import connection.connection : BesterConnection;
-import server.informer : BesterInformer;
+import server.informer.informer : BesterInformer;
 
 public final class BesterServer
 {
