@@ -3,6 +3,7 @@ module server.informer.informer;
 import core.thread : Thread;
 import server.server : BesterServer;
 import std.socket;
+import server.informer.client : BesterInformerClient;
 
 /**
 * The `BesterInformer` allows handlers to query (out-of-band)
@@ -35,6 +36,9 @@ public final class BesterInformer : Thread
         while(1)
         {
             Socket handler = informerSocket.accept();
+
+            BesterInformerClient newInformer = new BesterInformerClient(server, handler);
+            newInformer.start();
         }
     }
 
