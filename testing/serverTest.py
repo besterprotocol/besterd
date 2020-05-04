@@ -8,14 +8,16 @@ def sendAs(username):
     d.connect(("127.0.0.1",2223))
 
     # First do it and authenticate
-    bys=json.dumps({"header":{"authentication":{"username":username, "password":"passwd"}, "scope":"client"},"payload":{"data":{"bruhMsg":input("Enter message naaier: ")},"type":"type1"}})
+    bys=json.dumps({"header":{"authentication":{"username":username, "password":"passwd"}, "scope":"client"},"payload":{"data":{"bfid":"111","command":input("Enter message naaier: ")
+    ,"account": {"username": "pielie", "password":"williepiel"}},
+    "type":"type1"}})
     print(len(bys), bys)
     d.send(len(bys).to_bytes(4, "little"))
     d.send(bys.encode())
 
     # Loop prompt and sending of message to tbk
     while True:
-        bys=json.dumps({"header":{"authentication":{"username":"ddd", "password":"passwd"}, "scope":"client"},"payload":{"data":{"bruhMsg":input("Enter message naaier: ")},"type":"type1"}})
+        bys=json.dumps({"header":{"authentication":{"username":"ddd", "password":"passwd"}, "scope":"client"},"payload":{"data":{"bfid":"111","command":input("Enter message naaier: ")},"type":"type1"}})
         print(len(bys), bys)
         d.send(len(bys).to_bytes(4, "little"))
         d.send(bys.encode())
