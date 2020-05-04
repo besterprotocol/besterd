@@ -125,12 +125,6 @@ public final class BesterServer
 
 	/**
 	* Starts the BesterInformer.
-	*
-	* The `BesterInformer` allows handlers to query (out-of-band)
-	* information regarding this bester server.
-	*
-	* This is useful when the message handler requires additional
-	* information before it sends its final message response.
 	*/
 	private void startInformer()
 	{
