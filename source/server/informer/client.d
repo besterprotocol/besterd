@@ -10,6 +10,13 @@ import std.string;
 import server.informer.utils;
 import std.conv : to;
 
+/**
+* Represents a handler's connection to the
+* Bester informer socket, runs as a seperate
+* thread with a read, dispatch, write loop
+* to handle commands and responses to the handler
+* from the server.
+*/
 public class BesterInformerClient : Thread
 {
     /* The associated `BesterServer` */
@@ -84,8 +91,7 @@ public class BesterInformerClient : Thread
                 string commandType = handlerCommand["command"]["type"].str();
                 debugPrint("Command: " ~ commandType);
 
-                
-
+                /* Dispatch to the correct command and return a status */
                 bool commandStatus = runCommand(handlerCommand["command"], runCommandData);
 
                 /* Set the data */
@@ -102,7 +108,6 @@ public class BesterInformerClient : Thread
 
             /* Send the response to the handler */
             sendMessage(handlerSocket, handlerResponse);
-            
         }
     }
 
