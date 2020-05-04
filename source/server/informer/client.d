@@ -39,6 +39,13 @@ public class BesterInformerClient : Thread
                 /* Create a JSON list of strings */
                 result = listClients(server);
             }
+            /* Check if the command is `isClient` */
+            else if(cmp(commandType, "isClient") == 0)
+            {
+                /* The username to match */
+                string username = commandBlock["data"].str();
+                result = isClient(server, username);
+            }
 
 
             debugPrint(result.toPrettyString());
@@ -49,6 +56,7 @@ public class BesterInformerClient : Thread
             return false;
         }
     }
+
     private void worker()
     {
         /* TODO: Implement me */
