@@ -24,6 +24,9 @@ private enum CommandType : ubyte
 	UNKNOWN
 }
 
+/**
+* Represents a response message from a handler.
+*/
 public final class HandlerResponse
 {
 	/* The message-handler's response */
@@ -142,6 +145,10 @@ public final class HandlerResponse
 		}
 	}
 
+	/**
+	* Executes the command. Either `sendClients`, `sendServers`
+	* or `sendHandler`.
+	*/
 	public void execute(BesterConnection originalRequester)
 	{
 		/* TODO: Implement me */
@@ -292,7 +299,6 @@ public final class HandlerResponse
 			string handler = messageResponse["header"]["command"]["data"].str();
 			debugPrint("Handler to forward to: " ~ handler);
 
-			
 			/* Lookup the payloadType handler */
 			MessageHandler chosenHandler = server.findHandler(handler);
 
@@ -301,10 +307,6 @@ public final class HandlerResponse
 
 			/* Execute the code (this here, recursive) */
 			handlerResponse.execute(originalRequester);
-			
-
-			/* TODO: Add me, shit is going to get recursive here */
-
 
 			debugPrint("SEND_HANDLER: Completed run");
 		}
