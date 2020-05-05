@@ -54,6 +54,7 @@ public final class BesterInformerClient : Thread
                 result = isClient(server, username);
             }
             /* TODO: Add any more new command here */
+            /* If the command is invalid */
             else
             {
                 result = null;
