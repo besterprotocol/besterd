@@ -17,7 +17,7 @@ import std.conv : to;
 * to handle commands and responses to the handler
 * from the server.
 */
-public class BesterInformerClient : Thread
+public final class BesterInformerClient : Thread
 {
     /* The associated `BesterServer` */
     private BesterServer server;
