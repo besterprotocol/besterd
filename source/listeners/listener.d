@@ -36,18 +36,24 @@ public class BesterListener : Thread
 		this.server = besterServer;
 	}
 
+	/**
+	* Set the server socket.
+	*/
 	public void setServerSocket(Socket serverSocket)
 	{
 		/* Set the server socket */
 		this.serverSocket = serverSocket;
 	}
 
-
-	/* Start listen loop */
+	/**
+	* Start listen loop.
+	*/
 	public void run()
 	{
 		serverSocket.listen(1); /* TODO: This value */
 		debugPrint("Server listen loop started");
+
+		/* Loop receive and dispatch connections whilst active */
 		while(active)
 		{
 			/* Wait for an incoming connection */
