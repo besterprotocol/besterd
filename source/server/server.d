@@ -208,6 +208,10 @@ public final class BesterServer
 		shutdownClients();
 	}
 
+	/**
+	* Loops through the list of `BesterListener`s and
+	* shuts each of them down.
+	*/
 	private void shutdownListeners()
 	{
 		/* Shutdown all the listeners */
@@ -217,6 +221,10 @@ public final class BesterServer
 		}
 	}
 
+	/**
+	* Loops through the list of `BesterConnection`s and
+	* shuts each of them down.
+	*/
 	private void shutdownClients()
 	{
 		/* Shutdown all the clients */
