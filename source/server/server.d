@@ -234,5 +234,3 @@ public final class BesterServer
 		}
 	}
 }
-
-
