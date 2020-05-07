@@ -69,5 +69,4 @@ public class BesterListener : Thread
 	{
 		active = false;
 	}
-	
 }
