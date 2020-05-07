@@ -192,6 +192,20 @@ public final class BesterServer
 
 		return isBuiltIn;
 	}
+
+
+
+
+	/**
+	* Stops the server.
+	*/
+	private void shutdown()
+	{
+		/* Stop the informer service */
+		informer.shutdown();
+
+
+	}
 }
 
 

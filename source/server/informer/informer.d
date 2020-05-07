@@ -23,6 +23,9 @@ public final class BesterInformer : Thread
     /* Whether or not the informer server is active */
     private bool active = true;
 
+    /* Connected clients */
+    private BesterInformerClient[] informerClients;
+
     /**
     * Constructs a new `BesterInformer` object
     * which will accept incoming connections
@@ -57,10 +60,11 @@ public final class BesterInformer : Thread
             Socket handlerSocket = informerSocket.accept();
 
             /**
-            * Create a new worker for the informer client and dispatch
-            * its worker thread.
+            * Create a new worker for the informer client, adds it
+            * to the client queue and dispatches its worker thread.
             */
             BesterInformerClient newInformer = new BesterInformerClient(server, handlerSocket);
+            informerClients ~= newInformer;
             newInformer.start();
         }
 
@@ -68,5 +72,12 @@ public final class BesterInformer : Thread
         informerSocket.close();
     }
 
+    public void shutdown()
+    {
+        for(ulong i = 0; i < informerClients.length; i++)
+        {
+            informerClients[i].shutdown();
+        }
+    }
 
 }

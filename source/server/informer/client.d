@@ -134,4 +134,9 @@ public final class BesterInformerClient : Thread
         handlerSocket.close();
     }
 
+
+    public void shutdown()
+    {
+        active = false;
+    }
 }
