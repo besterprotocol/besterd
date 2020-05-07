@@ -25,6 +25,9 @@ public final class BesterInformerClient : Thread
     /* The socket to the handler */
     private Socket handlerSocket;
 
+    /* If the connection is still active or not */
+    private bool active = true;
+
     this(BesterServer server, Socket handlerSocket)
     {
         super(&worker);
@@ -62,6 +65,13 @@ public final class BesterInformerClient : Thread
             {
                 result = getServerInfo(server);
             }
+            /* Check if the command is `quit` */
+            else if (cmp(commandType, "quit") == 0)
+            {
+                /* Set the connection to inactive */
+                active = false;
+                result = null; /* TODO: JSOn default value */
+            }
             /* TODO: Add any more new command here */
             /* If the command is invalid */
             else
@@ -82,7 +92,7 @@ public final class BesterInformerClient : Thread
     private void worker()
     {
         /* TODO: Implement me */
-        while(1)
+        while(active)
         {
             /* Receive a message */
             JSONValue handlerCommand;
@@ -119,6 +129,9 @@ public final class BesterInformerClient : Thread
             /* Send the response to the handler */
             sendMessage(handlerSocket, handlerResponse);
         }
+
+        /* Close the socket */
+        handlerSocket.close();
     }
 
 }
