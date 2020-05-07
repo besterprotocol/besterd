@@ -32,6 +32,8 @@ void main(string[] args)
 	/* TODO: Add usage check and arguments before this */
 
 	dprint("Main finished, remaining threads are keeping this open if it hangs");
+
+	/* TODO: Install signal handler so a shutdown can trigger shutdown */
 }
 
 private JSONValue getConfig(string configurationFilePath)
