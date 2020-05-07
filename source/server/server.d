@@ -12,27 +12,36 @@ import listeners.listener : BesterListener;
 import connection.connection : BesterConnection;
 import server.informer.informer : BesterInformer;
 
+/**
+* Represents an instance of a Bester server.
+*/
 public final class BesterServer
 {
 	/**
-	* Message handlers
-	*
-	* Associative array of `payloadType (string)`:`MessageHandler`
-	* TODO: Implement this
+	* Array of message handlers attached to
+	* this server.
 	*/
 	public MessageHandler[] handlers;
 
-	/* The server's socket */
+	/**
+	* The server's socket.
+	*/
 	private Socket serverSocket;
 	/* TODO: The above to be replaced */
 
-	/* Socket listeners for incoming connections */
+	/**
+	* Socket listeners for incoming connections.
+	*/
 	private BesterListener[] listeners;
 
-	/* Connected clients */
+	/**
+	* Connected clients.
+	*/
 	public BesterConnection[] clients;
 
-	/* The informer server */
+	/**
+	* The informer server.
+	*/
 	private BesterInformer informer;
 
 	/**
@@ -67,11 +76,19 @@ public final class BesterServer
 		return matchedUsers;
 	}
 
+	/**
+	* Adds a listener, `listener`, to this server's
+	* listener set.
+	*/
 	public void addListener(BesterListener listener)
 	{
 		this.listeners ~= listener;
 	}
 
+	/**
+	* Constructs a new BesterServer with the given
+	* JSON configuration.
+	*/
 	this(JSONValue config)
 	{
 		/* TODO: Bounds check and JSON type check */
@@ -83,6 +100,10 @@ public final class BesterServer
 		setupHandlers(config["handlers"]);
 	}
 
+	/**
+	* Given JSON, `handlerBlock`, this will setup the
+	* relevant message handlers.
+	*/
 	private void setupHandlers(JSONValue handlerBlock)
 	{
 		/* TODO: Implement me */
@@ -90,7 +111,9 @@ public final class BesterServer
 		handlers = MessageHandler.constructHandlers(this, handlerBlock);
 	}
 
-	/* Setup the server socket */
+	/**
+	* Setup the server socket.
+	*/
 	private void setupServerSocket(JSONValue networkBlock)
 	{
 		string bindAddress;
@@ -114,6 +137,9 @@ public final class BesterServer
 		serverSocket.bind(parseAddress(bindAddress, listenPort));
 	}
 
+	/**
+	* Starts all the listeners.
+	*/
 	private void startListeners()
 	{
 		for(ulong i = 0; i < listeners.length; i++)
@@ -132,7 +158,9 @@ public final class BesterServer
 		informer.start();
 	}
 
-	/* Start listen loop */
+	/**
+	Start listen loop.
+	*/
 	public void run()
 	{
 		/* Start the listeners */
@@ -142,7 +170,9 @@ public final class BesterServer
 		startInformer();
 	}
 
-	/* Authenticate the user */
+	/**
+	* Authenticate the user.
+	*/
 	public bool authenticate(string username, string password)
 	{
 		/* TODO: Implement me */
@@ -167,7 +197,9 @@ public final class BesterServer
 		return authed;
 	}
 
-	/* Returns the MessageHandler object of the requested type */
+	/**
+	* Returns the MessageHandler object of the requested type.
+	*/
 	public MessageHandler findHandler(string payloadType)
 	{
 		/* The found MessageHandler */
