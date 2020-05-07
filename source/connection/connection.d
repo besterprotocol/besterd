@@ -63,6 +63,12 @@ public final class BesterConnection : Thread
 		debugPrint("New client handler spawned for " ~ clientConnection.remoteAddress().toAddrString());
 	}
 
+	public void shutdown()
+	{
+		/* TODO: Send message posssibly, think about this for listeners and informers (etc.) too */
+		isActive = false;
+	}
+
 	override public string toString()
 	{
 		return username ~ "@" ~ clientConnection.remoteAddress().toAddrString();

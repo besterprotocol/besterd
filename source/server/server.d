@@ -193,9 +193,6 @@ public final class BesterServer
 		return isBuiltIn;
 	}
 
-
-
-
 	/**
 	* Stops the server.
 	*/
@@ -204,7 +201,29 @@ public final class BesterServer
 		/* Stop the informer service */
 		informer.shutdown();
 
+		/* Shutdown all the listeners */
+		shutdownListeners();
 
+		/* Shutdown all the clients */
+		shutdownClients();
+	}
+
+	private void shutdownListeners()
+	{
+		/* Shutdown all the listeners */
+		for(ulong i = 0; i < listeners.length; i++)
+		{
+			listeners[i].shutdown();
+		}
+	}
+
+	private void shutdownClients()
+	{
+		/* Shutdown all the clients */
+		for(ulong i = 0; i < clients.length; i++)
+		{
+			clients[i].shutdown();
+		}
 	}
 }
 

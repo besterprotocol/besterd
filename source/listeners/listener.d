@@ -24,6 +24,9 @@ public class BesterListener : Thread
 
 	/* The server's socket */
 	private Socket serverSocket;
+	
+	/* Whether or not the listener is active */
+	private bool active = true;
 
 	this(BesterServer besterServer)
 	{
@@ -46,7 +49,7 @@ public class BesterListener : Thread
 	{
 		serverSocket.listen(1); /* TODO: This value */
 		debugPrint("Server listen loop started");
-		while(true)
+		while(active)
 		{
 			/* Wait for an incoming connection */
 			Socket clientConnection = serverSocket.accept();
@@ -58,6 +61,14 @@ public class BesterListener : Thread
 			/* Add this client to the list of connected clients */
 			server.clients ~= besterConnection;
 		}
+
+		/* Close the socket */
+		serverSocket.close();
+	}
+
+	public void shutdown()
+	{
+		active = false;
 	}
 	
 }
