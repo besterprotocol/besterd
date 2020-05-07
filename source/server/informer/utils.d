@@ -3,6 +3,8 @@ module server.informer.utils;
 import server.server : BesterServer;
 import connection.connection : BesterConnection;
 import std.string : cmp;
+import std.json : JSONValue;
+import std.conv : to;
 
 /**
 * This functions returns `string[]` where each element
@@ -42,4 +44,20 @@ public static bool isClient(BesterServer server, string username)
     }
 
     return false;
+}
+
+/**
+* This function returns server information.
+*/
+public static JSONValue getServerInfo(BesterServer server)
+{
+    /* Server information */
+    JSONValue serverInfo;
+
+    /* TODO: Load additional information from `server.conf`'s `admin[info]` block */
+
+    /* TODO: Use as is number, no string */
+    serverInfo["clientCount"] = to!(string)(server.clients.length);
+
+    return serverInfo;
 }
