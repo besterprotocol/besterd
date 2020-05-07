@@ -159,7 +159,7 @@ public final class BesterServer
 	}
 
 	/**
-	Start listen loop.
+	* Start listen loop.
 	*/
 	public void run()
 	{
