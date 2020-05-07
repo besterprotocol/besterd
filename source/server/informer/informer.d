@@ -20,6 +20,13 @@ public final class BesterInformer : Thread
     /* Informer socket */
     private Socket informerSocket;
 
+    /**
+    * Constructs a new `BesterInformer` object
+    * which will accept incoming connections
+    * (upon calling `.start`) from handlers,
+    * over a UNIX domain socket, requesting
+    * server information.
+    */
     this(BesterServer server)
     {
         /* Set the worker function */
@@ -30,6 +37,7 @@ public final class BesterInformer : Thread
         informerSocket.bind(new UnixAddress("bInformer"));
         informerSocket.listen(1); /* TODO: Value */
 
+        /* Set the associated BesterServer */
         this.server = server;
     }
 
