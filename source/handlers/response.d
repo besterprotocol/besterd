@@ -29,7 +29,9 @@ private enum CommandType : ubyte
 */
 public final class HandlerResponse
 {
-	/* The message-handler's response */
+	/**
+	* The message-handler's response.
+	*/
 	private JSONValue messageResponse;
 
 	/* The command to be executed */
@@ -41,6 +43,10 @@ public final class HandlerResponse
 	/* The associated server */
 	private BesterServer server;	
 
+	/**
+	* Constructs a new `HandlerResponse` object that represents the
+	* message handler's response message and the execution of it.
+	*/
 	this(BesterServer server, MessageHandler handler, JSONValue messageResponse)
 	{
 		/* Set the message-handler's response message */
@@ -322,6 +328,9 @@ public final class HandlerResponse
 	}
 }
 
+/**
+* Represents an error in handling the response.
+*/
 public final class ResponseError : BesterException
 {
 
