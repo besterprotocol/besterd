@@ -45,6 +45,11 @@ public final class BesterServer
 	private BesterInformer informer;
 
 	/**
+	* Admin information regarding this server.
+	*/
+	private JSONValue adminInfo;
+
+	/**
 	 * Returns a list of BesterConnection objects that
 	 * match the usernames provided.
 	 *
@@ -264,5 +269,10 @@ public final class BesterServer
 		{
 			clients[i].shutdown();
 		}
+	}
+
+	public JSONValue getAdminInfo()
+	{
+		return adminInfo;
 	}
 }

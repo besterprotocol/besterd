@@ -199,6 +199,8 @@ public final class BesterInformerClient : Thread
 
         /* TODO: Use as is number, no string */
         serverInfo["clientCount"] = to!(string)(server.clients.length);
+        serverInfo["adminInfo"] = server.getAdminInfo();
+        //serverInfo["listeners"] = server.
 
         return serverInfo;
     }

@@ -11,14 +11,13 @@ import handlers.handler;
 import server.server;
 import connection.connection;
 
-
-/* TODO: Implement me */
-/* All this will do is accept incoming connections
- * but they will be pooled in the BesterServer.
- */
+/**
+* Represents a server listener which is a method
+* by which conections to the server (client or server)
+* can be made.
+*/
 public class BesterListener : Thread
 {
-
 	/* The associated BesterServer */
 	private BesterServer server;
 
