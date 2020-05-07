@@ -32,6 +32,10 @@ public final class BesterInformerClient : Thread
         this.handlerSocket = handlerSocket;
     }
 
+    /**
+    * Run's the command specified in `commandBlock` and sets the
+    * response in the variable pointed to by `result`.
+    */
     private bool runCommand(JSONValue commandBlock, ref JSONValue result)
     {
         try
@@ -52,6 +56,11 @@ public final class BesterInformerClient : Thread
                 /* The username to match */
                 string username = commandBlock["data"].str();
                 result = isClient(server, username);
+            }
+            /* Check if the command is `serverInfo` */
+            else if(cmp(commandType, "serverInfo") == 0)
+            {
+                result = getServerInfo(server);
             }
             /* TODO: Add any more new command here */
             /* If the command is invalid */
