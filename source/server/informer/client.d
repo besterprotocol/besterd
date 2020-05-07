@@ -7,8 +7,8 @@ import bmessage;
 import std.json;
 import utils.debugging;
 import std.string;
-import server.informer.utils;
 import std.conv : to;
+import connection.connection : BesterConnection;
 
 /**
 * Represents a handler's connection to the
@@ -28,6 +28,11 @@ public final class BesterInformerClient : Thread
     /* If the connection is still active or not */
     private bool active = true;
 
+    /**
+    * Constructs a new `BesterInformerClient` with the
+    * associated BesterServer, `server`, and handler
+    * socket, `handlerSocket`.
+    */
     this(BesterServer server, Socket handlerSocket)
     {
         super(&worker);
@@ -134,9 +139,67 @@ public final class BesterInformerClient : Thread
         handlerSocket.close();
     }
 
-
+    /**
+    * Shutdown the informer client.
+    */
     public void shutdown()
     {
         active = false;
+    }
+
+    /**
+    * This functions returns `string[]` where each element
+    * contains the username of the locally connected client.
+    */
+    public static string[] listClients(BesterServer server)
+    {
+        string[] clientList;
+
+        for(ulong i = 0; i < server.clients.length; i++)
+        {
+            /* Make sure only to add client connections */
+            BesterConnection connection = server.clients[i];
+            if(connection.getType() == BesterConnection.Scope.CLIENT)
+            {
+                clientList ~= [connection.getCredentials()[0]];
+            }
+        }
+
+        return clientList;
+    }
+
+    /**
+    * This function returns `true` if the provided username
+    * matches a locally connected client, `false` otherwise.
+    */
+    public static bool isClient(BesterServer server, string username)
+    {
+        for(ulong i = 0; i < server.clients.length; i++)
+        {
+            /* Make sure only to match client connections */
+            BesterConnection connection = server.clients[i];
+            if(connection.getType() == BesterConnection.Scope.CLIENT && cmp(connection.getCredentials[0], username))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+    * This function returns server information.
+    */
+    public static JSONValue getServerInfo(BesterServer server)
+    {
+        /* Server information */
+        JSONValue serverInfo;
+
+        /* TODO: Load additional information from `server.conf`'s `admin[info]` block */
+
+        /* TODO: Use as is number, no string */
+        serverInfo["clientCount"] = to!(string)(server.clients.length);
+
+        return serverInfo;
     }
 }
