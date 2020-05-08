@@ -110,6 +110,13 @@ public final class BesterServer
 		/* TODO: Bounds check and JSON type check */
 		debugPrint("Setting up message handlers...");
 		setupHandlers(config["handlers"]);
+		setupDatabase(config["database"]);
+	}
+
+	/* TODO: Add comment, implement me */
+	private void setupDatabase(JSONValue databaseBlock)
+	{
+		
 	}
 
 	/**
