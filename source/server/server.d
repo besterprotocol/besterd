@@ -215,7 +215,7 @@ public final class BesterServer
 		bool authed = true;
 
 		/* Strip the username of whitespace (TODO: Should we?) */
-		username = strip(username);
+		//username = strip(username);
 
 		/* Make sure username and password are not empty */
 		if(cmp(username, "") != 0 && cmp(password, "") != 0)
@@ -226,6 +226,8 @@ public final class BesterServer
 		{
 			authed = false;
 		}
+
+		debugPrint("Auth" ~ to!(string)(authed));
 
 		return authed;
 	}

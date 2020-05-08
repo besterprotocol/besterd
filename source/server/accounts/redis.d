@@ -2,6 +2,7 @@ module server.accounts.redis;
 
 import vibe.vibe;
 import server.accounts.base : BesterDataStore;
+import utils.debugging : debugPrint;
 
 /**
 * This represents a Redis datastore for the Bester
@@ -31,6 +32,7 @@ public final class RedisDataStore : BesterDataStore
         redisClient = new RedisClient(address, port);
         redisDatabase = redisClient.getDatabase(0);
         // createAccount("deavmi", "poes");
+        
     }
 
     override public bool userExists(string username)
@@ -41,11 +43,11 @@ public final class RedisDataStore : BesterDataStore
 
     override public bool authenticate(string username, string password)
     {
-         /* TODO: Implement me */
-
+        debugPrint(redisClient.info());
+        debugPrint(redisDatabase.keys("*"));
         /* Check if a key exists with the `username` */
         bool accountExists = redisDatabase.exists(username);
-
+        debugPrint(accountExists);
         if(accountExists)
         {
             /**
