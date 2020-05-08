@@ -220,7 +220,7 @@ public final class BesterServer
 		/* Make sure username and password are not empty */
 		if(cmp(username, "") != 0 && cmp(password, "") != 0)
 		{
-
+			authed = dataStore.authenticate(username, password);
 		}
 		else
 		{
