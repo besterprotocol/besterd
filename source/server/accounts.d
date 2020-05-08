@@ -17,5 +17,7 @@ public abstract class BesterDataStore
     */
     public abstract bool userExists(string username);
 
+    public abstract bool authenticate(string username, string password);
+
     public abstract void shutdown();
 }

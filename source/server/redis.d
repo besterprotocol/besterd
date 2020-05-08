@@ -47,7 +47,16 @@ public final class RedisDatastore : BesterDataStore
             */
             if(redisDatabase.hexists(username, "password"))
             {
-                
+                /* Get the password sub-field */
+                string passwordDB = redisDatabase.hget(username, "password");
+                if(cmp(password, passwordDB) == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -58,6 +67,9 @@ public final class RedisDatastore : BesterDataStore
         {
             /* TODO: Raise exception for non-existent account */
         }
+
+        /* TODO: Remove */
+        return false;
     }
 
     override public void createAccount(string username, string password)
