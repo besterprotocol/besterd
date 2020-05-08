@@ -32,10 +32,55 @@ public final class RedisDatastore : BesterDataStore
         redisDatabase = redisClient.getDatabase(0);
     }
 
+    override public bool authenticate(string username, string password)
+    {
+         /* TODO: Implement me */
+
+        /* Check if a key exists with the `username` */
+        bool accountExists = redisDatabase.exists(username);
+
+        if(accountExists)
+        {
+            /**
+            * Check within the key if the subkey and value pair exists.
+            * `(username) [password: <password>], ...`
+            */
+            if(redisDatabase.hexists(username, "password"))
+            {
+                
+            }
+            else
+            {
+                /* TODO: Raise exception for missing password sub-key */
+            }
+        }
+        else
+        {
+            /* TODO: Raise exception for non-existent account */
+        }
+    }
+
     override public void createAccount(string username, string password)
     {
         /* TODO: Implement me */
-        
+
+        /* Check if a key exists with the `username` */
+        bool accountExists = redisDatabase.exists(username);
+
+        if(!accountExists)
+        {
+            /**
+            * Create the new account.
+            * This involves creating a new key named `username`
+            * with a field named `"password"` matching to the value
+            * of `password`.
+            */
+            redisDatabase.hset(username, "password", password);
+        }
+        else
+        {
+            /* TODO: Raise exception for an already existing account */
+        }
     }
 
     public void f()
