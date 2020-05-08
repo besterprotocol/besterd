@@ -5,7 +5,8 @@
 	],
 	"copyright": "Copyright © 2020, Tristan B. Kildaire",
 	"dependencies": {
-		"bformat": "~>1.0.4"
+		"bformat": "~>1.0.4",
+		"vibe-d": "~>0.8.6"
 	},
 	"description": "Bester protocol daemon. ",
 	"license": "AGPL v3",
