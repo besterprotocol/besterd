@@ -1,4 +1,4 @@
-module server.accounts;
+module server.accounts.base;
 
 /**
 * This represents the accounts management system of

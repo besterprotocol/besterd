@@ -1,13 +1,13 @@
-module server.redis;
+module server.accounts.redis;
 
 import vibe.vibe;
-import server.accounts : BesterDataStore;
+import server.accounts.base : BesterDataStore;
 
 /**
 * This represents a Redis datastore for the Bester
 * server's account management system.
 */
-public final class RedisDatastore : BesterDataStore
+public final class RedisDataStore : BesterDataStore
 {
 
     /**
@@ -30,6 +30,13 @@ public final class RedisDatastore : BesterDataStore
     {
         redisClient = new RedisClient(address, port);
         redisDatabase = redisClient.getDatabase(0);
+        // createAccount("deavmi", "poes");
+    }
+
+    override public bool userExists(string username)
+    {
+        /* TODO: Implement me */
+        return true;
     }
 
     override public bool authenticate(string username, string password)
