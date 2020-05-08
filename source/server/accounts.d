@@ -16,4 +16,6 @@ public abstract class BesterDataStore
     * Check if the user, `username`, exists in the database.
     */
     public abstract bool userExists(string username);
+
+    public abstract void shutdown();
 }

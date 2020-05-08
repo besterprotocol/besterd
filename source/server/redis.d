@@ -43,7 +43,7 @@ public final class RedisDatastore : BesterDataStore
 
     }
 
-    public void shutdown()
+    override public void shutdown()
     {
         /* TODO: Should we shutdown the server? */
         redisClient.shutdown();

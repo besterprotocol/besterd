@@ -250,6 +250,9 @@ public final class BesterServer
 
 		/* Shutdown all the clients */
 		shutdownClients();
+
+		/* Shutdown the datastore */
+		dataStore.shutdown();
 	}
 
 	/**
