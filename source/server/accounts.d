@@ -1,7 +1,5 @@
 module server.accounts;
 
-import vibe.vibe;
-
 /**
 * This represents the accounts management system of
 * the server. It is only an abstract class.
@@ -13,4 +11,9 @@ public abstract class BesterDataStore
     * `password`.
     */
     public abstract void createAccount(string username, string password);
+
+    /**
+    * Check if the user, `username`, exists in the database.
+    */
+    public abstract bool userExists(string username);
 }

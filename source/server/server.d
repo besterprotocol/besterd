@@ -11,6 +11,7 @@ import handlers.handler : MessageHandler;
 import listeners.listener : BesterListener;
 import connection.connection : BesterConnection;
 import server.informer.informer : BesterInformer;
+import server.accounts : BesterDataStore;
 
 /**
 * Represents an instance of a Bester server.
@@ -48,6 +49,11 @@ public final class BesterServer
 	* Admin information regarding this server.
 	*/
 	private JSONValue adminInfo;
+
+	/**
+	* The datastore for the account information.
+	*/
+	private BesterDataStore dataStore;
 
 	/**
 	 * Returns a list of BesterConnection objects that
