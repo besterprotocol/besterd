@@ -8,5 +8,9 @@ import vibe.vibe;
 */
 public abstract class BesterDataStore
 {
-
+    /**
+    * Creates a new account with the given `username` and
+    * `password`.
+    */
+    public abstract void createAccount(string username, string password);
 }
