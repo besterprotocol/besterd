@@ -1,10 +1,13 @@
 module listeners.types;
 
-import listeners.listener;
-import server.server;
-
+import listeners.listener : BesterListener;
+import server.server : BesterServer;
 import std.socket : Socket, Address, AddressFamily, SocketType;
 
+/**
+* Represents a sream socket listener over UNIX
+* domain sockets.
+*/
 public final class UNIXListener : BesterListener
 {
 	this(BesterServer besterServer, Address address)
@@ -27,6 +30,10 @@ public final class UNIXListener : BesterListener
 	}
 }
 
+/**
+* Represents a stream socket listener over TCP
+* on IPv4.
+*/
 public final class TCP4Listener : BesterListener
 {
 	this(BesterServer besterServer, Address address)
@@ -49,6 +56,10 @@ public final class TCP4Listener : BesterListener
 	}
 }
 
+/**
+* Represents a stream socket listener over TCP
+* on IPv6.
+*/
 public final class TCP6Listener : BesterListener
 {
 	this(BesterServer besterServer, Address address)
