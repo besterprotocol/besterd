@@ -129,20 +129,20 @@ public final class BesterServer
 			ushort port = to!(ushort)(redisBlock["port"].str());
 
 			/* Create the redis datastore */
-			dataStore = new RedisDataStore(address, port);
-			dataStore.createAccount("bruh","fdgdg");
-			writeln("brdfsfdhjk: ", dataStore.userExists("bruh"));
-			writeln("brfdddhjk: ", dataStore.userExists("brsdfuh"));
-			writeln("brfddhjk: ", dataStore.userExists("bradsfuh"));
-			writeln("brfddhjk: ", dataStore.userExists("brasuh"));
-			writeln("brfdhdgfgsfdsgfdgfdsjk: ", dataStore.userExists("brdfsauh"));
-			writeln("brfdhjk: ", dataStore.userExists("brfdsasuh"));
-			writeln("brfdhjk: ", dataStore.userExists("brasuh"));
-			writeln("brfdhjk: ", dataStore.userExists("brsauh"));
-			writeln("brfdhjk: ", dataStore.userExists("brsaasuh"));
-			writeln("brfdhjk: ", dataStore.userExists("brusaasfh"));
-			writeln("fhdjfhjdf");
-			dataStore.authenticate("dd","dd");
+			// dataStore = new RedisDataStore(address, port);
+			// dataStore.createAccount("bruh","fdgdg");
+			// writeln("brdfsfdhjk: ", dataStore.userExists("bruh"));
+			// writeln("brfdddhjk: ", dataStore.userExists("brsdfuh"));
+			// writeln("brfddhjk: ", dataStore.userExists("bradsfuh"));
+			// writeln("brfddhjk: ", dataStore.userExists("brasuh"));
+			// writeln("brfdhdgfgsfdsgfdgfdsjk: ", dataStore.userExists("brdfsauh"));
+			// writeln("brfdhjk: ", dataStore.userExists("brfdsasuh"));
+			// writeln("brfdhjk: ", dataStore.userExists("brasuh"));
+			// writeln("brfdhjk: ", dataStore.userExists("brsauh"));
+			// writeln("brfdhjk: ", dataStore.userExists("brsaasuh"));
+			// writeln("brfdhjk: ", dataStore.userExists("brusaasfh"));
+			// writeln("fhdjfhjdf");
+			// dataStore.authenticate("dd","dd");
 			
 		}
 	}
