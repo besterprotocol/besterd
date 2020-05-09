@@ -27,6 +27,9 @@ public class BesterListener : Thread
 	/* Whether or not the listener is active */
 	private bool active = true;
 
+	/* the address of this listener */
+	protected Address address;
+
 	this(BesterServer besterServer)
 	{
 		/* Set the function address to be called as the worker function */
@@ -43,6 +46,9 @@ public class BesterListener : Thread
 	{
 		/* Set the server socket */
 		this.serverSocket = serverSocket;
+
+		/* Set the address */
+		address = serverSocket.localAddress();
 	}
 
 	/**

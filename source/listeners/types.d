@@ -19,6 +19,12 @@ public final class UNIXListener : BesterListener
 		unixSocket.bind(address);
 		return unixSocket;
 	}
+
+	override public string toString()
+	{
+		string address = "unix://"~super.address.toAddrString();
+		return address;
+	}
 }
 
 public final class TCP4Listener : BesterListener
@@ -35,6 +41,12 @@ public final class TCP4Listener : BesterListener
 		tcp4Socket.bind(address);
 		return tcp4Socket;
 	}
+
+	override public string toString()
+	{
+		string address = "tcp4://"~super.address.toAddrString();
+		return address;
+	}
 }
 
 public final class TCP6Listener : BesterListener
@@ -50,6 +62,12 @@ public final class TCP6Listener : BesterListener
 		Socket tcp6Socket = new Socket(AddressFamily.INET6, SocketType.STREAM);
 		tcp6Socket.bind(address);
 		return tcp6Socket;
+	}
+
+	override public string toString()
+	{
+		string address = "tcp6://"~super.address.toAddrString();
+		return address;
 	}
 }
 

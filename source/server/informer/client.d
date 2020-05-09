@@ -201,7 +201,7 @@ public final class BesterInformerClient : Thread
         for(ulong i = 0; i < server.listeners.length; i++)
         {
             JSONValue listener;
-            listener["address"] = server.listeners[i].getServerSocket().localAddress().toAddrString();
+            listener["address"] = server.listeners[i].toString();
             listenersBlock["listener"~to!(string)(i)] = listener;
         }
         
