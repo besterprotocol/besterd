@@ -34,7 +34,7 @@ public final class BesterServer
 	/**
 	* Socket listeners for incoming connections.
 	*/
-	private BesterListener[] listeners;
+	public BesterListener[] listeners;
 
 	/**
 	* Connected clients.

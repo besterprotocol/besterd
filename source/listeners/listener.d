@@ -46,6 +46,14 @@ public class BesterListener : Thread
 	}
 
 	/**
+	* Get the server socket.
+	*/
+	public Socket getServerSocket()
+	{
+		return serverSocket;
+	}
+
+	/**
 	* Start listen loop.
 	*/
 	public void run()

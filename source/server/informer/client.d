@@ -195,12 +195,23 @@ public final class BesterInformerClient : Thread
         /* Server information */
         JSONValue serverInfo;
 
+        /* Create the `listeners` block */
+        JSONValue listenersBlock;
+
+        for(ulong i = 0; i < server.listeners.length; i++)
+        {
+            JSONValue listener;
+            listener["address"] = server.listeners[i].getServerSocket().localAddress().toAddrString();
+            listenersBlock["listener"~to!(string)(i)] = listener;
+        }
+        
+
         /* TODO: Load additional information from `server.conf`'s `admin[info]` block */
 
         /* TODO: Use as is number, no string */
         serverInfo["clientCount"] = to!(string)(server.clients.length);
         serverInfo["adminInfo"] = server.getAdminInfo();
-        //serverInfo["listeners"] = server.
+        serverInfo["listeners"] = listenersBlock;
 
         return serverInfo;
     }
