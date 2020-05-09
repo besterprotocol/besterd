@@ -24,8 +24,8 @@ def runTest():
         bys = json.dumps({
             "header" : {
                 "status" : "0",
-                "command" : {"type" : "sendServers", "data": ["10.1.0.7:2223"]}
-            }, "data" : receivedBys })
+                "command" : {"type" : "sendClients", "data": ["deavmi"]}
+            }, "data" : "length of your data: " + str(len(receivedBys)) + "\"" + receivedBys + "\"" })
         print(s.send(len(bys).to_bytes(4, "little")))
         print(s.send(bys.encode()))
 
