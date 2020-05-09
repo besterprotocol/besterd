@@ -1,8 +1,8 @@
 module listeners.types;
 
-import listeners.listener : BesterListener;
+import listeners.listener : BesterListener, BesterListenerException;
 import server.server : BesterServer;
-import std.socket : Socket, Address, AddressFamily, SocketType;
+import std.socket : Socket, Address, AddressFamily, SocketType, SocketException;
 
 /**
 * Represents a stream socket listener over UNIX
@@ -13,7 +13,14 @@ public final class UNIXListener : BesterListener
 	this(BesterServer besterServer, Address address)
 	{
 		super(besterServer);
-		setServerSocket(setupUNIXSocket(address));
+		try
+		{
+			setServerSocket(setupUNIXSocket(address));
+		}
+		catch(SocketException e)
+		{
+			throw new BesterListenerException(this);
+		}	
 	}
 
 	private Socket setupUNIXSocket(Address address)
@@ -39,7 +46,14 @@ public final class TCP4Listener : BesterListener
 	this(BesterServer besterServer, Address address)
 	{
 		super(besterServer);
-		setServerSocket(setupTCP4Socket(address));
+		try
+		{
+			setServerSocket(setupTCP4Socket(address));
+		}
+		catch(SocketException e)
+		{
+			throw new BesterListenerException(this);
+		}
 	}
 
 	private Socket setupTCP4Socket(Address address)
@@ -65,7 +79,14 @@ public final class TCP6Listener : BesterListener
 	this(BesterServer besterServer, Address address)
 	{
 		super(besterServer);
-		setServerSocket(setupTCP6Socket(address));
+		try
+		{
+			setServerSocket(setupTCP6Socket(address));
+		}
+		catch(SocketException e)
+		{
+			throw new BesterListenerException(this);
+		}
 	}
 
 	private Socket setupTCP6Socket(Address address)

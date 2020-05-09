@@ -6,7 +6,7 @@ import std.socket : SocketOSException, parseAddress, UnixAddress;
 import utils.debugging : dprint;
 import std.stdio : File, writeln;
 import std.json : parseJSON, JSONValue;
-import listeners.listener : BesterListener;
+import listeners.listener : BesterListener, BesterListenerException;
 import listeners.types : TCP4Listener, TCP6Listener, UNIXListener;
 import std.file : exists;
 
@@ -67,28 +67,36 @@ private BesterListener[] getListeners(BesterServer server, JSONValue networkBloc
 
 	/* TODO: Error handling and get keys and clean up for formality */
 
-	/* Look for IPv4 TCP block */
-	JSONValue inet4TCPBlock = networkBlock["tcp4"];
-	dprint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
-	string inet4Address = inet4TCPBlock["address"].str();
-	ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
-	TCP4Listener tcp4Listener = new TCP4Listener(server, parseAddress(inet4Address, inet4Port));
-	listeners ~= tcp4Listener;
+	try
+	{
+		/* Look for IPv4 TCP block */
+		JSONValue inet4TCPBlock = networkBlock["tcp4"];
+		dprint("<<< IPv4 TCP Block >>>\n" ~ inet4TCPBlock.toPrettyString());
+		string inet4Address = inet4TCPBlock["address"].str();
+		ushort inet4Port = to!(ushort)(inet4TCPBlock["port"].str());
+		TCP4Listener tcp4Listener = new TCP4Listener(server, parseAddress(inet4Address, inet4Port));
+		listeners ~= tcp4Listener;
 
-	/* Look for IPv6 TCP block */
-	JSONValue inet6TCPBlock = networkBlock["tcp6"];
-	dprint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
-	string inet6Address = inet6TCPBlock["address"].str();
-	ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
-	TCP6Listener tcp6Listener = new TCP6Listener(server, parseAddress(inet6Address, inet6Port));
-	listeners ~= tcp6Listener;
+		/* Look for IPv6 TCP block */
+		JSONValue inet6TCPBlock = networkBlock["tcp6"];
+		dprint("<<< IPv6 TCP Block >>>\n" ~ inet6TCPBlock.toPrettyString());
+		string inet6Address = inet6TCPBlock["address"].str();
+		ushort inet6Port = to!(ushort)(inet6TCPBlock["port"].str());
+		TCP6Listener tcp6Listener = new TCP6Listener(server, parseAddress(inet6Address, inet6Port));
+		listeners ~= tcp6Listener;
 
-	/* Look for UNIX Domain block */
-	JSONValue unixDomainBlock = networkBlock["unix"];
-	dprint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
-	string unixAddress = unixDomainBlock["address"].str();
-//	UNIXListener unixListener = new UNIXListener(server, new UnixAddress(unixAddress));
-//	listeners ~= unixListener;
+		/* Look for UNIX Domain block */
+		JSONValue unixDomainBlock = networkBlock["unix"];
+		dprint("<<< UNIX Domain Block >>>\n" ~ unixDomainBlock.toPrettyString());
+		string unixAddress = unixDomainBlock["address"].str();
+		// UNIXListener unixListener = new UNIXListener(server, new UnixAddress(unixAddress));
+		// listeners ~= unixListener;
+	}
+	catch(BesterListenerException e)
+	{
+
+	}
+	
 
 	return listeners;
 }

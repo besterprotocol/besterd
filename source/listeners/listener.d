@@ -10,6 +10,7 @@ import std.string : cmp;
 import handlers.handler;
 import server.server;
 import connection.connection;
+import base.types : BesterException;
 
 /**
 * Represents a server listener which is a method
@@ -46,9 +47,6 @@ public class BesterListener : Thread
 	{
 		/* Set the server socket */
 		this.serverSocket = serverSocket;
-
-		/* Set the address */
-		address = serverSocket.localAddress();
 	}
 
 	/**
@@ -88,5 +86,13 @@ public class BesterListener : Thread
 	public void shutdown()
 	{
 		active = false;
+	}
+}
+
+public final class BesterListenerException : BesterException
+{
+	this(BesterListener e)
+	{
+		super("Could not bind to: " ~ e.toString());
 	}
 }
