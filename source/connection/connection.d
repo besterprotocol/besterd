@@ -166,7 +166,7 @@ public final class BesterConnection : Thread
 		/* Check if it is a dummy type */
 		if(cmp(payloadType, "dummy") == 0)
 		{
-			
+			/* TODO: Continue here, format think for everything */
 		}
 		/* Check if the payload is a built-in command */
 		else if(cmp(payloadType, "builtin") == 0)
@@ -229,6 +229,8 @@ public final class BesterConnection : Thread
 				/* TODO: Remove me */
 				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
 				dispatchStatus = false;
+
+				/* TODO: Add call to `sendStatus` here as the handler failed */
 			}
 			
 			debugPrint("Handler section done (for client)");
