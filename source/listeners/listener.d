@@ -47,6 +47,9 @@ public class BesterListener : Thread
 	{
 		/* Set the server socket */
 		this.serverSocket = serverSocket;
+
+		/* Set the address */
+		address = serverSocket.localAddress();
 	}
 
 	/**
