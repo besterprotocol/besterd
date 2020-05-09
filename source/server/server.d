@@ -130,6 +130,20 @@ public final class BesterServer
 
 			/* Create the redis datastore */
 			dataStore = new RedisDataStore(address, port);
+			dataStore.createAccount("bruh","fdgdg");
+			writeln("brdfsfdhjk: ", dataStore.userExists("bruh"));
+			writeln("brfdddhjk: ", dataStore.userExists("brsdfuh"));
+			writeln("brfddhjk: ", dataStore.userExists("bradsfuh"));
+			writeln("brfddhjk: ", dataStore.userExists("brasuh"));
+			writeln("brfdhdgfgsfdsgfdgfdsjk: ", dataStore.userExists("brdfsauh"));
+			writeln("brfdhjk: ", dataStore.userExists("brfdsasuh"));
+			writeln("brfdhjk: ", dataStore.userExists("brasuh"));
+			writeln("brfdhjk: ", dataStore.userExists("brsauh"));
+			writeln("brfdhjk: ", dataStore.userExists("brsaasuh"));
+			writeln("brfdhjk: ", dataStore.userExists("brusaasfh"));
+			writeln("fhdjfhjdf");
+			dataStore.authenticate("dd","dd");
+			
 		}
 	}
 
@@ -220,7 +234,8 @@ public final class BesterServer
 		/* Make sure username and password are not empty */
 		if(cmp(username, "") != 0 && cmp(password, "") != 0)
 		{
-			authed = dataStore.authenticate(username, password);
+			/* TODO: Fix me */
+			//authed = dataStore.authenticate(username, password);
 		}
 		else
 		{

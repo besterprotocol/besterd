@@ -38,7 +38,8 @@ public final class RedisDataStore : BesterDataStore
     override public bool userExists(string username)
     {
         /* TODO: Implement me */
-        return true;
+        return redisDatabase.exists(username);
+        // return true;
     }
 
     override public bool authenticate(string username, string password)
