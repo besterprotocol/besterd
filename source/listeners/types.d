@@ -5,7 +5,7 @@ import server.server : BesterServer;
 import std.socket : Socket, Address, AddressFamily, SocketType;
 
 /**
-* Represents a sream socket listener over UNIX
+* Represents a stream socket listener over UNIX
 * domain sockets.
 */
 public final class UNIXListener : BesterListener
