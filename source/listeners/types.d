@@ -44,7 +44,7 @@ public final class TCP4Listener : BesterListener
 
 	override public string toString()
 	{
-		string address = "tcp4://"~super.address.toAddrString();
+		string address = "tcp4://"~super.address.toAddrString()~":"~super.address.toPortString();
 		return address;
 	}
 }
@@ -66,7 +66,7 @@ public final class TCP6Listener : BesterListener
 
 	override public string toString()
 	{
-		string address = "tcp6://"~super.address.toAddrString();
+		string address = "tcp6://"~super.address.toAddrString()~":"~super.address.toPortString();
 		return address;
 	}
 }
