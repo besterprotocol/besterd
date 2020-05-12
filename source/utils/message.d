@@ -36,3 +36,6 @@ public void sendMessage(Socket recipient, JSONValue jsonMessage)
 		throw new NetworkException(recipient);
 	}
 }
+
+
+/* TODO: Hash message: Next-gen implementation */

@@ -77,7 +77,6 @@ public final class BesterInformerClient : Thread
                 active = false;
                 result = null; /* TODO: JSOn default value */
             }
-            /* TODO: Add any more new command here */
             /* If the command is invalid */
             else
             {
