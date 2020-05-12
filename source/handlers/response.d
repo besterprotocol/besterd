@@ -176,16 +176,11 @@ public final class HandlerResponse
 			BesterConnection[] connectionList = originalRequester.server.getClients(clients);
 			//debugPrint("Users matched online on server: " ~ to!(string)(connectionList));
 
-
 			/* The fully response message to send back */
 			JSONValue clientPayload;
 
-			// /* Set the `handlerName` field of the header block */
-			// JSONValue handlerName;
-			// handlerName["handlerName"] = handler.getPluginName();
-
 			/* Set the header of the response */
-			JSONValue headerBlock;
+			JSONValue headerBlock; /* TODO: Do something with this */
 			clientPayload["header"] = headerBlock;
 
 			/* Set the payload of the response */
@@ -248,12 +243,8 @@ public final class HandlerResponse
 			/* The fully response message to send back */
 			JSONValue serverPayload;
 
-			/* Set the `scope` field of the header block */
-			JSONValue scopeField = "server";
-
 			/* Set the header of the response */
 			JSONValue headerBlock;
-			// headerBlock["handlerName"] = handler.getPluginName();
 			headerBlock["scope"] = "server";
 			serverPayload["header"] = headerBlock;
 
