@@ -146,6 +146,13 @@ public final class BesterConnection : Thread
 	}
 
 	/* TODO: Comment [], rename [] */
+
+	/**
+	* Dispatches the message to the correct message handler.
+	*
+	* Returns `true` on success or partial success, `false`
+	* on fatal protocol error.
+	*/
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
 	{
 		/* Status of dispatch */
@@ -153,19 +160,32 @@ public final class BesterConnection : Thread
 
 		/* TODO: Bounds checking, type checking */
 
-		/* Get the payload type */
-		string payloadType = payloadBlock["type"].str;
-		debugPrint("Payload type is \"" ~ payloadType ~ "\"");
+		/* The payload type */
+		string payloadType
 
-		/* Get the payload data */
-		JSONValue payloadData = payloadBlock["data"];
+		/* The payload data */
+		JSONValue payloadData;
 
-		/* Get the payload tag */
-		string payloadTag = payloadBlock["id"].str();
+		/* The payload tag */
+		string payloadTag;
 
-		/* TODO: Only return `false` on fatal error, then close connection, else `sendStatus` */
+		try
+		{
+			/* Get the payload type */
+			payloadType = payloadBlock["type"].str;
+			debugPrint("Payload type is \"" ~ payloadType ~ "\"");
 
+			/* Get the payload data */
+			payloadData = payloadBlock["data"];
 
+			/* Get the payload tag */
+			payloadTag = payloadBlock["id"].str();
+		}
+		catch(JSONException e)
+		{
+			debugPrint("Fatal error when processing packet, missing fields");
+			return false;
+		}
 
 		/* Lookup the payloadType handler */
 		MessageHandler chosenHandler = server.findHandler(payloadType);
@@ -424,6 +444,8 @@ public final class BesterConnection : Thread
 			{
 				/* TODO: Error handling */
 				debugPrint("Dispatching failed...");
+				/* TODO: Send FATAL error message back to client and close the connection */
+				shutdown();
 			}	
 		}
 		/* If the attempt to convert the message to JSON fails */
