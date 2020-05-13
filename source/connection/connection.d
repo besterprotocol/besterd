@@ -493,19 +493,15 @@ public final class BesterConnection : Thread
 				connectionType = scopeField;
 			}
 			
-			/* Attempt to get the payload block and dispatch the message */
-			bool dispatchStatus;
-
-			
 			/* Get the `payload` block */
 			JSONValue payloadBlock = jsonMessage["payload"];
 			debugPrint("<<< Payload is >>>\n\n" ~ payloadBlock.toPrettyString());
 
-			/* Dispatch the message */
-			dispatchStatus = dispatchMessage(connectionType, payloadBlock);
-
-			/* TODO: Catch error here and not inside dispatchMessage, gets rid of the need for this if statement */	
-			if(dispatchStatus)
+			/**
+			* Dispatch the message. If a fatal failure is
+			* detected then the connection will be shutdown.
+			*/
+			if(dispatchMessage(connectionType, payloadBlock))
 			{
 				debugPrint("Dispatch succeeded");
 			}
