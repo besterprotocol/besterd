@@ -194,7 +194,36 @@ public final class BesterConnection : Thread
 		/* Check if it is a dummy type */
 		if(cmp(payloadType, "dummy") == 0)
 		{
-			/* TODO: Continue here, format think for everything */
+			/* Construct a dummy response */
+			JSONValue dummyMessage;
+
+			/* Construct a header block */
+			JSONValue headerBlock;
+			headerBlock["status"] = "0";
+
+			/* Attach the header block */
+			dummyMessage["header"] = headerBlock;
+
+			/* Construct the payload block */
+			JSONValue dummyPayloadBlock;
+			dummyPayloadBlock["data"] = null;
+			dummyPayloadBlock["type"] = payloadType;
+			dummyPayloadBlock["id"] = payloadTag;
+
+			/* Attach the payload block */
+			dummyMessage["payload"] = dummyPayloadBlock;
+
+			try
+			{
+				/* Send the message */
+				sendMessage(clientConnection, dummyMessage);
+			}
+			catch(NetworkException e)
+			{
+				debugPrint("Error sending status message");
+
+				/* TODO: We should deactivate the connection when this happens */
+			}
 		}
 		/* Check if the payload is a built-in command */
 		else if(cmp(payloadType, "builtin") == 0)
