@@ -217,7 +217,7 @@ public final class BesterConnection : Thread
 			{
 				debugPrint("Error sending status message, fatal closing connection");
 				/* TODO: We should deactivate the connection when this happens */
-				shutdown();
+				return false;
 			}
 		}
 		/* Check if the payload is a built-in command */
