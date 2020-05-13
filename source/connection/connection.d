@@ -394,19 +394,14 @@ public final class BesterConnection : Thread
 	/* Process the received message */
 	private void processMessage(JSONValue jsonMessage)
 	{
-
 		/* Attempt to convert the message to JSON */
 		try
 		{
 			/* Convert message to JSON */
 			debugPrint("<<< Received JSON >>>\n\n" ~ jsonMessage.toPrettyString());
 
-			/* TODO: Bounds checking, type checking */
-
 			/* Get the header */
 			JSONValue headerBlock = jsonMessage["header"];
-
-			
 
 			/**
 			 * Check to see if this connection is currently "untyped".
