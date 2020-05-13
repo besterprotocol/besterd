@@ -160,6 +160,11 @@ public final class BesterConnection : Thread
 		/* Get the payload data */
 		JSONValue payloadData = payloadBlock["data"];
 
+		/* Get the payload tag */
+		string payloadTag = payloadBlock["id"].str();
+
+
+
 		/* Lookup the payloadType handler */
 		MessageHandler chosenHandler = server.findHandler(payloadType);
 
