@@ -163,6 +163,8 @@ public final class BesterConnection : Thread
 		/* Get the payload tag */
 		string payloadTag = payloadBlock["id"].str();
 
+		/* TODO: Only return `false` on fatal error, then close connection, else `sendStatus` */
+
 
 
 		/* Lookup the payloadType handler */
