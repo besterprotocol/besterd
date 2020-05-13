@@ -216,13 +216,16 @@ public final class BesterConnection : Thread
 				debugPrint("Closing socket...");
 				isActive = false;
 
-				sendStatus(0, JSONValue());
+				// sendStatus(0, JSONValue());
 			}
 			else
 			{
 				debugPrint("Invalid built-in command type");
 				/* TODO: Generate error response */
-				dispatchStatus = false;
+				// dispatchStatus = false;
+
+				/* Send error message to client */
+				sendErrorReport(payloadTag);
 			}
 		}
 		/* If an external handler is found (i.e. not a built-in command) */
@@ -250,15 +253,21 @@ public final class BesterConnection : Thread
 				//JSONValue errorResponse;
 				//errorResponse["dd"] = 2;
 				//debugPrint("Response error");
-				dispatchStatus = false;
+				// dispatchStatus = false;
+
+				/* Send error message to client */
+				sendErrorReport(payloadTag);
 			}
 			catch(Exception e)
 			{
 				/* TODO: Remove me */
 				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
-				dispatchStatus = false;
+				// dispatchStatus = false;
 
 				/* TODO: Add call to `sendStatus` here as the handler failed */
+
+				/* Send error message to client */
+				sendErrorReport(payloadTag);
 			}
 			
 			debugPrint("Handler section done (for client)");
@@ -271,8 +280,7 @@ public final class BesterConnection : Thread
 			debugPrint("No handler available for payload type \"" ~ payloadType ~ "\"");
 
 			/* Send error message to client */
-			JSONValue handlerName = payloadType;
-			sendStatus(1, handlerName);
+			sendErrorReport(payloadTag);
 		}
 
 		return dispatchStatus;
