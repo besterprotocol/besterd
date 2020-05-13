@@ -161,7 +161,7 @@ public final class BesterConnection : Thread
 		/* TODO: Bounds checking, type checking */
 
 		/* The payload type */
-		string payloadType
+		string payloadType;
 
 		/* The payload data */
 		JSONValue payloadData;
@@ -169,6 +169,7 @@ public final class BesterConnection : Thread
 		/* The payload tag */
 		string payloadTag;
 
+		/* Attempt to parse protocol-critical fields */
 		try
 		{
 			/* Get the payload type */
