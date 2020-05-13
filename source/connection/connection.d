@@ -155,11 +155,6 @@ public final class BesterConnection : Thread
 	*/
 	private bool dispatchMessage(Scope scopeField, JSONValue payloadBlock)
 	{
-		/* Status of dispatch */
-		bool dispatchStatus = true;
-
-		/* TODO: Bounds checking, type checking */
-
 		/* The payload type */
 		string payloadType;
 
@@ -311,7 +306,7 @@ public final class BesterConnection : Thread
 			sendErrorReport(payloadTag);
 		}
 
-		return dispatchStatus;
+		return true;
 	}
 
 	/* Send an error report */
