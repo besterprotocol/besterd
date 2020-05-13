@@ -220,9 +220,9 @@ public final class BesterConnection : Thread
 			}
 			catch(NetworkException e)
 			{
-				debugPrint("Error sending status message");
-
+				debugPrint("Error sending status message, fatal closing connection");
 				/* TODO: We should deactivate the connection when this happens */
+				shutdown();
 			}
 		}
 		/* Check if the payload is a built-in command */
@@ -253,8 +253,7 @@ public final class BesterConnection : Thread
 				/* TODO: Generate error response */
 				// dispatchStatus = false;
 
-				/* Send error message to client */
-				sendErrorReport(payloadTag);
+				/* TODO: Send a response as the "builtin" message handler */
 			}
 		}
 		/* If an external handler is found (i.e. not a built-in command) */
