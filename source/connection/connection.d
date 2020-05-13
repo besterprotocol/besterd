@@ -385,6 +385,12 @@ public final class BesterConnection : Thread
 		return Scope.UNKNOWN;
 	}
 
+	/* TODO: Implement me */
+	private void sendFatalMessage()
+	{
+		
+	}
+
 	/* Process the received message */
 	private void processMessage(JSONValue jsonMessage)
 	{
@@ -505,17 +511,25 @@ public final class BesterConnection : Thread
 			}
 			else
 			{
-				/* TODO: Error handling */
-				debugPrint("Dispatching failed...");
-				/* TODO: Send FATAL error message back to client and close the connection */
+				debugPrint("Dispatch failed, deactivating connection...");
+
+				/* Send fatal message */
+				sendFatalMessage();
+
+				/* Shutdown the connection */
 				shutdown();
 			}	
 		}
 		/* If the attempt to convert the message to JSON fails */
 		catch(JSONException exception)
 		{
-			debugPrint("General format error");
-			sendStatus(3, JSONValue());
+			debugPrint("Fatal format error, deactivating connection...");
+
+			/* Send fatal message */
+			sendFatalMessage();
+
+			/* Shutdown the connection */
+			shutdown();
 		}
 	}
 }
