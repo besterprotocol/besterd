@@ -264,6 +264,7 @@ public final class BesterConnection : Thread
 			debugPrint("Handler section done (for client)");
 			/* TODO: Handle response */
 		}
+		/* If no message handler for the specified type could be found */
 		else
 		{
 			/* TODO: Implement error handling */
@@ -272,10 +273,40 @@ public final class BesterConnection : Thread
 			/* Send error message to client */
 			JSONValue handlerName = payloadType;
 			sendStatus(1, handlerName);
-			dispatchStatus = false;
 		}
 
 		return dispatchStatus;
+	}
+
+	/* Send an error report */
+	public void sendErrorReport(string id)
+	{
+		/* Construct the response */
+		JSONValue statusMessage;
+
+		/* Construct the haeder block */
+		JSONValue headerBlock;
+		headerBlock["status"] = "bad";
+
+		/* Attach the header block */
+		statusMessage["header"] = headerBlock;
+
+		/* Create the payload block */
+		JSONValue payloadBlock;
+		payloadBlock["id"] = id;
+
+		/* Attach the payload block */
+		statusMessage["payload"] = payloadBlock;
+
+		try
+		{
+			/* Send the message */
+			sendMessage(clientConnection, statusMessage);
+		}
+		catch(NetworkException e)
+		{
+			debugPrint("Error sending status message");
+		}
 	}
 
 	/* Send a status message to the client */
