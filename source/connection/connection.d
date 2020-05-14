@@ -279,7 +279,7 @@ public final class BesterConnection : Thread
 				// dispatchStatus = false;
 
 				/* Send error message to client */
-				sendErrorReport(payloadTag);
+				sendStatusReport(StatusType.FAILURE, payloadTag);
 			}
 			catch(Exception e)
 			{
@@ -287,7 +287,7 @@ public final class BesterConnection : Thread
 				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
 
 				/* Send error message to client */
-				sendErrorReport(payloadTag);
+				sendStatusReport(StatusType.FAILURE, payloadTag);
 			}
 			
 			debugPrint("Handler section done (for client)");
@@ -300,7 +300,7 @@ public final class BesterConnection : Thread
 			debugPrint("No handler available for payload type \"" ~ payloadType ~ "\"");
 
 			/* Send error message to client */
-			sendErrorReport(payloadTag);
+			sendStatusReport(StatusType.FAILURE, payloadTag);
 		}
 
 		return true;

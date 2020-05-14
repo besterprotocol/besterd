@@ -191,10 +191,11 @@ public final class HandlerResponse
 
 
 			/**
-			 * Loop through each BesterConnection in connectionList and
-			 * send the message-handler payload response message to each
-			 * of them.
-			 */
+			* Loop through each BesterConnection in connectionList and
+			* send the message-handler payload response message to each
+			* of them.
+			*/
+			bool allSuccess = true;
 			for(ulong i = 0; i < connectionList.length; i++)
 			{
 				/* Get the conneciton */
@@ -214,13 +215,14 @@ public final class HandlerResponse
 				catch(SocketOSException exception)
 				{
 					/**
-					 * If there was an error sending to the client, this can happen
-					 * if the client has disconnected but hasn't yet been removed from
-					 * the connections array and hence we try to send on a dead socket
-					 * or get the remoteAddress on a dead socket, which causes a
-					 * SocketOSException to be called.
-					 */
-					 debugPrint("Attempted interacting with dead socket");
+					* If there was an error sending to the client, this can happen
+					* if the client has disconnected but hasn't yet been removed from
+					* the connections array and hence we try to send on a dead socket
+					* or get the remoteAddress on a dead socket, which causes a
+					* SocketOSException to be called.
+					*/
+					debugPrint("Attempted interacting with dead socket");
+					allSuccess=false;
 				}
 			}
 
@@ -229,9 +231,7 @@ public final class HandlerResponse
 			/**
 			* Send a status report here.
 			*/
-			
-			/* TODO: Implement me */
-			sendErrorReport
+			originalRequester.sendStatusReport(cast(BesterConnection.StatusType)!allSuccess, messageResponse["payload"]["id"].str());
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
 		{
