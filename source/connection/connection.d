@@ -495,6 +495,11 @@ public final class BesterConnection : Thread
 
 				/* Set the connection type to `scopeField` */
 				connectionType = scopeField;
+
+				if(connectionType == Scope.CLIENT)
+				{
+					return;
+				}
 			}
 			
 			/* Get the `payload` block */
