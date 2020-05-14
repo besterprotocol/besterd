@@ -346,37 +346,6 @@ public final class BesterConnection : Thread
 		}
 	}
 
-	/* Send an error report */
-	public void sendErrorReport(string id)
-	{
-		/* Construct the response */
-		JSONValue statusMessage;
-
-		/* Construct the haeder block */
-		JSONValue headerBlock;
-		headerBlock["status"] = "bad";
-
-		/* Attach the header block */
-		statusMessage["header"] = headerBlock;
-
-		/* Create the payload block */
-		JSONValue payloadBlock;
-		payloadBlock["id"] = id;
-
-		/* Attach the payload block */
-		statusMessage["payload"] = payloadBlock;
-
-		try
-		{
-			/* Send the message */
-			sendMessage(clientConnection, statusMessage);
-		}
-		catch(NetworkException e)
-		{
-			debugPrint("Error sending status message");
-		}
-	}
-
 	/* Send a status message to the client */
 	public void sendStatus(uint code, JSONValue data)
 	{
@@ -512,7 +481,7 @@ public final class BesterConnection : Thread
 						sendStatus(2, JSONValue());
 
 						/* Stop the read/write loop */
-						isActive = false;
+						shutdown();
 						return;
 					}
 				}

@@ -222,7 +222,7 @@ public final class HandlerResponse
 					* SocketOSException to be called.
 					*/
 					debugPrint("Attempted interacting with dead socket");
-					allSuccess=false;
+					allSuccess = false;
 				}
 			}
 
@@ -293,7 +293,7 @@ public final class HandlerResponse
 				{
 					/* TODO: Be more specific with the above exception type */
 					debugPrint("Error whilst sending payload to server: " ~ e.toString());
-					allSuccess=false;
+					allSuccess = false;
 				}
 			}
 
