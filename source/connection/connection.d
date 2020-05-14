@@ -466,7 +466,10 @@ public final class BesterConnection : Thread
 						this.password = password;
 
 						/* Send error message to client */
-						sendStatus(5, JSONValue());
+						// sendStatus(5, JSONValue());
+
+						/* TODO: Send authentication success */
+						sendStatusReport(StatusType.SUCCESS, "auth_special");
 					}
 					/* If authentication failed due to malformed message or incorrect details */
 					else
@@ -477,8 +480,8 @@ public final class BesterConnection : Thread
 						*/
 						debugPrint("Authenticating the user failed, sending error and closing connection.");
 
-						/* Send error message to client */
-						sendStatus(2, JSONValue());
+						/* Send fatal message */
+						sendFatalMessage();
 
 						/* Stop the read/write loop */
 						shutdown();
