@@ -25,7 +25,7 @@ def runTest():
             "header" : {
                 "status" : "0",
                 "command" : {"type" : "sendClients", "data": ["deavmi"]}
-            }, "data" : "length of your data: " + str(len(receivedBys)) + "\"" + receivedBys + "\"" })
+            }, "data" : "length of your data: " + str(len(receivedBys)) + "\"" + str(receivedBys) + "\"" })
         print(s.send(len(bys).to_bytes(4, "little")))
         print(s.send(bys.encode()))
 
