@@ -225,6 +225,13 @@ public final class HandlerResponse
 			}
 
 			debugPrint("SEND_CLIENTS: Completed run");
+
+			/**
+			* Send a status report here.
+			*/
+			
+			/* TODO: Implement me */
+			sendErrorReport
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
 		{

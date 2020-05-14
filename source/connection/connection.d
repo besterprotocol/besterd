@@ -285,9 +285,6 @@ public final class BesterConnection : Thread
 			{
 				/* TODO: Remove me */
 				debugPrint("fhjhfsdjhfdjhgsdkjh UUUUH:" ~e.toString());
-				// dispatchStatus = false;
-
-				/* TODO: Add call to `sendStatus` here as the handler failed */
 
 				/* Send error message to client */
 				sendErrorReport(payloadTag);
@@ -307,6 +304,46 @@ public final class BesterConnection : Thread
 		}
 
 		return true;
+	}
+
+	public enum StatusType
+	{
+		SUCCESS,
+		FAILURE
+	}
+
+	/**
+	* Send a status report for the message with id
+	* `id` of type `StatusType`.
+	*/
+	public void sendStatusReport(StatusType statusType, string id)
+	{
+		/* Construct the response */
+		JSONValue statusMessage;
+
+		/* Construct the haeder block */
+		JSONValue headerBlock;
+		headerBlock["status"] = statusType == 0 ? "good" : "bad";
+
+		/* Attach the header block */
+		statusMessage["header"] = headerBlock;
+
+		/* Create the payload block */
+		JSONValue payloadBlock;
+		payloadBlock["id"] = id;
+
+		/* Attach the payload block */
+		statusMessage["payload"] = payloadBlock;
+
+		try
+		{
+			/* Send the message */
+			sendMessage(clientConnection, statusMessage);
+		}
+		catch(NetworkException e)
+		{
+			debugPrint("Error sending status message");
+		}
 	}
 
 	/* Send an error report */

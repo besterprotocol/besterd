@@ -20,6 +20,12 @@ def sendAs(username):
         d.send(len(bys).to_bytes(4, "little"))
         d.send(bys.encode())
 
+        length=int.from_bytes(list(d.recv(4)), "little")
+        print(length)
+        receivedDataBytes = d.recv(length)
+        receivedData = list(receivedDataBytes)
+        print(receivedDataBytes.decode())
+
 
 
     # Now we can do it again (without authentication)
