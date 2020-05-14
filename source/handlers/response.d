@@ -263,6 +263,7 @@ public final class HandlerResponse
 
 
 			/* Attempt connecting to each server and sending the payload */
+			bool allSuccess = true;
 			for(ulong i = 0; i < servers.length; i++)
 			{
 				/* Get the current server address and port */
@@ -292,10 +293,16 @@ public final class HandlerResponse
 				{
 					/* TODO: Be more specific with the above exception type */
 					debugPrint("Error whilst sending payload to server: " ~ e.toString());
+					allSuccess=false;
 				}
 			}
 
 			debugPrint("SEND_SERVERS: Completed run");
+
+			/**
+			* Send a status report here.
+			*/
+			originalRequester.sendStatusReport(cast(BesterConnection.StatusType)!allSuccess, messageResponse["payload"]["id"].str());
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
