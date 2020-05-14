@@ -469,6 +469,7 @@ public final class BesterConnection : Thread
 						// sendStatus(5, JSONValue());
 
 						/* TODO: Send authentication success */
+						/* TODO: Disallow this id from anywhere but here */
 						sendStatusReport(StatusType.SUCCESS, "auth_special");
 					}
 					/* If authentication failed due to malformed message or incorrect details */
