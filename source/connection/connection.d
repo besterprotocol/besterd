@@ -265,8 +265,8 @@ public final class BesterConnection : Thread
 				/* TODO: Continue here, we will make all error handling do on construction as to make this all more compact */
 				debugPrint("<<< Message Handler [" ~ chosenHandler.getPluginName() ~ "] response >>>\n\n" ~ handlerResponse.toString());
 
-				/* Execute the message handler's command (as per its reply) */
-				handlerResponse.execute(this);
+				/* Execute the message handler's command (as per its reply) and pass in the tag */
+				handlerResponse.execute(this, payloadTag);
 			}
 			catch(ResponseError e)
 			{

@@ -155,7 +155,7 @@ public final class HandlerResponse
 	* Executes the command. Either `sendClients`, `sendServers`
 	* or `sendHandler`.
 	*/
-	public void execute(BesterConnection originalRequester)
+	public void execute(BesterConnection originalRequester, string messageID)
 	{
 		/* TODO: Implement me */
 
@@ -231,7 +231,7 @@ public final class HandlerResponse
 			/**
 			* Send a status report here.
 			*/
-			originalRequester.sendStatusReport(cast(BesterConnection.StatusType)!allSuccess, messageResponse["payload"]["id"].str());
+			originalRequester.sendStatusReport(cast(BesterConnection.StatusType)!allSuccess, messageID);
 		}
 		else if (commandType == CommandType.SEND_SERVERS)
 		{
@@ -302,7 +302,7 @@ public final class HandlerResponse
 			/**
 			* Send a status report here.
 			*/
-			originalRequester.sendStatusReport(cast(BesterConnection.StatusType)!allSuccess, messageResponse["payload"]["id"].str());
+			originalRequester.sendStatusReport(cast(BesterConnection.StatusType)!allSuccess, messageID);
 		}
 		else if (commandType == CommandType.SEND_HANDLER)
 		{
@@ -317,7 +317,7 @@ public final class HandlerResponse
 			HandlerResponse handlerResponse = chosenHandler.handleMessage(messageResponse["data"]);
 
 			/* Execute the code (this here, recursive) */
-			handlerResponse.execute(originalRequester);
+			handlerResponse.execute(originalRequester, messageID);
 
 			debugPrint("SEND_HANDLER: Completed run");
 		}
