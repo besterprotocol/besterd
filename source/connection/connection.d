@@ -63,6 +63,10 @@ public final class BesterConnection : Thread
 		debugPrint("New client handler spawned for " ~ clientConnection.remoteAddress().toAddrString());
 	}
 
+	/**
+	* Shutdown the BesterConnection by stopping
+	* the read-write loop and closing the socket.
+	*/
 	public void shutdown()
 	{
 		/* TODO: Send message posssibly, think about this for listeners and informers (etc.) too */
@@ -74,6 +78,9 @@ public final class BesterConnection : Thread
 		return username ~ "@" ~ clientConnection.remoteAddress().toAddrString();
 	}
 
+	/**
+	* Returns an array of the username and password.
+	*/
 	public string[] getCredentials()
 	{
 		return [username, password];
@@ -83,7 +90,7 @@ public final class BesterConnection : Thread
 	private void run()
 	{
 		debugPrint("<<< Begin read/send loop >>>");
-		while(isActive) /*TODO: Remove and also make the stting of this kak not be closing socket */
+		while(isActive)
 		{
 			/* Received JSON message */
 			JSONValue receivedMessage;
@@ -103,7 +110,7 @@ public final class BesterConnection : Thread
 				if(connectionType == Scope.SERVER)
 				{
 					debugPrint("Server connection done, closing BesterConnection.");
-					isActive = false;
+					shutdown();
 				}
 			}
 			catch(BesterException exception)
@@ -272,15 +279,12 @@ public final class BesterConnection : Thread
 			{
 				/* In the case of an error with the message handler, send an error to the client/server */
 				
-				/* TODO: Send error here */
-				//JSONValue errorResponse;
-				//errorResponse["dd"] = 2;
-				//debugPrint("Response error");
-				// dispatchStatus = false;
+				/* TODO: Clean up comments */
 
 				/* Send error message to client */
 				sendStatusReport(StatusType.FAILURE, payloadTag);
 			}
+			/* TODO: Be more specific with errors and reporting in the future */
 			catch(Exception e)
 			{
 				/* TODO: Remove me */
@@ -291,7 +295,6 @@ public final class BesterConnection : Thread
 			}
 			
 			debugPrint("Handler section done (for client)");
-			/* TODO: Handle response */
 		}
 		/* If no message handler for the specified type could be found */
 		else
