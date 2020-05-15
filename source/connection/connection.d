@@ -306,6 +306,10 @@ public final class BesterConnection : Thread
 		return true;
 	}
 
+	/**
+	* Type of the status report.
+	* Either 0 (for success) or 1 (for failure).
+	*/
 	public enum StatusType
 	{
 		SUCCESS,
@@ -335,27 +339,6 @@ public final class BesterConnection : Thread
 
 		/* Attach the payload block */
 		statusMessage["payload"] = payloadBlock;
-
-		try
-		{
-			/* Send the message */
-			sendMessage(clientConnection, statusMessage);
-		}
-		catch(NetworkException e)
-		{
-			debugPrint("Error sending status message");
-		}
-	}
-
-	/* Send a status message to the client */
-	public void sendStatus(uint code, JSONValue data)
-	{
-		/* Construct a status message */
-		JSONValue statusMessage;
-		JSONValue statusBlock;
-		statusBlock["code"] = to!(string)(code);
-		statusBlock["data"] = data;
-		statusMessage["status"] = statusBlock;
 
 		try
 		{

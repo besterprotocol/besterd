@@ -14,7 +14,10 @@ import std.string : split;
 import server.server : BesterServer;
 import handlers.commands : Command;
 
-/* The type of the command the message handler wants us to run */
+/**
+* The type of the command the message handler wants
+* us to run
+*/
 private enum CommandType : ubyte
 {
 	/* Simple message flow (always end point) */
