@@ -321,9 +321,10 @@ public final class BesterConnection : Thread
 		/* Construct the response */
 		JSONValue statusMessage;
 
-		/* Construct the haeder block */
+		/* Construct the header block */
 		JSONValue headerBlock;
 		headerBlock["status"] = statusType == 0 ? "good" : "bad";
+		headerBlock["responseType"] = "statusReport";
 
 		/* Attach the header block */
 		statusMessage["header"] = headerBlock;
