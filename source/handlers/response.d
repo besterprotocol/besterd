@@ -181,6 +181,7 @@ public final class HandlerResponse
 
 			/* Set the header of the response */
 			JSONValue headerBlock; /* TODO: Do something with this */
+			headerBlock["messageType"] = "receivedMessage";
 			clientPayload["header"] = headerBlock;
 
 			/* Set the payload of the response */
