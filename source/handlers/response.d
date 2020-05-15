@@ -157,8 +157,6 @@ public final class HandlerResponse
 	*/
 	public void execute(BesterConnection originalRequester, string messageID)
 	{
-		/* TODO: Implement me */
-
 		/* If the command is SEND_CLIENTS */
 		if(commandType == CommandType.SEND_CLIENTS)
 		{
@@ -180,7 +178,7 @@ public final class HandlerResponse
 			JSONValue clientPayload;
 
 			/* Set the header of the response */
-			JSONValue headerBlock; /* TODO: Do something with this */
+			JSONValue headerBlock;
 			headerBlock["messageType"] = "receivedMessage";
 			clientPayload["header"] = headerBlock;
 
