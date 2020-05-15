@@ -375,10 +375,15 @@ public final class BesterConnection : Thread
 		return Scope.UNKNOWN;
 	}
 
-	/* TODO: Implement me */
+	
+	/**
+	* Sends an error message on fatal error.
+	* Used before client shutdown on such
+	* an error.
+	*/
 	private void sendFatalMessage()
 	{
-		
+		/* TODO: Implement me */
 	}
 
 	/* Process the received message */
@@ -413,8 +418,11 @@ public final class BesterConnection : Thread
 
 					/* TODO: Send message back about an invalid scope */
 
-					/* TODO: End this here */
-					isActive = false;
+					/* Send fatal message */
+					sendFatalMessage();
+
+					/* Stop the read/write loop */
+					shutdown();
 					return;
 				}
 				else if(scopeField == Scope.CLIENT)
