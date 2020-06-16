@@ -99,9 +99,7 @@ public final class BesterConnection : Thread
 			try
 			{
 				/* Receive a message */
-				byte[] receivedBytes;
-				receiveMessage(clientConnection, receivedBytes);
-				receivedMessage = parseJSON(cast(string)receivedBytes);
+				receiveMessage(clientConnection, receivedMessage);
 
 				/**
 				* If the message was received successfully then
@@ -220,7 +218,7 @@ public final class BesterConnection : Thread
 			try
 			{
 				/* Send the message */
-				sendMessage(clientConnection, cast(byte[])toJSON(dummyMessage));
+				sendMessage(clientConnection, dummyMessage);
 			}
 			catch(NetworkException e)
 			{
@@ -348,7 +346,7 @@ public final class BesterConnection : Thread
 		try
 		{
 			/* Send the message */
-			sendMessage(clientConnection, cast(byte[])toJSON(statusMessage));
+			sendMessage(clientConnection, statusMessage);
 		}
 		catch(NetworkException e)
 		{

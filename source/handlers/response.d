@@ -211,7 +211,7 @@ public final class HandlerResponse
 					
 					/* Send the message to the client */
 					debugPrint("Sending handler's response to client \"" ~ clientConnection.toString() ~ "\"...");
-					sendMessage(clientSocket, cast(byte[])toJSON(clientPayload));
+					sendMessage(clientSocket, clientPayload);
 					debugPrint("Sending handler's response to client \"" ~ clientConnection.toString() ~ "\"... [sent]");
 				}
 				catch(SocketOSException exception)
@@ -284,7 +284,7 @@ public final class HandlerResponse
 
 					/* Send the payload */
 					debugPrint("Sending handler's response to server \"" ~ serverConnection.toString() ~ "\"...");
-					sendMessage(serverConnection, cast(byte[])toJSON(serverPayload));
+					sendMessage(serverConnection, serverPayload);
 					debugPrint("Sending handler's response to server \"" ~ serverConnection.toString() ~ "\"... [sent]");
 
 					/* Close the connection to the server */

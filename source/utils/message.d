@@ -14,10 +14,15 @@ import bmessage : bformatreceiveMessage = receiveMessage, bformatsendMessage = s
  */
 public void receiveMessage(Socket originator, ref JSONValue receiveMessage)
 {
-	if(!bformatreceiveMessage(originator, receiveMessage))
+	/* The received bytes */
+	byte[] receivedBytes;
+
+	if(!bformatreceiveMessage(originator, receivedBytes))
 	{
 		throw new NetworkException(originator);
 	}
+
+	receiveMessage = parseJSON(cast(string)receivedBytes);
 }
 
 /**
@@ -31,7 +36,7 @@ public void receiveMessage(Socket originator, ref JSONValue receiveMessage)
  */
 public void sendMessage(Socket recipient, JSONValue jsonMessage)
 {
-	if(!bformatsendMessage(recipient, jsonMessage))
+	if(!bformatsendMessage(recipient, cast(byte[])toJSON(jsonMessage)))
 	{
 		throw new NetworkException(recipient);
 	}
