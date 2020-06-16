@@ -79,7 +79,7 @@ public class BesterListener : Thread
 			besterConnection.start();
 
 			/* Add this client to the list of connected clients */
-			server.clients ~= besterConnection;
+			server.addConnection(besterConnection);
 		}
 
 		/* Close the socket */

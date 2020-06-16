@@ -103,6 +103,7 @@ public final class BesterServer
 		/**
 		* Append the connection to the array
 		*/
+		clients ~= connection;
 
 		/**
 		* Release the mutex so other listeners can now append
