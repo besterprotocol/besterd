@@ -348,7 +348,7 @@ public final class BesterConnection : Thread
 		try
 		{
 			/* Send the message */
-			sendMessage(clientConnection, statusMessage);
+			sendMessage(clientConnection, cast(byte[])toJSON(statusMessage));
 		}
 		catch(NetworkException e)
 		{
