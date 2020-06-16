@@ -4,6 +4,7 @@ import utils.debugging : debugPrint;
 import std.conv : to;
 import std.socket : Socket, AddressFamily, SocketType, ProtocolType, parseAddress;
 import core.thread : Thread;
+import core.sync.mutex;
 import std.stdio : writeln, File;
 import std.json : JSONValue, parseJSON, JSONException, JSONType, toJSON;
 import std.string : cmp, strip;
@@ -40,6 +41,7 @@ public final class BesterServer
 	* Connected clients.
 	*/
 	public BesterConnection[] clients;
+	private Mutex clientsMutex;
 
 	/**
 	* The informer server.
@@ -93,13 +95,12 @@ public final class BesterServer
 	*/
 	public void addConnection(BesterConnection connection)
 	{
-		/* TODO: Implement me */
-
 		/**
 		* Lock the mutex so that only one listener thread
 		* may access the array at a time.
 		*/
-
+		clientsMutex.lock();
+		
 		/**
 		* Append the connection to the array
 		*/
@@ -109,7 +110,7 @@ public final class BesterServer
 		* Release the mutex so other listeners can now append
 		* to the array.
 		*/
-
+		clientsMutex.unlock();
 	}
 
 	/**
@@ -135,6 +136,9 @@ public final class BesterServer
 		debugPrint("Setting up message handlers...");
 		setupHandlers(config["handlers"]);
 		setupDatabase(config["database"]);
+
+		/* Initialize the `clients` array mutex */
+		clientsMutex = new Mutex();
 	}
 
 	/* TODO: Add comment, implement me */
