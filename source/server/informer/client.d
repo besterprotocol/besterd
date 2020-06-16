@@ -3,7 +3,7 @@ module server.informer.client;
 import core.thread : Thread;
 import server.server : BesterServer;
 import std.socket;
-import bmessage;
+import utils.message : receiveMessage, sendMessage;
 import std.json;
 import utils.debugging;
 import std.string;
