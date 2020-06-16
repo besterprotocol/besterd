@@ -89,6 +89,29 @@ public final class BesterServer
 	}
 
 	/**
+	* Adds a new Connection, `connection`, to the server.
+	*/
+	public void addConnection(BesterConnection connection)
+	{
+		/* TODO: Implement me */
+
+		/**
+		* Lock the mutex so that only one listener thread
+		* may access the array at a time.
+		*/
+
+		/**
+		* Append the connection to the array
+		*/
+
+		/**
+		* Release the mutex so other listeners can now append
+		* to the array.
+		*/
+
+	}
+
+	/**
 	* Adds a listener, `listener`, to this server's
 	* listener set.
 	*/
